@@ -4,12 +4,12 @@ The goal of this project is to make you write your own IRC server
 ## Pending tasks
 
 Necesitamos unos utils que nos den funciones:
-x- split (la linea 119 de command va a fallar hasta que hagas la función split)
-x- tolowercase (hasta que no lo tengamos, los nicks siempre en mayúsculas)
-El TODO de la linea 145 de sockets
-Crear el msg de ResultCmd, según el error, para todos los errores posibles
-No veo el motivo por el que si hago yo la carga de nick y user de un usuario sí que funciona
-(es lo activado ahora en prueba), pero no si se hace desde el socket
+
+- [] split (la linea 119 de command va a fallar hasta que hagas la función split)
+- [] tolowercase (hasta que no lo tengamos, los nicks siempre en mayúsculas)
+- [] El TODO de la linea 145 de sockets
+- [] Crear el msg de ResultCmd, según el error, para todos los errores posibles
+- [] No veo el motivo por el que si hago yo la carga de nick y user de un usuario sí que funciona (es lo activado ahora en prueba), pero no si se hace desde el socket
 
 ## Debug
 
