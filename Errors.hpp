@@ -1,0 +1,7 @@
+#ifndef ERRORS_H
+#define ERRORS_H
+#define DUPLICATE_USER 600
+#define USER_NOT_ADMIN 601
+#define DUPLICATE_CHANNEL 602
+
+#endif
