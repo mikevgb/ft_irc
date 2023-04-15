@@ -178,7 +178,7 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command* cmd)
             {                
                 std::string channel = channels.front();
                 std::cout << "HandleCmds:canal guardado:" << channel << std::endl;
-                ResultCmd result();
+                ResultCmd result;
                 std::list<ResultCmd> msgsOfChannel = _channels->joinChannel(channel,sender);
                 results.insert(results.end(),msgsOfChannel.begin(), msgsOfChannel.end());                                     
                 channels.pop();

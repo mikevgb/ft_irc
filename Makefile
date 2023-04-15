@@ -1,14 +1,10 @@
-NAME = pruebas
-
-RM = rm -rf
-
-CXX = g++
-
-RM = rm -rf
-
-CXXFLAGS =  -g -ggdb -Wall -Werror -Wextra -I include -D_GLIBCXX_DEBUG
-
-SRCS =	User.cpp \
+NAME:= ircserv
+CXX:= g++
+RM:= rm -rf
+#CXXFLAGS:= -Wall -Werror -Wextra
+CPPSTD:= -std=c++98 -pedantic
+CXXFLAGS:=  -g -ggdb -Wall -Werror -Wextra -I include -D_GLIBCXX_DEBUG
+SRCS:=	User.cpp \
 		Channel.cpp \
 		ListUsers.cpp \
 		ListChannels.cpp \
@@ -21,12 +17,12 @@ SRCS =	User.cpp \
 		main.cpp
 		#pruebas.cpp
 
-OBJS =${SRCS:.cpp=.o}
+OBJS:= $(SRCS:%.cpp=%.o)
+
+all: ${NAME}
 
 ${NAME} : ${OBJS}
 	${CXX} ${CXXFLAGS} -o ${NAME} ${OBJS}
-
-all: ${NAME}
 
 clean:
 	${RM} ${OBJS}
@@ -35,3 +31,5 @@ fclean: clean
 	${RM} ${NAME}
 
 re: fclean all
+
+.PHONY: all fclean clean re
