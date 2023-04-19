@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Socket.hpp                                         :+:      :+:    :+:   */
+/*   IRCServer.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 16:05:06 by mvillaes          #+#    #+#             */
-/*   Updated: 2022/12/06 22:31:38 by mvillaes         ###   ########.fr       */
+/*   Updated: 2023/04/19 13:55:13 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SOCKET_H
-#define SOCKET_H
+#ifndef IRCSERVER_HPP
+#define IRCSERVER_HPP
 #define MAX_USERS 420
 #define MAXMSGSIZE 512
 
@@ -19,7 +19,7 @@
 
 class HandleCmds;
 
-class socketIRC
+class IRCServer
 {
 	private:
 	HandleCmds* _handleCmds; //std::unique_ptr
@@ -54,8 +54,8 @@ class socketIRC
 	
 
 	public:
-	socketIRC();
-	~socketIRC();
+	IRCServer();
+	~IRCServer();
 
 	void pollLoop();
 	void recvMessage(std::string s, int fd);

@@ -12,7 +12,7 @@
 #include "ResultCmd.hpp"
 #include "Command.hpp"
 #include "HandleCmds.hpp"
-#include "Socket.hpp"
+#include "IRCServer.hpp"
 //#include <string>
 #include <optional>
 

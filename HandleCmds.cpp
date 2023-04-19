@@ -254,7 +254,7 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command* cmd)
         //requested IP, but since we are not implementing a multi server irc we will answer always.
         ResultCmd result(0);
         result.addUser(_cmd->getSender());
-        std::string pongReply = "PONG " + _cmd->getNextParam(); // + _hostname en socketIRC //host name ex: c2r16s2.42.madrid.com 
+        std::string pongReply = "PONG " + _cmd->getNextParam(); // + _hostname en IRCServer //host name ex: c2r16s2.42.madrid.com 
         result.setMsg(pongReply);
         results.push_back(result);
         return results;

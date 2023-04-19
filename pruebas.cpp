@@ -36,7 +36,7 @@ int main() {
 	//server.executeCmd(cmd);
 	
 	
-	socketIRC *newSocket = new socketIRC();
+	IRCServer *newSocket = new IRCServer();
 	newSocket->pollLoop();
 	
 	

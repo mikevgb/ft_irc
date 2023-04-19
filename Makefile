@@ -13,7 +13,7 @@ SRCS:=	User.cpp \
 		HandleCmds.cpp \
 		ServerMsgs.cpp \
 		Msg.cpp \
-		Socket.cpp \
+		IRCServer.cpp \
 		main.cpp
 		#pruebas.cpp
 

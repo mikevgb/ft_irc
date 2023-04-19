@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Socket.cpp                                         :+:      :+:    :+:   */
+/*   IRCServer.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 16:05:06 by mvillaes          #+#    #+#             */
-/*   Updated: 2022/12/08 20:23:32 by mvillaes         ###   ########.fr       */
+/*   Updated: 2023/04/19 13:55:13 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Socket.hpp"
+#include "IRCServer.hpp"
 
-socketIRC::socketIRC()
+IRCServer::IRCServer()
 {
     _handleCmds = new HandleCmds();
     _opt = 1;
@@ -39,7 +39,7 @@ socketIRC::socketIRC()
 
     /*server data*/
     if (gethostname(_hostname, sizeof(_hostname)) != -1)
-        std::cout << "socketIRC:Host: " << _hostname << std::endl;
+        std::cout << "IRCServer:Host: " << _hostname << std::endl;
     _p_he = gethostbyname(_hostname);
 
     if (_p_he != 0)
@@ -47,20 +47,20 @@ socketIRC::socketIRC()
         for (int i = 0; _p_he->h_addr_list[i] != 0; i++)
         {
             memcpy(&_addr, _p_he->h_addr_list[i], sizeof(struct in_addr));
-            std::cout << "socketIRC:IP address: " << inet_ntoa(_addr) << std::endl;
+            std::cout << "IRCServer:IP address: " << inet_ntoa(_addr) << std::endl;
         }
     }
-    std::cout << "socketIRC:Port: " << (int)ntohs(bindSocket.sin_port) << std::endl;
+    std::cout << "IRCServer:Port: " << (int)ntohs(bindSocket.sin_port) << std::endl;
 }
 
-socketIRC::~socketIRC()
+IRCServer::~IRCServer()
 {
-    std::cout << "socketIRC:socket obj destructor called" << std::endl;
+    std::cout << "IRCServer:socket obj destructor called" << std::endl;
     close(_sockfd);
     delete _handleCmds;
 }
 
-void socketIRC::acceptConex()
+void IRCServer::acceptConex()
 {
     if (_acceptConexSocket != -1)
     {
@@ -76,7 +76,7 @@ void socketIRC::acceptConex()
     setNonBlocking(_pollFds[_nfds].fd);
 }
 
-void socketIRC::setUpPoll()
+void IRCServer::setUpPoll()
 {
     // Clear the poll file descriptors array
     memset(&_pollFds, 0, sizeof(_pollFds));
@@ -86,9 +86,9 @@ void socketIRC::setUpPoll()
     _pollFds[0].events = POLLIN;
 }
 
-void socketIRC::lostConex(int i)
+void IRCServer::lostConex(int i)
 {
-    std::cout << "socketIRC:connection lost on fd: " << _pollFds[i].fd << std::endl;
+    std::cout << "IRCServer:connection lost on fd: " << _pollFds[i].fd << std::endl;
     int closeReturn = close(_pollFds[i].fd);
     ft_result(closeReturn, "close");
     _handleCmds->removeUser(_pollFds[i].fd);
@@ -96,7 +96,7 @@ void socketIRC::lostConex(int i)
     _nfds--;
 }
 
-void socketIRC::pollLoop()
+void IRCServer::pollLoop()
 {
     _acceptConexSocket = 0;
     setUpPoll();
@@ -141,7 +141,7 @@ void socketIRC::pollLoop()
                     }
                     if (dataReceived)
                     {
-                        std::cout << "socketIRC:dataReceived" << std::endl;
+                        std::cout << "IRCServer:dataReceived" << std::endl;
                         recvMessage(data, _pollFds[i].fd);
                     }
                         
@@ -157,10 +157,10 @@ void socketIRC::pollLoop()
 //check for errors (errors!)
 //replace structs with vectors
 
-void socketIRC::recvMessage(std::string s, int fd)
+void IRCServer::recvMessage(std::string s, int fd)
 {
     // std::string s(msg);
-    std::cout << "socketIRC:INSIDE recvMessage: " << s << std::endl;
+    std::cout << "IRCServer:INSIDE recvMessage: " << s << std::endl;
     (void)fd;
     std::list<std::string> comandos(Command::split(s,"\r\n"));
     //comandos.push_back(Command::split(s,"\r\n"));
@@ -175,14 +175,14 @@ void socketIRC::recvMessage(std::string s, int fd)
             for(it = results.begin(); it != results.end(); it++)
             {            
                 ResultCmd result = *it;
-                std::cout << "socketIRC:recvMessage: " << result.getMsg() << std::endl;
+                std::cout << "IRCServer:recvMessage: " << result.getMsg() << std::endl;
                 std::set<int> users = result.getUsers();
                 std::set<int>::iterator itusers;
                 for(itusers = users.begin(); itusers != users.end(); itusers++)
                 {
                     int fdUser = *itusers;
                     std::string tmp = result.getMsg();
-                    std::cout << "socketIRC:recvMessage send to fd: " << fdUser << std::endl;
+                    std::cout << "IRCServer:recvMessage send to fd: " << fdUser << std::endl;
                     if (!tmp.empty())
                     {
                         tmp += "\n";
@@ -195,22 +195,22 @@ void socketIRC::recvMessage(std::string s, int fd)
             //cada result tiene una lista de usuarios a los que se manda el mismo mensaje
         }
         else
-            std::cout << "socketIRC:*** _handleCmds->executeCmd fail! (socketIRC::recvMessage) ***" << std::endl;
+            std::cout << "IRCServer:*** _handleCmds->executeCmd fail! (IRCServer::recvMessage) ***" << std::endl;
     }
 }
 
-void socketIRC::ft_result(int var, std::string function)
+void IRCServer::ft_result(int var, std::string function)
 {
     if (var < 0)
     {
-        std::cerr << function << " socketIRC:error: " << std::strerror(errno) << std::endl;
+        std::cerr << function << " IRCServer:error: " << std::strerror(errno) << std::endl;
         exit(1);
     }
     else
-        std::cout << function << " OK:socketIRC" << std::endl;
+        std::cout << function << " OK:IRCServer" << std::endl;
 }
 
-void socketIRC::setNonBlocking(int fdIn)
+void IRCServer::setNonBlocking(int fdIn)
 {
     int opts = fcntl(fdIn, F_GETFL); //get current fd flags
     ft_result(opts, "fcntl");

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   socket.hpp                                         :+:      :+:    :+:   */
+/*   IRCServer.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvillaes <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 16:05:06 by mvillaes          #+#    #+#             */
-/*   Updated: 2022/10/14 17:41:01 by mvillaes         ###   ########.fr       */
+/*   Updated: 2023/04/19 13:55:13 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "lib.h"
 #include "HandleCmds.hpp"
 
-class socketIRC
+class IRCServer
 {
 	private:
 	int _opt;
@@ -51,7 +51,7 @@ class socketIRC
 			std::cout << function << " OK" << std::endl;
 	}
 
-	socketIRC()
+	IRCServer()
 	{
 		_opt = 1;
 		_nfds = 1;
@@ -185,7 +185,7 @@ class socketIRC
 		}
 	}
 
-   	~socketIRC() {};
+   	~IRCServer() {};
 
 };
 
