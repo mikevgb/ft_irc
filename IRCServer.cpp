@@ -12,6 +12,31 @@
 
 #include "IRCServer.hpp"
 
+IRCServer::IRCServer(const char *ip, const uint16_t port)
+{
+	_handleCmds = new HandleCmds();
+	serverSocket = new Socket(ip, port);
+	this->initServerSocket();
+
+	//TODO: See how can implement this section of code into initServer()
+	/*server data*/
+	if (gethostname(_hostname, sizeof(_hostname)) != -1)
+		std::cout << "IRCServer:Host: " << _hostname << std::endl;
+	_p_he = gethostbyname(_hostname);
+
+	if (_p_he != 0)
+	{
+		for (int i = 0; _p_he->h_addr_list[i] != 0; i++)
+		{
+			memcpy(&_addr, _p_he->h_addr_list[i], sizeof(struct in_addr));
+			std::cout << "IRCServer:IP address: " << inet_ntoa(_addr) << std::endl;
+		}
+	}
+	std::cout << "IRCServer:Port: " << (int)ntohs(bindSocket.sin_port) << std::endl;
+
+	this->pollLoop();
+}
+
 IRCServer::IRCServer()
 {
 	_handleCmds = new HandleCmds();
@@ -60,6 +85,33 @@ IRCServer::~IRCServer()
 	std::cout << "IRCServer:socket obj destructor called" << std::endl;
 	close(_sockfd);
 	delete _handleCmds;
+}
+
+bool IRCServer::initServerSocket()
+{
+	int opt = true;
+
+	if (bind(serverSocket->sockfd, (struct sockaddr *)&serverSocket->addr, sizeof(serverSocket->addr)) == -1)
+	{
+		std::cout << "[SERVER-Error: Failed to bind to port " << ntohs(serverSocket->addr.sin_port) << " | errno: " << errno << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	std::cout << "[SERVER]: Socket successfully binded.\n";
+
+	if (listen(serverSocket->sockfd, MAX_USERS) < 0)
+	{
+		std::cout << "[SERVER-Error]: Failed to listen on socket. errno: " << errno << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	std::cout << "[SERVER-INFO]: Listening on IP: " << inet_ntoa(serverSocket->addr.sin_addr) << " | Port: " << ntohs(serverSocket->addr.sin_port) << "\n";
+	if (setsockopt(this->serverSocket->sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0)
+	{
+		std::cout << "[SERVER-Error: Failed setsockopt " << ntohs(serverSocket->addr.sin_port) << "| errno: " << errno << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	return true;
 }
 
 void IRCServer::acceptConex()

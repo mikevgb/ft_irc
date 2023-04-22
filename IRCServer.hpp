@@ -16,6 +16,7 @@
 #define MAXMSGSIZE 512
 
 #include "lib2.h"
+#include "Socket.hpp"
 
 class HandleCmds;
 
@@ -23,6 +24,8 @@ class IRCServer
 {
 private:
 	HandleCmds *_handleCmds; // std::unique_ptr
+
+	Socket *serverSocket;
 
 	// socket options
 	int _opt;
@@ -54,8 +57,10 @@ private:
 
 public:
 	IRCServer();
+	IRCServer(const char *ip, const uint16_t port);
 	~IRCServer();
 
+	bool initServerSocket();
 	void pollLoop();
 	void recvMessage(std::string s, int fd);
 	void ft_result(int var, std::string function);

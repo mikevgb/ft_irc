@@ -14,8 +14,8 @@ SRCS:=	User.cpp \
 		ServerMsgs.cpp \
 		Msg.cpp \
 		IRCServer.cpp \
+		Socket.cpp \
 		main.cpp
-		#pruebas.cpp
 
 OBJS:= $(SRCS:%.cpp=%.o)
 
