@@ -64,7 +64,7 @@ public:
 	IRCServer(const char *ip, const uint16_t port);
 	~IRCServer();
 
-	bool initServerSocket();
+	bool startServer();
 	void pollLoop();
 	void recvMessage(std::string s, int fd);
 	void ft_result(int var, std::string function);

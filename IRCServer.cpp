@@ -16,7 +16,7 @@ IRCServer::IRCServer(const char *ip, const uint16_t port) : log(std::cout, __PRE
 {
 	_handleCmds = new HandleCmds();
 	serverSocket = new Socket(ip, port);
-	this->initServerSocket();
+	this->startServer();
 
 	//TODO: See how can implement this section of code into initServer()
 	/*server data*/
@@ -82,33 +82,32 @@ IRCServer::IRCServer() : log(std::cout, __PRETTY_FUNCTION__)
 
 IRCServer::~IRCServer()
 {
-	std::cout << "IRCServer:socket obj destructor called" << std::endl;
 	close(_sockfd);
 	delete _handleCmds;
 }
 
-bool IRCServer::initServerSocket()
+bool IRCServer::startServer()
 {
 	int opt = true;
 
 	if (bind(serverSocket->sockfd, (struct sockaddr *)&serverSocket->addr, sizeof(serverSocket->addr)) == -1)
 	{
-		std::cout << "[SERVER-Error: Failed to bind to port " << ntohs(serverSocket->addr.sin_port) << " | errno: " << errno << std::endl;
+		log(LOG_ERROR) << "Failed to bind to port " << ntohs(serverSocket->addr.sin_port) << " | errno: " << errno << "\n";
 		exit(EXIT_FAILURE);
 	}
 
-	std::cout << "[SERVER]: Socket successfully binded.\n";
+	log(LOG_INFO) << "Socket successfully binded.\n";
 
 	if (listen(serverSocket->sockfd, MAX_USERS) < 0)
 	{
-		std::cout << "[SERVER-Error]: Failed to listen on socket. errno: " << errno << std::endl;
+		log(LOG_ERROR) << "Failed to listen on socket. errno: " << errno << "\n";
 		exit(EXIT_FAILURE);
 	}
 
-	std::cout << "[SERVER-INFO]: Listening on IP: " << inet_ntoa(serverSocket->addr.sin_addr) << " | Port: " << ntohs(serverSocket->addr.sin_port) << "\n";
+	log(LOG_INFO) << "Listening on IP: " << inet_ntoa(serverSocket->addr.sin_addr) << " | Port: " << ntohs(serverSocket->addr.sin_port) << "\n";
 	if (setsockopt(this->serverSocket->sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0)
 	{
-		std::cout << "[SERVER-Error: Failed setsockopt " << ntohs(serverSocket->addr.sin_port) << "| errno: " << errno << std::endl;
+		log(LOG_ERROR) << "Failed setsockopt " << ntohs(serverSocket->addr.sin_port) << "| errno: " << errno << "\n";
 		exit(EXIT_FAILURE);
 	}
 	return true;
