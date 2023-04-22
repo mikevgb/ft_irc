@@ -12,7 +12,7 @@
 
 #include "IRCServer.hpp"
 
-IRCServer::IRCServer(const char *ip, const uint16_t port)
+IRCServer::IRCServer(const char *ip, const uint16_t port) : log(std::cout, __PRETTY_FUNCTION__)
 {
 	_handleCmds = new HandleCmds();
 	serverSocket = new Socket(ip, port);
@@ -37,7 +37,7 @@ IRCServer::IRCServer(const char *ip, const uint16_t port)
 	this->pollLoop();
 }
 
-IRCServer::IRCServer()
+IRCServer::IRCServer() : log(std::cout, __PRETTY_FUNCTION__)
 {
 	_handleCmds = new HandleCmds();
 	_opt = 1;
@@ -254,11 +254,11 @@ void IRCServer::ft_result(int var, std::string function)
 {
 	if (var < 0)
 	{
-		std::cerr << function << " IRCServer:error: " << std::strerror(errno) << std::endl;
+		log(LOG_ERROR) << std::strerror(errno) << "\n";
 		exit(1);
 	}
 	else
-		std::cout << function << " OK:IRCServer" << std::endl;
+		log(LOG_INFO) << function << " OK:IRCServer\n";
 }
 
 void IRCServer::setNonBlocking(int fdIn)

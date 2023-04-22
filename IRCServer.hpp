@@ -17,8 +17,10 @@
 
 #include "lib2.h"
 #include "Socket.hpp"
+#include "BSLogger.hpp"
 
 class HandleCmds;
+class logger;
 
 class IRCServer
 {
@@ -26,6 +28,8 @@ private:
 	HandleCmds *_handleCmds; // std::unique_ptr
 
 	Socket *serverSocket;
+
+	logger log;
 
 	// socket options
 	int _opt;
