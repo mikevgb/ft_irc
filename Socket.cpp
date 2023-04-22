@@ -1,0 +1,42 @@
+#include "Socket.hpp"
+
+bool Socket::initSocket()
+{
+	this->sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (this->sockfd == -1)
+	{
+		std::cerr << "[Server-error]: socket creation failed.\n";
+		return false;
+	}
+	lenaddr = sizeof(sockaddr_in);
+
+	// Clear memory buffers and address
+	bzero(&addr, sizeof(addr));
+	bzero(buff_tx, buff_size);
+	bzero(buff_rx, buff_size);
+
+	addr.sin_family = AF_INET;
+	return true;
+}
+
+Socket::Socket()
+{
+	if (!this->initSocket())
+		exit(EXIT_FAILURE);
+}
+
+Socket::Socket(const char *ip, const uint16_t port)
+{
+	if (!this->initSocket())
+		exit(EXIT_FAILURE);
+
+	// Setting server socket structure
+	addr.sin_addr.s_addr = inet_addr(ip);
+	addr.sin_port = htons((uint16_t)(port));
+	std::cout << "[SERVER]: Socket successfully created\n";
+}
+
+Socket::~Socket()
+{
+	close(this->sockfd);
+}
