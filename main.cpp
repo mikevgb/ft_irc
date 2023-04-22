@@ -1,4 +1,5 @@
 #include "IRCServer.hpp"
+#include "BSLogger.hpp"
 
 void printUsage()
 {
@@ -18,6 +19,11 @@ int main(int argc, char **argv)
 		printUsage();
 		exit(EXIT_FAILURE);
 	}
+
+	LOG_INIT_CERR();
+
+	// Change the log level
+	log.set_log_level(LOG_DEBUG);
 
 	IRCServer irc;
 	(void)argv;
