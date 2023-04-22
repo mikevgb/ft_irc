@@ -5,20 +5,21 @@
 class Message
 {
 private:
-    int _fd;
-    std::string _msg;
+	int _fd;
+	std::string _msg;
 
 public:
-    Message(int fd, std::string msg);
-    ~Message();
+	Message(int fd, std::string msg);
+	~Message();
 };
 
 Message::Message(int fd, std::string msg)
-:_fd(),_msg()
+	: _fd(), _msg()
 {
 }
 
 Message::~Message()
 {
 }
+
 #endif

@@ -25,7 +25,7 @@
 	ERR_UMODEUNKNOWNFLAG
 *****************************/
 
-//class User;
+// class User;
 
 class Channel
 {
@@ -33,10 +33,10 @@ private:
 	std::string _name;
 	std::string _topic;
 	std::string _password;
-	std::set<User*> _users;
-	std::set<User*> _admins;
-	std::set<User*> _voiced;
-	std::set<User*> _baned;
+	std::set<User *> _users;
+	std::set<User *> _admins;
+	std::set<User *> _voiced;
+	std::set<User *> _baned;
 	size_t _limit;
 	size_t _nbrUsers;
 	bool _isPrivate;
@@ -45,43 +45,42 @@ private:
 	bool _isModerate;
 	bool _isTopicBlock;
 	bool _isBlockOutside;
+
 public:
-	Channel(const std::string& name);
+	Channel(const std::string &name);
 	~Channel();
-	const std::string& getName() const;
-	int setTopic(const std::string& topic, User* user);
-	const std::string& getTopic() const;
-	int addUser(User* user, const std::string& password);
-	int addAdmin(User* user);
-	int inviteUser(User* user, User* admin);
-	int removeUser(User* user);
-	void setVoiceUser(User* user);
-	void removeVoiceUser(User* user);
-	void setBanUser(User* user);
-	void removeBanUser(User* user);
-	int setMode(char mode, User* admin, User* user, const std::string& param);
-	int removeMode(char mode, User* admin, User* user);
+	const std::string &getName() const;
+	int setTopic(const std::string &topic, User *user);
+	const std::string &getTopic() const;
+	int addUser(User *user, const std::string &password);
+	int addAdmin(User *user);
+	int inviteUser(User *user, User *admin);
+	int removeUser(User *user);
+	void setVoiceUser(User *user);
+	void removeVoiceUser(User *user);
+	void setBanUser(User *user);
+	void removeBanUser(User *user);
+	int setMode(char mode, User *admin, User *user, const std::string &param);
+	int removeMode(char mode, User *admin, User *user);
 	bool isEmpty() const;
-	bool isUser(User* user) const;
-	bool isAdmin(User* admin) const;
-	bool isBaned(User* user) const;
+	bool isUser(User *user) const;
+	bool isAdmin(User *admin) const;
+	bool isBaned(User *user) const;
 	bool isPrivate() const;
 	bool isSecret() const;
 	bool isInviteOnly() const;
 	bool isModerate() const;
 	bool isTopicBlock() const;
 	bool isBlockOutside() const;
-	int setPrivate(bool mode, User* user);
-	int setSecret(bool mode, User* user);
-	int setInviteOnly(bool mode, User* user);
-	int setModerate(bool mode, User* user);
-	int setTopicBlock(bool mode, User* user);
-	int setBlockOutside(bool mode, User* user);
+	int setPrivate(bool mode, User *user);
+	int setSecret(bool mode, User *user);
+	int setInviteOnly(bool mode, User *user);
+	int setModerate(bool mode, User *user);
+	int setTopicBlock(bool mode, User *user);
+	int setBlockOutside(bool mode, User *user);
 	std::set<int> getUsers() const;
 	std::string getModes() const;
 	std::string getListUsers() const;
-
 };
-
 
 #endif

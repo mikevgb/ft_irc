@@ -21,39 +21,38 @@ class HandleCmds;
 
 class IRCServer
 {
-	private:
-	HandleCmds* _handleCmds; //std::unique_ptr
+private:
+	HandleCmds *_handleCmds; // std::unique_ptr
 
-	//socket options
+	// socket options
 	int _opt;
 	int _nfds;
 	int _rcv;
 	int _sockfd;
 	int _sock_opt;
 
-	//socket address
+	// socket address
 	struct sockaddr_in bindSocket;
 	socklen_t _addr_size;
 
-	//server data
+	// server data
 	int _socketBind;
 	char _hostname[80];
 	int _escucha;
-	struct hostent* _p_he;
+	struct hostent *_p_he;
 	struct in_addr _addr;
 
-	//poll fds
+	// poll fds
 	struct pollfd _pollFds[MAX_USERS];
 	int _pollReturn;
 
-	//receive buffer
+	// receive buffer
 	char _buf[MAXMSGSIZE];
 
-	//accepted client socket
+	// accepted client socket
 	int _acceptConexSocket;
-	
 
-	public:
+public:
 	IRCServer();
 	~IRCServer();
 
@@ -64,7 +63,6 @@ class IRCServer
 	void acceptConex();
 	void lostConex(int i);
 	void setNonBlocking(int fdIn);
-
 };
 
 #endif

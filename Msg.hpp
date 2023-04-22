@@ -1,7 +1,7 @@
 #ifndef MSG_H
 #define MSG_H
 #include <string>
-//#include "ServerMsgs.hpp"
+// #include "ServerMsgs.hpp"
 #define SPACE " "
 #define COLON ":"
 #define AT "@"
@@ -14,21 +14,20 @@
 class Msg
 {
 private:
-    /* data */
+	/* data */
 public:
-    Msg(/* args */);
-    ~Msg();
-    static std::string getSpace();
-    static std::string getColon();
-    static std::string getAt();
-    static std::string getExclamation();
-    static std::string getLineBreak();
-    static std::string getServerName();
-    static std::string getErrNickName();
-    static std::string getCodWelcome();
-    static std::string getWelcomeMsg();
-    static std::string getDuplicateNickMsg();
-    
+	Msg(/* args */);
+	~Msg();
+	static std::string getSpace();
+	static std::string getColon();
+	static std::string getAt();
+	static std::string getExclamation();
+	static std::string getLineBreak();
+	static std::string getServerName();
+	static std::string getErrNickName();
+	static std::string getCodWelcome();
+	static std::string getWelcomeMsg();
+	static std::string getDuplicateNickMsg();
 };
 
 #endif

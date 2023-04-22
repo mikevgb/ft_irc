@@ -3,7 +3,7 @@ CXX:= g++
 RM:= rm -rf
 #CXXFLAGS:= -Wall -Werror -Wextra
 CPPSTD:= -std=c++98 -pedantic
-CXXFLAGS:=  -g -ggdb -Wall -Werror -Wextra -I include -D_GLIBCXX_DEBUG
+CXXFLAGS:=  -g -ggdb -Wall -Werror -Wextra -I include -D_GLIBCXX_DEBUG $(CPPSTD)
 SRCS:=	User.cpp \
 		Channel.cpp \
 		ListUsers.cpp \

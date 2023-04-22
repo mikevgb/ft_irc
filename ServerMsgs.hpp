@@ -20,17 +20,15 @@
 #define RPL_TOPIC "332"
 #define END_NAME_LIST " :End of /NAMES list."
 
-
 class ServerMsgs
 {
 private:
-    
 public:
     ServerMsgs(/* args */);
     ~ServerMsgs();
     static std::string getColon();
-    static std::string getWelcomeMsg(const std::string& nick, const std::string& user);
-    static std::string getErrNickname(const std::string& nick);
+    static std::string getWelcomeMsg(const std::string &nick, const std::string &user);
+    static std::string getErrNickname(const std::string &nick);
     /*
     static std::string getResponseTopicChannel(const std::string& channel,const std::string& nick, const std::string& topic);
     static std::string getResponseUsersChannel(const std::string& channel,const std::string& nick, const std::string& users);
