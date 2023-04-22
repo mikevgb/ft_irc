@@ -37,6 +37,9 @@ IRCServer::IRCServer(const char *ip, const uint16_t port) : log(std::cout, __PRE
 	this->pollLoop();
 }
 
+//TODO: Convert this constructor to the constructor above
+//TODO: Understand what setsocketopt do and simplify it
+
 IRCServer::IRCServer() : log(std::cout, __PRETTY_FUNCTION__)
 {
 	_handleCmds = new HandleCmds();
