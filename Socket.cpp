@@ -2,7 +2,9 @@
 
 bool Socket::initSocket()
 {
+	int opt = true;
 	this->sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
 	if (this->sockfd == -1)
 	{
 		std::cerr << "[Server-error]: socket creation failed.\n";
@@ -16,6 +18,12 @@ bool Socket::initSocket()
 	bzero(buff_rx, buff_size);
 
 	addr.sin_family = AF_INET;
+
+	if (setsockopt(this->sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0)
+	{
+		std::cout << "Failed setsockopt" << " | errno: " << errno << std::endl;
+		exit(EXIT_FAILURE);
+	}
 	return true;
 }
 

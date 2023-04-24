@@ -106,11 +106,7 @@ bool IRCServer::initServerSocket()
 	}
 
 	std::cout << "[SERVER-INFO]: Listening on IP: " << inet_ntoa(serverSocket->addr.sin_addr) << " | Port: " << ntohs(serverSocket->addr.sin_port) << "\n";
-	if (setsockopt(this->serverSocket->sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0)
-	{
-		std::cout << "[SERVER-Error: Failed setsockopt " << ntohs(serverSocket->addr.sin_port) << "| errno: " << errno << std::endl;
-		exit(EXIT_FAILURE);
-	}
+
 	return true;
 }
 
