@@ -14,6 +14,8 @@
 #include <string>
 #include <iostream>
 
+#include "BSLogger.hpp"
+
 #define MSG "ECHO Daemon v1.0 \r\n"
 
 class Socket
