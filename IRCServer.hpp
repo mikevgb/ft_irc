@@ -29,8 +29,6 @@ private:
 
 	Socket *serverSocket;
 
-	logger log;
-
 	// socket options
 	int _opt;
 	int _nfds;

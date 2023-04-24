@@ -169,12 +169,25 @@ logger::logger(std::ostream &f, unsigned ll, std::string n)
 	_loglevel() = ll;
 }
 
+// Original operator
+/*
 logger &logger::operator()(unsigned ll)
 {
 	_message_level = ll;
 	if (_message_level <= _loglevel())
 	{
 		_fac << prep_level(*this) << prep_time(*this) << prep_name(*this) << ": ";
+	}
+	return *this;
+}
+*/
+
+logger &logger::operator()(unsigned ll)
+{
+	_message_level = ll;
+	if (_message_level <= _loglevel())
+	{
+		_fac << prep_level(*this) << prep_time(*this) << ": ";
 	}
 	return *this;
 }
@@ -496,5 +509,7 @@ private:
 	std::string _unit;
 	bool _final;
 };
+
+static logger logg(std::cout, "");
 
 #endif

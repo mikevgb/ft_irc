@@ -12,13 +12,12 @@
 
 #include "IRCServer.hpp"
 
-IRCServer::IRCServer(const char *ip, const uint16_t port) : log(std::cout, __PRETTY_FUNCTION__)
+IRCServer::IRCServer(const char *ip, const uint16_t port)
 {
 	_handleCmds = new HandleCmds();
 	serverSocket = new Socket(ip, port);
 	this->startServer();
 
-	//TODO: See how can implement this section of code into initServer()
 	/*server data*/
 	if (gethostname(_hostname, sizeof(_hostname)) != -1)
 		std::cout << "IRCServer:Host: " << _hostname << std::endl;
@@ -40,7 +39,7 @@ IRCServer::IRCServer(const char *ip, const uint16_t port) : log(std::cout, __PRE
 //TODO: Convert this constructor to the constructor above
 //TODO: Understand what setsocketopt do and simplify it
 
-IRCServer::IRCServer() : log(std::cout, __PRETTY_FUNCTION__)
+IRCServer::IRCServer()
 {
 	_handleCmds = new HandleCmds();
 	_opt = 1;
@@ -91,28 +90,21 @@ IRCServer::~IRCServer()
 
 bool IRCServer::startServer()
 {
-	int opt = true;
-
 	if (bind(serverSocket->sockfd, (struct sockaddr *)&serverSocket->addr, sizeof(serverSocket->addr)) == -1)
 	{
-		log(LOG_ERROR) << "Failed to bind to port " << ntohs(serverSocket->addr.sin_port) << " | errno: " << errno << "\n";
+		logg(LOG_ERROR) << "Failed to bind to port " << ntohs(serverSocket->addr.sin_port) << " | errno: " << errno << "\n";
 		exit(EXIT_FAILURE);
 	}
 
-	log(LOG_INFO) << "Socket successfully binded.\n";
+	logg(LOG_INFO) << "Socket successfully binded.\n";
 
 	if (listen(serverSocket->sockfd, MAX_USERS) < 0)
 	{
-		log(LOG_ERROR) << "Failed to listen on socket. errno: " << errno << "\n";
+		logg(LOG_ERROR) << "Failed to listen on socket. errno: " << errno << "\n";
 		exit(EXIT_FAILURE);
 	}
 
-	log(LOG_INFO) << "Listening on IP: " << inet_ntoa(serverSocket->addr.sin_addr) << " | Port: " << ntohs(serverSocket->addr.sin_port) << "\n";
-	if (setsockopt(this->serverSocket->sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0)
-	{
-		log(LOG_ERROR) << "Failed setsockopt " << ntohs(serverSocket->addr.sin_port) << "| errno: " << errno << "\n";
-		exit(EXIT_FAILURE);
-	}
+	logg(LOG_INFO) << "Listening on IP: " << inet_ntoa(serverSocket->addr.sin_addr) << " | Port: " << ntohs(serverSocket->addr.sin_port) << "\n";
 	return true;
 }
 
@@ -256,11 +248,11 @@ void IRCServer::ft_result(int var, std::string function)
 {
 	if (var < 0)
 	{
-		log(LOG_ERROR) << std::strerror(errno) << "\n";
+		logg(LOG_ERROR) << std::strerror(errno) << "\n";
 		exit(1);
 	}
 	else
-		log(LOG_INFO) << function << " OK:IRCServer\n";
+		logg(LOG_INFO) << function << " OK:IRCServer\n";
 }
 
 void IRCServer::setNonBlocking(int fdIn)
