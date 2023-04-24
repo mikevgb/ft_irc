@@ -117,6 +117,11 @@ public:
 		static unsigned _ll_internal = LOG_DEFAULT;
 		return _ll_internal;
 	};
+	static logger &getInstance()
+	{
+		static logger instance(std::cout, __PRETTY_FUNCTION__); // Guaranteed to be destroyed && Instantiated on first use.
+		return instance;
+	}
 	inline void set_log_level(unsigned ll) { _loglevel() = ll; }
 
 private:
