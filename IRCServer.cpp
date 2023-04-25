@@ -74,7 +74,7 @@ void IRCServer::acceptConnection()
 {
 	int new_sd = 0;
 
-	if (new_sd != -1)
+	if (new_sd != -1) //FIXME: While vs if (Multiple queries at the same time)
 	{
 		new_sd = accept(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, &_serverSocket->lenaddr);
 		if (new_sd < 0)
@@ -123,7 +123,7 @@ void IRCServer::pollLoop()
 
 	setUpPoll();
 
-	while (1)
+	while (true)
 	{
 		logg(LOG_DEBUG) << "Waiting on poll()...\n";
 		rc = poll(_pollFds, _nfds, TIMEOUT);
@@ -180,12 +180,9 @@ void IRCServer::pollLoop()
 							// data.append(_buf, rc);
 							data = std::string(_buf, rc);
 							memset(&_buf, 0, sizeof(_buf));
+							logg(LOG_DEBUG) << "Data:\n";
+							recvMessage(data, _pollFds[i].fd);
 						}
-					}
-					if (dataReceived)
-					{
-						std::cout << "IRCServer:dataReceived" << std::endl;
-						recvMessage(data, _pollFds[i].fd);
 					}
 				}
 			}
@@ -193,7 +190,7 @@ void IRCServer::pollLoop()
 	}
 }
 
-// TODO:
+// TODO: Recive msg. CHECK IT AND FORMAT STRUCTURE!
 // handle poll time out -> use epoll -> https://stackoverflow.com/questions/40070698/how-to-detect-a-timed-out-client-with-poll
 // check for errors (errors!)
 // replace structs with vectors

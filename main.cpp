@@ -19,6 +19,8 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
  */
+	logg.set_log_level(LOG_DEBUG);
+	
 	IRCServer irc("127.0.0.1", 4242);
 	(void)argv;
 	(void)argc;
