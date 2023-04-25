@@ -19,7 +19,8 @@
 
 #include "lib2.h"
 #include "Socket.hpp"
-#include "BSLogger.hpp"
+#include "include/BSLogger.hpp"
+#include "include/Colors.hpp"
 
 class HandleCmds;
 class logger;

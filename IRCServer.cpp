@@ -22,7 +22,7 @@ IRCServer::IRCServer(const char *ip, const uint16_t port)
 
 	/*server data*/
 	if (gethostname(_hostname, sizeof(_hostname)) != -1)
-		logg(LOG_INFO) << "Host: " << _hostname << "\n";
+		logg(LOG_INFO) << colors::blue << "Host: " << _hostname << colors::reset << "\n";
 	host = gethostbyname(_hostname);
 
 	if (host != 0)
@@ -30,16 +30,13 @@ IRCServer::IRCServer(const char *ip, const uint16_t port)
 		for (int i = 0; host->h_addr_list[i] != 0; i++)
 		{
 			memcpy(&_addr, host->h_addr_list[i], sizeof(struct in_addr));
-			logg(LOG_INFO) << "IP address: " << inet_ntoa(_addr) << "\n";
+			logg(LOG_INFO) << colors::yellow << "IP address: " << inet_ntoa(_addr) << colors::reset << "\n";
 		}
 	}
-	logg(LOG_INFO) << "Port: " << (int)ntohs(_serverSocket->addr.sin_port) << "\n";
+	logg(LOG_INFO) << colors::bright_green << "Port: " << (int)ntohs(_serverSocket->addr.sin_port) << colors::reset << "\n";
 
 	this->pollLoop();
 }
-
-// TODO: Convert this constructor to the constructor above
-// TODO: Understand what setsocketopt do and simplify it
 
 IRCServer::~IRCServer()
 {
@@ -63,15 +60,13 @@ bool IRCServer::startServer()
 		exit(EXIT_FAILURE);
 	}
 
-	logg(LOG_INFO) << "Socket successfully binded.\n";
+	logg(LOG_DEBUG) << "Socket successfully binded.\n";
 
 	if (listen(_serverSocket->sockfd, MAX_USERS) < 0)
 	{
 		logg(LOG_ERROR) << "Failed to listen on socket. errno: " << errno << "\n";
 		exit(EXIT_FAILURE);
 	}
-
-	logg(LOG_INFO) << "Listening on IP: " << inet_ntoa(_serverSocket->addr.sin_addr) << " | Port: " << ntohs(_serverSocket->addr.sin_port) << "\n";
 	return true;
 }
 
@@ -79,7 +74,7 @@ void IRCServer::acceptConnection()
 {
 	int new_sd = 0;
 
-	while (new_sd != -1)
+	if (new_sd != -1)
 	{
 		new_sd = accept(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, &_serverSocket->lenaddr);
 		if (new_sd < 0)
@@ -87,9 +82,10 @@ void IRCServer::acceptConnection()
 			if (errno != EWOULDBLOCK)
 			{
 				logg(LOG_ERR) << "accept() failed\n";
+				exit(EXIT_FAILURE);
 			}
 		}
-		logg(LOG_INFO) << "New incoming connection - " << new_sd;
+		logg(LOG_INFO) << "New incoming connection - " << new_sd << "\n";
 		_pollFds[_nfds].fd = new_sd;
 		_pollFds[_nfds].events = POLLIN;
 		_handleCmds->newUser(_pollFds[_nfds].fd);
@@ -149,10 +145,10 @@ void IRCServer::pollLoop()
 				{
 					continue;
 				}
-				if (_pollFds[i].revents != POLLIN)
+				if (_pollFds[i].revents != POLLIN) //FIXME: What happens if Client insert Ctrl + D
 				{
-					logg(LOG_ERROR) << "  Error! revents = " << _pollFds[i].revents;
-					break;
+					logg(LOG_ERROR) << "  Error! revents = " << _pollFds[i].revents << "\n";
+					exit(EXIT_FAILURE);
 				}
 				if (_pollFds[i].fd == _serverSocket->sockfd)
 				{
