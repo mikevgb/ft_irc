@@ -14,7 +14,7 @@
 #include <string>
 #include <iostream>
 
-#include "BSLogger.hpp"
+#include "include/BSLogger.hpp"
 
 #define MSG "ECHO Daemon v1.0 \r\n"
 

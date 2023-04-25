@@ -41,7 +41,7 @@ Socket::Socket(const char *ip, const uint16_t port)
 	// Setting server socket structure
 	addr.sin_addr.s_addr = inet_addr(ip);
 	addr.sin_port = htons((uint16_t)(port));
-	logg(LOG_INFO) << "Socket successfully created\n";
+	logg(LOG_DEBUG) << "Socket successfully created\n";
 }
 
 Socket::~Socket()
