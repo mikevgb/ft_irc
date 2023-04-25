@@ -15,7 +15,9 @@
 IRCServer::IRCServer(const char *ip, const uint16_t port)
 {
 	_handleCmds = new HandleCmds();
-	serverSocket = new Socket(ip, port);
+	_serverSocket = new Socket(ip, port);
+	_nfds = 1;
+	_opt = 1;
 	this->startServer();
 
 	/*server data*/
@@ -31,96 +33,69 @@ IRCServer::IRCServer(const char *ip, const uint16_t port)
 			logg(LOG_INFO) << "IP address: " << inet_ntoa(_addr) << "\n";
 		}
 	}
-	logg(LOG_INFO) << "Port: " << (int)ntohs(serverSocket->addr.sin_port) << "\n";
+	logg(LOG_INFO) << "Port: " << (int)ntohs(_serverSocket->addr.sin_port) << "\n";
 
 	this->pollLoop();
 }
 
-//TODO: Convert this constructor to the constructor above
-//TODO: Understand what setsocketopt do and simplify it
-
-IRCServer::IRCServer()
-{
-	_handleCmds = new HandleCmds();
-	_opt = 1;
-	_nfds = 1;
-	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	ft_result(_sockfd, "socket");
-
-	/*make the socket reusable*/
-	_sock_opt = setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&_opt,
-						   sizeof(_opt));
-	ft_result(_sock_opt, "setsockopt");
-
-	/*bind*/
-	memset(&bindSocket, 0, sizeof(bindSocket));
-	bindSocket.sin_family = AF_INET;
-	bindSocket.sin_port = htons(4242);
-	bindSocket.sin_addr.s_addr = INADDR_ANY;
-	_socketBind = bind(_sockfd, (struct sockaddr *)&bindSocket, sizeof(bindSocket));
-	ft_result(_socketBind, "bind");
-
-	/*listen*/
-	_escucha = listen(_sockfd, 2); // that 2 should be the max number of connex
-	ft_result(_escucha, "listen");
-
-	/*server data*/
-	if (gethostname(_hostname, sizeof(_hostname)) != -1)
-		std::cout << "IRCServer:Host: " << _hostname << std::endl;
-	host = gethostbyname(_hostname);
-
-	if (host != 0)
-	{
-		for (int i = 0; host->h_addr_list[i] != 0; i++)
-		{
-			memcpy(&_addr, host->h_addr_list[i], sizeof(struct in_addr));
-			std::cout << "IRCServer:IP address: " << inet_ntoa(_addr) << std::endl;
-		}
-	}
-	std::cout << "IRCServer:Port: " << (int)ntohs(bindSocket.sin_port) << std::endl;
-
-	this->pollLoop();
-}
+// TODO: Convert this constructor to the constructor above
+// TODO: Understand what setsocketopt do and simplify it
 
 IRCServer::~IRCServer()
 {
-	close(_sockfd);
+	close(_serverSocket->sockfd);
 	delete _handleCmds;
+	delete _serverSocket;
+	for (int i = 0; i < _nfds; i++)
+	{
+		if (_pollFds[i].fd >= 0)
+		{
+			close(_pollFds[i].fd);
+		}
+	}
 }
 
 bool IRCServer::startServer()
 {
-	if (bind(serverSocket->sockfd, (struct sockaddr *)&serverSocket->addr, sizeof(serverSocket->addr)) == -1)
+	if (bind(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, sizeof(_serverSocket->addr)) == -1)
 	{
-		logg(LOG_ERROR) << "Failed to bind to port " << ntohs(serverSocket->addr.sin_port) << " | errno: " << errno << "\n";
+		logg(LOG_ERROR) << "Failed to bind to port " << ntohs(_serverSocket->addr.sin_port) << " | errno: " << errno << "\n";
 		exit(EXIT_FAILURE);
 	}
 
 	logg(LOG_INFO) << "Socket successfully binded.\n";
 
-	if (listen(serverSocket->sockfd, MAX_USERS) < 0)
+	if (listen(_serverSocket->sockfd, MAX_USERS) < 0)
 	{
 		logg(LOG_ERROR) << "Failed to listen on socket. errno: " << errno << "\n";
 		exit(EXIT_FAILURE);
 	}
 
-	logg(LOG_INFO) << "Listening on IP: " << inet_ntoa(serverSocket->addr.sin_addr) << " | Port: " << ntohs(serverSocket->addr.sin_port) << "\n";
+	logg(LOG_INFO) << "Listening on IP: " << inet_ntoa(_serverSocket->addr.sin_addr) << " | Port: " << ntohs(_serverSocket->addr.sin_port) << "\n";
 	return true;
 }
 
-void IRCServer::acceptConex()
+void IRCServer::acceptConnection()
 {
-	if (_acceptConexSocket != -1)
+	int new_sd = 0;
+
+	while (new_sd != -1)
 	{
-		_acceptConexSocket = accept(_sockfd, (struct sockaddr *)&bindSocket, &_addr_size);
-		if (_acceptConexSocket < 0)
+		new_sd = accept(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, &_serverSocket->lenaddr);
+		if (new_sd < 0)
+		{
 			if (errno != EWOULDBLOCK)
-				ft_result(_acceptConexSocket, "accept");
-		_pollFds[_nfds].fd = _acceptConexSocket;
+			{
+				logg(LOG_ERR) << "accept() failed\n";
+			}
+		}
+		logg(LOG_INFO) << "New incoming connection - " << new_sd;
+		_pollFds[_nfds].fd = new_sd;
 		_pollFds[_nfds].events = POLLIN;
 		_handleCmds->newUser(_pollFds[_nfds].fd);
 		_nfds++;
 	}
+
 	setNonBlocking(_pollFds[_nfds].fd);
 }
 
@@ -130,11 +105,11 @@ void IRCServer::setUpPoll()
 	memset(&_pollFds, 0, sizeof(_pollFds));
 
 	// Set up the server socket
-	_pollFds[0].fd = _sockfd;
+	_pollFds[0].fd = _serverSocket->sockfd;
 	_pollFds[0].events = POLLIN;
 }
 
-void IRCServer::lostConex(int i)
+void IRCServer::closeConnection(int i)
 {
 	std::cout << "IRCServer:connection lost on fd: " << _pollFds[i].fd << std::endl;
 	int closeReturn = close(_pollFds[i].fd);
@@ -146,45 +121,70 @@ void IRCServer::lostConex(int i)
 
 void IRCServer::pollLoop()
 {
-	_acceptConexSocket = 0;
+	int rc = 1;
+	std::string data;
+	bool dataReceived;
+
 	setUpPoll();
 
 	while (1)
 	{
-		_pollReturn = poll(_pollFds, _nfds, 3000);
-		if (_pollReturn < 0)
-			ft_result(_pollReturn, "poll");
-		for (int i = 0; i < _nfds; i++)
+		logg(LOG_DEBUG) << "Waiting on poll()...\n";
+		rc = poll(_pollFds, _nfds, TIMEOUT);
+		if (rc < 0)
 		{
-			if (_pollFds[i].revents == 0)
-				continue;
+			logg(LOG_ERROR) << "poll() failed | errno: " << errno << "\n";
+			exit(EXIT_FAILURE);
+		}
+		else if (rc == 0)
+		{
+			logg(LOG_ERROR) << "poll() timed out.  End program.\n\n";
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			for (int i = 0; i < _nfds; i++)
 			{
-				if (_pollFds[i].fd == _sockfd)
-					acceptConex();
+				if (_pollFds[i].revents == 0)
+				{
+					continue;
+				}
+				if (_pollFds[i].revents != POLLIN)
+				{
+					logg(LOG_ERROR) << "  Error! revents = " << _pollFds[i].revents;
+					break;
+				}
+				if (_pollFds[i].fd == _serverSocket->sockfd)
+				{
+					acceptConnection();
+				}
 				else
 				{
-					bool dataReceived = false;
 					memset(&_buf, 0, sizeof(_buf));
-					std::string data;
-					_rcv = -1;
+					dataReceived = false;
 					while (!dataReceived)
 					{
-						_rcv = 0;
-						_rcv = recv(_pollFds[i].fd, _buf, sizeof(_buf), 0);
-						if (_rcv == 0)
+						rc = recv(_pollFds[i].fd, _buf, sizeof(_buf), 0);
+						if (rc < 0)
 						{
-							lostConex(i);
+							if (errno != EWOULDBLOCK)
+							{
+								logg(LOG_ERR) << "  recv() failed\n";
+							}
 							break;
 						}
-						else if (_rcv > 0)
+						else if (rc == 0)
+						{
+							closeConnection(i);
+							break;
+						}
+						else
 						{
 							dataReceived = true;
-							// data.append(_buf, _rcv);
-							data = std::string(_buf, _rcv);
+							// data.append(_buf, rc);
+							data = std::string(_buf, rc);
 							memset(&_buf, 0, sizeof(_buf));
 						}
-						else if (_rcv == -1)
-							ft_result(_rcv, "recv");
 					}
 					if (dataReceived)
 					{

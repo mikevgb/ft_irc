@@ -12,9 +12,10 @@
 
 #ifndef IRCSERVER_HPP
 #define IRCSERVER_HPP
-#define MAX_USERS 420
+#define MAX_USERS 1024
 #define MAXMSGSIZE 512
 #define HOST_SIZE 128
+#define TIMEOUT 30000
 
 #include "lib2.h"
 #include "Socket.hpp"
@@ -28,38 +29,26 @@ class IRCServer
 private:
 	HandleCmds *_handleCmds; // std::unique_ptr
 
-	Socket *serverSocket;
+	Socket *_serverSocket;
 
 	// socket options
 	int _opt;
-	int _nfds;
-	int _rcv;
-	int _sockfd;
-	int _sock_opt;
 
 	// socket address
-	struct sockaddr_in bindSocket;
-	socklen_t _addr_size;
 
 	// server data
-	int _socketBind;
 	char _hostname[HOST_SIZE];
-	int _escucha;
 	struct hostent *host;
 	struct in_addr _addr;
 
 	// poll fds
 	struct pollfd _pollFds[MAX_USERS];
-	int _pollReturn;
+	int _nfds;
 
 	// receive buffer
 	char _buf[MAXMSGSIZE];
 
-	// accepted client socket
-	int _acceptConexSocket;
-
 public:
-	IRCServer();
 	IRCServer(const char *ip, const uint16_t port);
 	~IRCServer();
 
@@ -68,8 +57,8 @@ public:
 	void recvMessage(std::string s, int fd);
 	void ft_result(int var, std::string function);
 	void setUpPoll();
-	void acceptConex();
-	void lostConex(int i);
+	void acceptConnection();
+	void closeConnection(int i);
 	void setNonBlocking(int fdIn);
 };
 

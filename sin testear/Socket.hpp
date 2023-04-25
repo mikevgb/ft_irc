@@ -34,7 +34,7 @@ class IRCServer
 	struct pollfd _pollFds[420];
 	int _pollReturn;
 	char _buf[512];
-	int _acceptConexSocket;
+	int _new_sd;
 
 	public:
 
@@ -94,7 +94,7 @@ class IRCServer
 	void pollLoop()
 	{
 		memset(&_pollFds, 0, sizeof(_pollFds));
-		_acceptConexSocket = 0;
+		_new_sd = 0;
 		char welcomemssg[18] = "lemIRC server v0\n";
 
 		_pollFds[0].fd = _sockfd;
@@ -115,13 +115,13 @@ class IRCServer
 				{
 					if (_pollFds[i].fd == _sockfd)
 					{
-						if (_acceptConexSocket != -1)
+						if (_new_sd != -1)
 						{
-							_acceptConexSocket = accept(_sockfd, (struct sockaddr*)&bindSocket, &_addr_size);
-							if (_acceptConexSocket < 0)
+							_new_sd = accept(_sockfd, (struct sockaddr*)&bindSocket, &_addr_size);
+							if (_new_sd < 0)
 								if (errno != EWOULDBLOCK)
-									ft_result(_acceptConexSocket, "accept");
-							_pollFds[_nfds].fd = _acceptConexSocket;
+									ft_result(_new_sd, "accept");
+							_pollFds[_nfds].fd = _new_sd;
 							_pollFds[_nfds].events = POLLIN;
 							send(_pollFds[_nfds].fd, welcomemssg, sizeof(welcomemssg), 0);							
 							server.newUser(_pollFds[i].fd);
