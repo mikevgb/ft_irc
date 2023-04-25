@@ -17,7 +17,7 @@ IRCServer::IRCServer(const char *ip, const uint16_t port)
 	_handleCmds = new HandleCmds();
 	_serverSocket = new Socket(ip, port);
 	_nfds = 1;
-	_opt = 1;
+
 	this->startServer();
 
 	/*server data*/

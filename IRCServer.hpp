@@ -32,11 +32,6 @@ private:
 
 	Socket *_serverSocket;
 
-	// socket options
-	int _opt;
-
-	// socket address
-
 	// server data
 	char _hostname[HOST_SIZE];
 	struct hostent *host;
