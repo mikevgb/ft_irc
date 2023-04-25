@@ -14,6 +14,7 @@
 #define IRCSERVER_HPP
 #define MAX_USERS 420
 #define MAXMSGSIZE 512
+#define HOST_SIZE 128
 
 #include "lib2.h"
 #include "Socket.hpp"
@@ -42,9 +43,9 @@ private:
 
 	// server data
 	int _socketBind;
-	char _hostname[80];
+	char _hostname[HOST_SIZE];
 	int _escucha;
-	struct hostent *_p_he;
+	struct hostent *host;
 	struct in_addr _addr;
 
 	// poll fds

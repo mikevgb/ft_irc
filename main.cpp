@@ -13,13 +13,14 @@ void printUsage()
 
 int main(int argc, char **argv)
 {
-	if (argc > 4 || argc < 3)
+/* 	if (argc > 4 || argc < 3)
 	{
 		printUsage();
 		exit(EXIT_FAILURE);
 	}
-
+ */
 	IRCServer irc;
 	(void)argv;
+	(void)argc;
 	return 0;
 }

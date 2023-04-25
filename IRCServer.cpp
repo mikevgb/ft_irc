@@ -20,18 +20,18 @@ IRCServer::IRCServer(const char *ip, const uint16_t port)
 
 	/*server data*/
 	if (gethostname(_hostname, sizeof(_hostname)) != -1)
-		std::cout << "IRCServer:Host: " << _hostname << std::endl;
-	_p_he = gethostbyname(_hostname);
+		logg(LOG_INFO) << "Host: " << _hostname << "\n";
+	host = gethostbyname(_hostname);
 
-	if (_p_he != 0)
+	if (host != 0)
 	{
-		for (int i = 0; _p_he->h_addr_list[i] != 0; i++)
+		for (int i = 0; host->h_addr_list[i] != 0; i++)
 		{
-			memcpy(&_addr, _p_he->h_addr_list[i], sizeof(struct in_addr));
-			std::cout << "IRCServer:IP address: " << inet_ntoa(_addr) << std::endl;
+			memcpy(&_addr, host->h_addr_list[i], sizeof(struct in_addr));
+			logg(LOG_INFO) << "IP address: " << inet_ntoa(_addr) << "\n";
 		}
 	}
-	std::cout << "IRCServer:Port: " << (int)ntohs(bindSocket.sin_port) << std::endl;
+	logg(LOG_INFO) << "Port: " << (int)ntohs(serverSocket->addr.sin_port) << "\n";
 
 	this->pollLoop();
 }
@@ -67,13 +67,13 @@ IRCServer::IRCServer()
 	/*server data*/
 	if (gethostname(_hostname, sizeof(_hostname)) != -1)
 		std::cout << "IRCServer:Host: " << _hostname << std::endl;
-	_p_he = gethostbyname(_hostname);
+	host = gethostbyname(_hostname);
 
-	if (_p_he != 0)
+	if (host != 0)
 	{
-		for (int i = 0; _p_he->h_addr_list[i] != 0; i++)
+		for (int i = 0; host->h_addr_list[i] != 0; i++)
 		{
-			memcpy(&_addr, _p_he->h_addr_list[i], sizeof(struct in_addr));
+			memcpy(&_addr, host->h_addr_list[i], sizeof(struct in_addr));
 			std::cout << "IRCServer:IP address: " << inet_ntoa(_addr) << std::endl;
 		}
 	}

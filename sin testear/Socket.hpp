@@ -29,7 +29,7 @@ class IRCServer
 	int _socketBind;
 	char _hostname[80];
 	int _escucha;
-	struct hostent* _p_he;
+	struct hostent* host;
 	struct in_addr _addr;
 	struct pollfd _pollFds[420];
 	int _pollReturn;
@@ -78,13 +78,13 @@ class IRCServer
 		/*server data*/
 		if (gethostname(_hostname, sizeof(_hostname)) != -1)
 			std::cout << "Host: " << _hostname << std::endl;
-		_p_he = gethostbyname(_hostname);
+		host = gethostbyname(_hostname);
 
-		if (_p_he != 0)
+		if (host != 0)
 		{
-			for (int i = 0; _p_he->h_addr_list[i] != 0; i++)
+			for (int i = 0; host->h_addr_list[i] != 0; i++)
 			{
-				memcpy(&_addr, _p_he->h_addr_list[i], sizeof(struct in_addr));
+				memcpy(&_addr, host->h_addr_list[i], sizeof(struct in_addr));
 				std::cout << "IP address: " << inet_ntoa(_addr) << std::endl;
 			}
 		}
