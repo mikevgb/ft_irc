@@ -20,7 +20,7 @@ IRCServer::IRCServer(const char *ip, const uint16_t port)
 
 	this->startServer();
 
-	/*server data*/
+	/*server data*/ //FIXME: Handle main arguments
 	if (gethostname(_hostname, sizeof(_hostname)) != -1)
 		logg(LOG_INFO) << colors::blue << "Host: " << _hostname << colors::reset << "\n";
 	host = gethostbyname(_hostname);
@@ -118,11 +118,8 @@ void IRCServer::closeConnection(int i)
 void IRCServer::pollLoop()
 {
 	int rc = 1;
-	std::string data;
-	bool dataReceived;
 
 	setUpPoll();
-
 	while (true)
 	{
 		logg(LOG_DEBUG) << "Waiting on poll()...\n";
@@ -145,7 +142,7 @@ void IRCServer::pollLoop()
 				{
 					continue;
 				}
-				if (_pollFds[i].revents != POLLIN) //FIXME: What happens if Client insert Ctrl + D
+				if (_pollFds[i].revents != POLLIN) //FIXME: What happens if Client insert Ctrl + D, CLEAN UP THE ACTIVE CONNECTIONS	 (See IBM Poll C)
 				{
 					logg(LOG_ERROR) << "  Error! revents = " << _pollFds[i].revents << "\n";
 					exit(EXIT_FAILURE);
@@ -157,8 +154,7 @@ void IRCServer::pollLoop()
 				else
 				{
 					memset(&_buf, 0, sizeof(_buf));
-					dataReceived = false;
-					while (!dataReceived)
+					while (true)
 					{
 						rc = recv(_pollFds[i].fd, _buf, sizeof(_buf), 0);
 						if (rc < 0)
@@ -176,12 +172,8 @@ void IRCServer::pollLoop()
 						}
 						else
 						{
-							dataReceived = true;
-							// data.append(_buf, rc);
-							data = std::string(_buf, rc);
-							memset(&_buf, 0, sizeof(_buf));
-							logg(LOG_DEBUG) << "Data:\n";
-							recvMessage(data, _pollFds[i].fd);
+							recvMessage(std::string(_buf, rc), _pollFds[i].fd);
+							break;
 						}
 					}
 				}
@@ -195,13 +187,13 @@ void IRCServer::pollLoop()
 // check for errors (errors!)
 // replace structs with vectors
 
-void IRCServer::recvMessage(std::string s, int fd)
+void IRCServer::recvMessage(std::string msg, int fd) //FIXME: Reformat output messages
 {
-	// std::string s(msg);
-	std::cout << "IRCServer:INSIDE recvMessage: " << s << std::endl;
+	// std::string msg(msg);
+	logg(LOG_DEBUG) << "Data:" << msg << "\n";
 	(void)fd;
-	std::list<std::string> comandos(Command::split(s, "\r\n"));
-	// comandos.push_back(Command::split(s,"\r\n"));
+	std::list<std::string> comandos(Command::split(msg, "\r\n"));
+	// comandos.push_back(Command::split(msg,"\r\n"));
 	for (std::list<std::string>::iterator itcmd = comandos.begin(); itcmd != comandos.end(); itcmd++)
 	{
 		Command *cmd = new Command(fd, *itcmd);
@@ -213,14 +205,14 @@ void IRCServer::recvMessage(std::string s, int fd)
 			for (it = results.begin(); it != results.end(); it++)
 			{
 				ResultCmd result = *it;
-				std::cout << "IRCServer:recvMessage: " << result.getMsg() << std::endl;
+				logg(LOG_DEBUG) << "recvMessage: " << result.getMsg() << "\n";
 				std::set<int> users = result.getUsers();
 				std::set<int>::iterator itusers;
 				for (itusers = users.begin(); itusers != users.end(); itusers++)
 				{
 					int fdUser = *itusers;
 					std::string tmp = result.getMsg();
-					std::cout << "IRCServer:recvMessage send to fd: " << fdUser << std::endl;
+					logg(LOG_DEBUG) << "recvMessage send to fd: " << fdUser << "\n"; // TODO: Why the next FD is the sum of the previous fd plus 2?
 					if (!tmp.empty())
 					{
 						tmp += "\n";
@@ -233,7 +225,7 @@ void IRCServer::recvMessage(std::string s, int fd)
 			// cada result tiene una lista de usuarios a los que se manda el mismo mensaje
 		}
 		else
-			std::cout << "IRCServer:*** _handleCmds->executeCmd fail! (IRCServer::recvMessage) ***" << std::endl;
+			logg(LOG_ERR) << "IRCServer:*** _handleCmds->executeCmd fail! (IRCServer::recvMessage) ***\n";
 	}
 }
 
@@ -248,9 +240,13 @@ void IRCServer::ft_result(int var, std::string function)
 		logg(LOG_INFO) << function << " OK:IRCServer\n";
 }
 
-void IRCServer::setNonBlocking(int fdIn)
+void IRCServer::setNonBlocking(int fd)
 {
-	int opts = fcntl(fdIn, F_GETFL); // get current fd flags
-	ft_result(opts, "fcntl");
-	fcntl(fdIn, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
+	int opts = fcntl(fd, F_GETFL); // get current fd flags
+	if (opts < 0)
+	{
+		logg(LOG_ERR) << "ftcntl() failed | errno: " << errno << "\n";
+		exit(EXIT_FAILURE);
+	}
+	fcntl(fd, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
 }
