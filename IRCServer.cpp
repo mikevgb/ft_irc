@@ -20,7 +20,7 @@ IRCServer::IRCServer(const char *ip, const uint16_t port)
 
 	this->startServer();
 
-	/*server data*/ //FIXME: Handle main arguments
+	/*server data*/ // FIXME: Handle main arguments
 	if (gethostname(_hostname, sizeof(_hostname)) != -1)
 		logg(LOG_INFO) << colors::blue << "Host: " << _hostname << colors::reset << "\n";
 	host = gethostbyname(_hostname);
@@ -73,7 +73,7 @@ void IRCServer::acceptConnection()
 {
 	int new_sd = 0;
 
-	if (new_sd != -1) //FIXME: While vs if (Multiple queries at the same time)
+	if (new_sd != -1) // FIXME: While vs if (Multiple queries at the same time)
 	{
 		new_sd = accept(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, &_serverSocket->lenaddr);
 		if (new_sd < 0)
@@ -83,7 +83,7 @@ void IRCServer::acceptConnection()
 				throwError("accept() failed");
 			}
 		}
-		logg(LOG_INFO) << "New incoming connection - [" << new_sd << "]\n";
+		logg(LOG_INFO) << "New incoming connection - [" << colors::bright_blue << new_sd << colors::reset << "]\n";
 		_pollFds[_nfds].fd = new_sd;
 		_pollFds[_nfds].events = POLLIN;
 		_cmdHandler->newUser(_pollFds[_nfds].fd);
@@ -105,7 +105,7 @@ void IRCServer::setUpPoll()
 
 void IRCServer::loseConnection(int i)
 {
-	logg(LOG_INFO) << "Connection lost on fd: " << _pollFds[i].fd << "\n";
+	logg(LOG_INFO) << "Connection lost on fd: " << colors::bright_blue << _pollFds[i].fd << colors::reset << "\n";
 	if (close(_pollFds[i].fd) < 0)
 	{
 		throwError("Close() Error");
@@ -174,7 +174,7 @@ void IRCServer::pollLoop()
 // check for errors (errors!)
 // replace structs with vectors
 
-void IRCServer::recvMessage(std::string msg, int fd) //FIXME: Reformat output messages
+void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output messages
 {
 	logg(LOG_DEBUG) << "Data:" << msg << "\n";
 	std::list<std::string> comandos(Command::split(msg, "\r\n"));
@@ -216,8 +216,8 @@ void IRCServer::recvMessage(std::string msg, int fd) //FIXME: Reformat output me
 
 void IRCServer::throwError(std::string msg)
 {
-		logg(LOG_ERROR) << msg << " | Errno: "  << std::strerror(errno) << "\n";
-		exit(EXIT_FAILURE);
+	logg(LOG_ERROR) << msg << " | Errno: " << std::strerror(errno) << "\n";
+	exit(EXIT_FAILURE);
 }
 
 void IRCServer::setNonBlocking(int fd)
