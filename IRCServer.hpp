@@ -15,7 +15,6 @@
 #define MAX_USERS 1024
 #define MAXMSGSIZE 512
 #define HOST_SIZE 128
-#define TIMEOUT 30000
 
 #include "lib2.h"
 #include "Socket.hpp"
@@ -51,7 +50,7 @@ public:
 	bool startServer();
 	void pollLoop();
 	void recvMessage(std::string s, int fd);
-	void ft_result(int var, std::string function);
+	void throwError(int var, std::string function);
 	void setUpPoll();
 	void acceptConnection();
 	void closeConnection(int i);

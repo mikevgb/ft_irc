@@ -38,7 +38,7 @@ class IRCServer
 
 	public:
 
-	void ft_result(int var, std::string function)
+	void throwError(int var, std::string function)
 	{
 		char errbuf[256];
 		if (var < 0)
@@ -56,12 +56,12 @@ class IRCServer
 		_opt = 1;
 		_nfds = 1;
 		_sockfd = socket(AF_INET, SOCK_STREAM, 0);
-		ft_result(_sockfd, "socket");
+		throwError(_sockfd, "socket");
 
 		/*make fd reusable*/
 		_sock_opt = setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&_opt,
 				sizeof(_opt));
-		ft_result(_sock_opt, "setsockopt");
+		throwError(_sock_opt, "setsockopt");
 
 		/*bind*/
 		memset(&bindSocket, 0, sizeof(bindSocket));
@@ -69,11 +69,11 @@ class IRCServer
 		bindSocket.sin_port = htons(4242);
 		bindSocket.sin_addr.s_addr = INADDR_ANY;
 		_socketBind = bind(_sockfd, (struct sockaddr*)&bindSocket, sizeof(bindSocket));
-		ft_result(_socketBind, "bind");
+		throwError(_socketBind, "bind");
 
 		/*listen*/
 		_escucha = listen(_sockfd, 2);
-		ft_result(_escucha, "listen");
+		throwError(_escucha, "listen");
 
 		/*server data*/
 		if (gethostname(_hostname, sizeof(_hostname)) != -1)
@@ -106,7 +106,7 @@ class IRCServer
 		{
 			_pollReturn = poll(_pollFds, _nfds, 3000);
 			if (_pollReturn < 0)
-				ft_result(_pollReturn, "poll");
+				throwError(_pollReturn, "poll");
 			for (int i = 0; i < _nfds; i++)
 			{
 				memset(&_buf, 0, sizeof(_buf));
@@ -120,7 +120,7 @@ class IRCServer
 							_new_sd = accept(_sockfd, (struct sockaddr*)&bindSocket, &_addr_size);
 							if (_new_sd < 0)
 								if (errno != EWOULDBLOCK)
-									ft_result(_new_sd, "accept");
+									throwError(_new_sd, "accept");
 							_pollFds[_nfds].fd = _new_sd;
 							_pollFds[_nfds].events = POLLIN;
 							send(_pollFds[_nfds].fd, welcomemssg, sizeof(welcomemssg), 0);							

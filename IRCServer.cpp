@@ -107,11 +107,14 @@ void IRCServer::setUpPoll()
 
 void IRCServer::closeConnection(int i)
 {
-	std::cout << "IRCServer:connection lost on fd: " << _pollFds[i].fd << std::endl;
-	int closeReturn = close(_pollFds[i].fd);
-	ft_result(closeReturn, "close");
+	logg(LOG_WARNING) << "Connection lost on fd: " << _pollFds[i].fd << "\n";
+	if (close(_pollFds[i].fd) < 0)
+	{
+		logg(LOG_ERR) << "Close() Error\n";
+		exit(EXIT_FAILURE);
+	}
 	_handleCmds->removeUser(_pollFds[i].fd);
-	_pollFds[i].fd = 0; // not sure of this
+	_pollFds[i].fd = -1;
 	_nfds--;
 }
 
@@ -123,15 +126,10 @@ void IRCServer::pollLoop()
 	while (true)
 	{
 		logg(LOG_DEBUG) << "Waiting on poll()...\n";
-		rc = poll(_pollFds, _nfds, TIMEOUT);
+		rc = poll(_pollFds, _nfds, -1);
 		if (rc < 0)
 		{
 			logg(LOG_ERROR) << "poll() failed | errno: " << errno << "\n";
-			exit(EXIT_FAILURE);
-		}
-		else if (rc == 0)
-		{
-			logg(LOG_ERROR) << "poll() timed out.  End program.\n\n";
 			exit(EXIT_FAILURE);
 		}
 		else
@@ -163,18 +161,16 @@ void IRCServer::pollLoop()
 							{
 								logg(LOG_ERR) << "  recv() failed\n";
 							}
-							break;
 						}
 						else if (rc == 0)
 						{
 							closeConnection(i);
-							break;
 						}
 						else
 						{
 							recvMessage(std::string(_buf, rc), _pollFds[i].fd);
-							break;
 						}
+						break;
 					}
 				}
 			}
@@ -189,9 +185,7 @@ void IRCServer::pollLoop()
 
 void IRCServer::recvMessage(std::string msg, int fd) //FIXME: Reformat output messages
 {
-	// std::string msg(msg);
 	logg(LOG_DEBUG) << "Data:" << msg << "\n";
-	(void)fd;
 	std::list<std::string> comandos(Command::split(msg, "\r\n"));
 	// comandos.push_back(Command::split(msg,"\r\n"));
 	for (std::list<std::string>::iterator itcmd = comandos.begin(); itcmd != comandos.end(); itcmd++)
@@ -229,15 +223,10 @@ void IRCServer::recvMessage(std::string msg, int fd) //FIXME: Reformat output me
 	}
 }
 
-void IRCServer::ft_result(int var, std::string function)
+void IRCServer::throwError(int logLevel, std::string msg)
 {
-	if (var < 0)
-	{
-		logg(LOG_ERROR) << std::strerror(errno) << "\n";
-		exit(1);
-	}
-	else
-		logg(LOG_INFO) << function << " OK:IRCServer\n";
+		logg(logLevel) << msg << " | Errno: "  << std::strerror(errno) << "\n";
+		exit(EXIT_FAILURE);
 }
 
 void IRCServer::setNonBlocking(int fd)
@@ -245,8 +234,7 @@ void IRCServer::setNonBlocking(int fd)
 	int opts = fcntl(fd, F_GETFL); // get current fd flags
 	if (opts < 0)
 	{
-		logg(LOG_ERR) << "ftcntl() failed | errno: " << errno << "\n";
-		exit(EXIT_FAILURE);
+		throwError(LOG_ERROR, "ftcntl() failed");
 	}
 	fcntl(fd, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
 }
