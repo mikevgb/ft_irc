@@ -56,7 +56,7 @@ bool IRCServer::startServer()
 {
 	if (bind(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, sizeof(_serverSocket->addr)) == -1)
 	{
-		logg(LOG_ERROR) << "Failed to bind to port " << ntohs(_serverSocket->addr.sin_port) << " | errno: " << errno << "\n";
+		logg(LOG_ERROR) << "Failed to bind to port " << ntohs(_serverSocket->addr.sin_port) << "\n";
 		exit(EXIT_FAILURE);
 	}
 
@@ -64,8 +64,7 @@ bool IRCServer::startServer()
 
 	if (listen(_serverSocket->sockfd, MAX_USERS) < 0)
 	{
-		logg(LOG_ERROR) << "Failed to listen on socket. errno: " << errno << "\n";
-		exit(EXIT_FAILURE);
+		throwError("Failed to listen on socket");
 	}
 	return true;
 }
@@ -81,11 +80,10 @@ void IRCServer::acceptConnection()
 		{
 			if (errno != EWOULDBLOCK)
 			{
-				logg(LOG_ERR) << "accept() failed\n";
-				exit(EXIT_FAILURE);
+				throwError("accept() failed");
 			}
 		}
-		logg(LOG_INFO) << "New incoming connection - " << new_sd << "\n";
+		logg(LOG_INFO) << "New incoming connection - [" << new_sd << "]\n";
 		_pollFds[_nfds].fd = new_sd;
 		_pollFds[_nfds].events = POLLIN;
 		_handleCmds->newUser(_pollFds[_nfds].fd);
@@ -110,8 +108,7 @@ void IRCServer::loseConnection(int i)
 	logg(LOG_INFO) << "Connection lost on fd: " << _pollFds[i].fd << "\n";
 	if (close(_pollFds[i].fd) < 0)
 	{
-		logg(LOG_ERR) << "Close() Error\n";
-		exit(EXIT_FAILURE);
+		throwError("Close() Error");
 	}
 	_handleCmds->removeUser(_pollFds[i].fd);
 	_pollFds[i].fd = -1;
@@ -129,8 +126,7 @@ void IRCServer::pollLoop()
 		rc = poll(_pollFds, _nfds, -1);
 		if (rc < 0)
 		{
-			logg(LOG_ERROR) << "poll() failed | errno: " << errno << "\n";
-			exit(EXIT_FAILURE);
+			throwError("poll() failed");
 		}
 		else
 		{
@@ -218,9 +214,9 @@ void IRCServer::recvMessage(std::string msg, int fd) //FIXME: Reformat output me
 	}
 }
 
-void IRCServer::throwError(int logLevel, std::string msg)
+void IRCServer::throwError(std::string msg)
 {
-		logg(logLevel) << msg << " | Errno: "  << std::strerror(errno) << "\n";
+		logg(LOG_ERROR) << msg << " | Errno: "  << std::strerror(errno) << "\n";
 		exit(EXIT_FAILURE);
 }
 
@@ -229,7 +225,7 @@ void IRCServer::setNonBlocking(int fd)
 	int opts = fcntl(fd, F_GETFL); // get current fd flags
 	if (opts < 0)
 	{
-		throwError(LOG_ERROR, "ftcntl() failed");
+		throwError("ftcntl() failed");
 	}
 	fcntl(fd, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
 }

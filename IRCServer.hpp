@@ -50,7 +50,7 @@ public:
 	bool startServer();
 	void pollLoop();
 	void recvMessage(std::string s, int fd);
-	void throwError(int var, std::string function);
+	void throwError(std::string msg);
 	void setUpPoll();
 	void acceptConnection();
 	void loseConnection(int i);
