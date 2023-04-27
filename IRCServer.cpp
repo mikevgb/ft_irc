@@ -14,7 +14,7 @@
 
 IRCServer::IRCServer(const char *ip, const uint16_t port)
 {
-	_handleCmds = new HandleCmds();
+	_handleCmds = new CommandHandler();
 	_serverSocket = new Socket(ip, port);
 	_nfds = 1;
 

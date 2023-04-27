@@ -11,7 +11,7 @@
 #include "ListChannels.hpp"
 #include "ResultCmd.hpp"
 #include "Command.hpp"
-#include "HandleCmds.hpp"
+#include "CommandHandler.hpp"
 #include "IRCServer.hpp"
 //#include <string>
 #include <optional>

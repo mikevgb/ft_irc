@@ -21,13 +21,13 @@
 #include "include/BSLogger.hpp"
 #include "include/Colors.hpp"
 
-class HandleCmds;
+class CommandHandler;
 class logger;
 
 class IRCServer
 {
 private:
-	HandleCmds *_handleCmds; // std::unique_ptr
+	CommandHandler *_handleCmds; // std::unique_ptr
 
 	Socket *_serverSocket;
 

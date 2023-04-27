@@ -1,11 +1,11 @@
 
-#include "HandleCmds.hpp"
+#include "CommandHandler.hpp"
 
-// HandleCmds::HandleCmds()
+// CommandHandler::CommandHandler()
 // :_users(), _channels(),_listToSend(),_sender(),_cmd()
 // { }
 
-HandleCmds::HandleCmds()
+CommandHandler::CommandHandler()
 	: _sender(), _cmd()
 {
 	_users = new ListUsers();
@@ -13,22 +13,22 @@ HandleCmds::HandleCmds()
 	_firstTimeFlag = 0;
 }
 
-HandleCmds::~HandleCmds()
+CommandHandler::~CommandHandler()
 {
 	delete _users;
 }
 
-User *HandleCmds::newUser(const int fd)
+User *CommandHandler::newUser(const int fd)
 {
 	return _users->createUser(fd);
 }
 
-bool HandleCmds::removeUser(const int fd)
+bool CommandHandler::removeUser(const int fd)
 {
 	return _users->removeUser(fd);
 }
 
-void HandleCmds::sendPRIVMSG(const std::string &nick)
+void CommandHandler::sendPRIVMSG(const std::string &nick)
 {
 	std::cout << "inside sendPRIVMSG" << std::endl;
 	ResultCmd result;
@@ -40,7 +40,7 @@ void HandleCmds::sendPRIVMSG(const std::string &nick)
 	// que en sender se cargue el getFullName nick@user@server que debe devolver el usuario
 }
 
-std::list<ResultCmd> HandleCmds::mierdaDeFuncionDeMiguelQueNoSabeProgramarNiEscuchar()
+std::list<ResultCmd> CommandHandler::mierdaDeFuncionDeMiguelQueNoSabeProgramarNiEscuchar()
 {
 	std::list<ResultCmd> results;
 	return results;
@@ -53,7 +53,7 @@ the appropriate method to handle the command. For example, if the command
 is "NICK", it calls the setNick method of the _users object to set the
 user's nickname.*/
 
-std::list<ResultCmd> HandleCmds::executeCmd(Command *cmd)
+std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 {
 	_cmd = cmd;
 	std::string msg = _cmd->getMsg();
@@ -64,8 +64,8 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command *cmd)
 
 	std::list<ResultCmd> results;
 	std::string comando = _cmd->getCommand();
-	std::cout << "*****HandleCmds:mesaje: " << _cmd->getMsg() << std::endl;
-	std::cout << "HandleCmds:comando: " << comando << std::endl;
+	std::cout << "*****CommandHandler:mesaje: " << _cmd->getMsg() << std::endl;
+	std::cout << "CommandHandler:comando: " << comando << std::endl;
 	if (!_cmd->getCommand().compare("NICK"))
 	{
 		if (_cmd->paramsSize() == 0)
@@ -176,7 +176,7 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command *cmd)
 			while (!channels.empty())
 			{
 				std::string channel = channels.front();
-				std::cout << "HandleCmds:canal guardado:" << channel << std::endl;
+				std::cout << "CommandHandler:canal guardado:" << channel << std::endl;
 				ResultCmd result;
 				std::list<ResultCmd> msgsOfChannel = _channels->joinChannel(channel, sender);
 				results.insert(results.end(), msgsOfChannel.begin(), msgsOfChannel.end());
@@ -190,13 +190,13 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command *cmd)
 		ResultCmd result(0);
 		result.addUser(_cmd->getSender());
 		/*https://ircv3.net/specs/extensions/capability-negotiation.html*/
-		std::cout << "HandleCmds:CAP command detected" << std::endl;
+		std::cout << "CommandHandler:CAP command detected" << std::endl;
 		if (_cmd->paramsSize() == 0)
 		{
 
 			result.setMsg("Invalid C");
 			results.push_back(result);
-			std::cout << "HandleCmds:ERROR: Invalid CAP command" << std::endl;
+			std::cout << "CommandHandler:ERROR: Invalid CAP command" << std::endl;
 			return results;
 			/* Respuesta si falla */
 			//: example.org 410 jw FOO :Invalid CAP command
@@ -207,14 +207,14 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command *cmd)
 			std::string param = _cmd->getNextParam();
 			if (!param.compare("LS"))
 			{
-				std::cout << "HandleCmds:LS command detected after CAP" << std::endl;
+				std::cout << "CommandHandler:LS command detected after CAP" << std::endl;
 				result.setMsg(CAPASUPPORTANSWER);
 				results.push_back(result);
 				return results;
 			}
 			else if (!param.compare("END"))
 			{
-				std::cout << "HandleCmds:END command detected afert CAP" << std::endl;
+				std::cout << "CommandHandler:END command detected afert CAP" << std::endl;
 				return results;
 				/*The END subcommand signals to the server that capability
 				negotiation is complete and requests that the server continue
@@ -226,7 +226,7 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command *cmd)
 				// REQ blindly request a set of capabilitys to the server
 				// atm we will ignore them.
 				int _firstTimeFlag = 0;
-				std::cout << "HandleCmds:REQ command detected after CAP" << std::endl;
+				std::cout << "CommandHandler:REQ command detected after CAP" << std::endl;
 				if (_firstTimeFlag != 0)
 					// NAK server answers NAK when the requested capa is rejected
 					result.setMsg("CAP * NAK :"); // missing requested capas
@@ -238,7 +238,7 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command *cmd)
 			else if (!param.compare("LIST"))
 			{
 				// LIST client request list of server capab
-				std::cout << "HandleCmds:LIST command detected after CAP" << std::endl;
+				std::cout << "CommandHandler:LIST command detected after CAP" << std::endl;
 				// no capa enabled atm, empty answer
 				result.setMsg("CAP * LIST :");
 				results.push_back(result);
@@ -282,7 +282,7 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command *cmd)
 	}
 	else
 	{
-		std::cout << "HandleCmds:idk = " << _cmd->getCommand() << std::endl;
+		std::cout << "CommandHandler:idk = " << _cmd->getCommand() << std::endl;
 		ResultCmd result(0);
 		result.addUser(_cmd->getSender());
 		result.setMsg("IDK what u said :( " + _cmd->getMsg());
@@ -295,12 +295,12 @@ std::list<ResultCmd> HandleCmds::executeCmd(Command *cmd)
 	return results;
 }
 
-ListUsers *HandleCmds::getUsers()
+ListUsers *CommandHandler::getUsers()
 {
 	return _users;
 }
 
-// void HandleCmds::sendFt(std::string msg2send, int fd)
+// void CommandHandler::sendFt(std::string msg2send, int fd)
 // {
 //     ResultCmd result()
 //     User* sender = _users->getUser(_cmd->getSender());

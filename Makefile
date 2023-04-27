@@ -10,7 +10,7 @@ SRCS:=	User.cpp \
 		ListChannels.cpp \
 		Command.cpp \
 		ResultCmd.cpp \
-		HandleCmds.cpp \
+		CommandHandler.cpp \
 		ServerMsgs.cpp \
 		Msg.cpp \
 		IRCServer.cpp \

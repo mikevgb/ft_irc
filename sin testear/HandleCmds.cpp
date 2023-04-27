@@ -1,25 +1,25 @@
 
-#include "HandleCmds.hpp"
+#include "CommandHandler.hpp"
 
-HandleCmds::HandleCmds()
+CommandHandler::CommandHandler()
 :_users(), _channels(),_listToSend(),_sender(),_cmd()
 { }
 
-HandleCmds::~HandleCmds()
+CommandHandler::~CommandHandler()
 { }
 
 
-User* HandleCmds::newUser(const int fd)
+User* CommandHandler::newUser(const int fd)
 {
     return _users.createUser(fd);
 }
 
-bool HandleCmds::removeUser(const int fd)
+bool CommandHandler::removeUser(const int fd)
 {
     return _users.removeUser(fd);
 }
 
-void HandleCmds::sendPRIVMSG( const std::string& nick)
+void CommandHandler::sendPRIVMSG( const std::string& nick)
 {
     ResultCmd result;
     result.addUser(_users.getUser(nick)->getFd());
@@ -30,7 +30,7 @@ void HandleCmds::sendPRIVMSG( const std::string& nick)
 
 }
 
-std::list<ResultCmd> HandleCmds::executeCmd(Command& cmd)
+std::list<ResultCmd> CommandHandler::executeCmd(Command& cmd)
 {
     _cmd = &cmd;
     std::list<ResultCmd> results;

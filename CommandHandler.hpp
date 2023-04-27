@@ -12,7 +12,7 @@ class ListChannels;
 class Command;
 class ResultCmd;
 
-class HandleCmds
+class CommandHandler
 {
 private:
 	ListUsers *_users;
@@ -25,8 +25,8 @@ private:
 
 public:
 	void sendPRIVMSG(const std::string &nick);
-	HandleCmds();
-	~HandleCmds();
+	CommandHandler();
+	~CommandHandler();
 	std::list<ResultCmd> executeCmd(Command *cmd);
 	User *newUser(const int fd);
 	bool removeUser(const int fd);

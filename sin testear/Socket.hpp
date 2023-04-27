@@ -14,7 +14,7 @@
 #define SOCKET_HPP
 
 #include "lib.h"
-#include "HandleCmds.hpp"
+#include "CommandHandler.hpp"
 
 class IRCServer
 {
@@ -100,7 +100,7 @@ class IRCServer
 		_pollFds[0].fd = _sockfd;
 		_pollFds[0].events = POLLIN;
 
-		HandleCmds server;
+		CommandHandler server;
 
 		while(1)
 		{
@@ -151,7 +151,7 @@ class IRCServer
 
 							/*
 							Command cmd(_pollFds[i].fd, _buf);
-							ResultCmd res = server.handleCmds(cmd);
+							ResultCmd res = server.CommandHandler(cmd);
 							std::set<int> users = res.getUsers();
 							*/
 							recvMessage(_buf, _pollFds[i].fd);

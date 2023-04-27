@@ -7,7 +7,7 @@
 
 class User;
 
-class HandleCmds
+class CommandHandler
 {
 private:
     ListUsers _users;
@@ -19,8 +19,8 @@ private:
     void sendPRIVMSG( const std::string& nick);
 
 public:
-    HandleCmds();
-    ~HandleCmds();
+    CommandHandler();
+    ~CommandHandler();
     std::list<ResultCmd> executeCmd(Command& cmd);
     User* newUser(const int fd);
     bool removeUser(const int fd);
