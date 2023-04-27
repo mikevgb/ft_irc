@@ -105,9 +105,9 @@ void IRCServer::setUpPoll()
 	_pollFds[0].events = POLLIN;
 }
 
-void IRCServer::closeConnection(int i)
+void IRCServer::loseConnection(int i)
 {
-	logg(LOG_WARNING) << "Connection lost on fd: " << _pollFds[i].fd << "\n";
+	logg(LOG_INFO) << "Connection lost on fd: " << _pollFds[i].fd << "\n";
 	if (close(_pollFds[i].fd) < 0)
 	{
 		logg(LOG_ERR) << "Close() Error\n";
@@ -140,11 +140,6 @@ void IRCServer::pollLoop()
 				{
 					continue;
 				}
-				if (_pollFds[i].revents != POLLIN) //FIXME: What happens if Client insert Ctrl + D, CLEAN UP THE ACTIVE CONNECTIONS	 (See IBM Poll C)
-				{
-					logg(LOG_ERROR) << "  Error! revents = " << _pollFds[i].revents << "\n";
-					exit(EXIT_FAILURE);
-				}
 				if (_pollFds[i].fd == _serverSocket->sockfd)
 				{
 					acceptConnection();
@@ -164,7 +159,7 @@ void IRCServer::pollLoop()
 						}
 						else if (rc == 0)
 						{
-							closeConnection(i);
+							loseConnection(i);
 						}
 						else
 						{

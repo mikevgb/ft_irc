@@ -53,7 +53,7 @@ public:
 	void throwError(int var, std::string function);
 	void setUpPoll();
 	void acceptConnection();
-	void closeConnection(int i);
+	void loseConnection(int i);
 	void setNonBlocking(int fdIn);
 };
 
