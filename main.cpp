@@ -6,7 +6,7 @@ void printUsage()
 	std::cout << "./ircserv [host:port_network:password_network] <port> <password>\n";
 }
 
-int main(int argc, char **argv)
+int main()
 {
 /* 	if (argc > 4 || argc < 3)
 	{
