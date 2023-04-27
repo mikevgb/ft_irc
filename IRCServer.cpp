@@ -14,7 +14,7 @@
 
 IRCServer::IRCServer(const char *ip, const uint16_t port)
 {
-	_handleCmds = new CommandHandler();
+	_cmdHandler = new CommandHandler();
 	_serverSocket = new Socket(ip, port);
 	_nfds = 1;
 
@@ -41,7 +41,7 @@ IRCServer::IRCServer(const char *ip, const uint16_t port)
 IRCServer::~IRCServer()
 {
 	close(_serverSocket->sockfd);
-	delete _handleCmds;
+	delete _cmdHandler;
 	delete _serverSocket;
 	for (int i = 0; i < _nfds; i++)
 	{
@@ -86,7 +86,7 @@ void IRCServer::acceptConnection()
 		logg(LOG_INFO) << "New incoming connection - [" << new_sd << "]\n";
 		_pollFds[_nfds].fd = new_sd;
 		_pollFds[_nfds].events = POLLIN;
-		_handleCmds->newUser(_pollFds[_nfds].fd);
+		_cmdHandler->newUser(_pollFds[_nfds].fd);
 		_nfds++;
 	}
 
@@ -110,7 +110,7 @@ void IRCServer::loseConnection(int i)
 	{
 		throwError("Close() Error");
 	}
-	_handleCmds->removeUser(_pollFds[i].fd);
+	_cmdHandler->removeUser(_pollFds[i].fd);
 	_pollFds[i].fd = -1;
 	_nfds--;
 }
@@ -182,7 +182,7 @@ void IRCServer::recvMessage(std::string msg, int fd) //FIXME: Reformat output me
 	for (std::list<std::string>::iterator itcmd = comandos.begin(); itcmd != comandos.end(); itcmd++)
 	{
 		Command *cmd = new Command(fd, *itcmd);
-		std::list<ResultCmd> results = _handleCmds->executeCmd(cmd);
+		std::list<ResultCmd> results = _cmdHandler->executeCmd(cmd);
 		std::list<ResultCmd>::iterator it;
 
 		if (!results.empty())
@@ -210,7 +210,7 @@ void IRCServer::recvMessage(std::string msg, int fd) //FIXME: Reformat output me
 			// cada result tiene una lista de usuarios a los que se manda el mismo mensaje
 		}
 		else
-			logg(LOG_ERR) << "IRCServer:*** _handleCmds->executeCmd fail! (IRCServer::recvMessage) ***\n";
+			logg(LOG_ERR) << "IRCServer:*** _cmdHandler->executeCmd fail! (IRCServer::recvMessage) ***\n";
 	}
 }
 

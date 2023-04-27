@@ -27,7 +27,7 @@ class logger;
 class IRCServer
 {
 private:
-	CommandHandler *_handleCmds; // std::unique_ptr
+	CommandHandler *_cmdHandler; // std::unique_ptr
 
 	Socket *_serverSocket;
 
