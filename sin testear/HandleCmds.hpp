@@ -16,15 +16,14 @@ private:
     std::queue<ResultCmd> _listToSend;
     std::string _sender;
     Command *_cmd;
-    void sendPRIVMSG( const std::string& nick);
+    void sendPRIVMSG(const std::string &nick);
 
 public:
     CommandHandler();
     ~CommandHandler();
-    std::list<ResultCmd> executeCmd(Command& cmd);
-    User* newUser(const int fd);
+    std::list<ResultCmd> executeCmd(Command &cmd);
+    User *newUser(const int fd);
     bool removeUser(const int fd);
-    
 };
 
 #endif

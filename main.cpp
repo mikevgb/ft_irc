@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 12:42:47 by mmateo-t          #+#    #+#             */
+/*   Updated: 2023/05/03 12:45:48 by mmateo-t         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "IRCServer.hpp"
 
 void printUsage()
@@ -13,14 +25,14 @@ void printUsage()
 
 int main(int argc, char **argv)
 {
-/* 	if (argc > 4 || argc < 3)
-	{
-		printUsage();
-		exit(EXIT_FAILURE);
-	}
- */
+	/* 	if (argc > 4 || argc < 3)
+		{
+			printUsage();
+			exit(EXIT_FAILURE);
+		}
+	 */
 	logg.set_log_level(LOG_DEBUG);
-	
+
 	IRCServer irc("127.0.0.1", 4242);
 	(void)argv;
 	(void)argc;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Channel.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
+/*   Updated: 2023/05/03 12:45:28 by mmateo-t         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Channel.hpp"
 Channel::Channel(const std::string &name)
 	: _name(name), _topic("Nuevo canal"), _password(), _users(), _admins(), _voiced(), _baned()

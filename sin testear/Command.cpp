@@ -1,7 +1,7 @@
 
 #include "Command.hpp"
 
-const std::string Command::getToNext(const std::string& split)
+const std::string Command::getToNext(const std::string &split)
 {
     std::string result = std::string("");
     std::cout << "temp antes: " << _temp << std::endl;
@@ -25,15 +25,15 @@ const std::string Command::getToNext(const std::string& split)
     return result;
 }
 
-Command::Command(int from, const std::string& msg)
-:_from(from), _msg(msg), _cmd(), _params()
+Command::Command(int from, const std::string &msg)
+    : _from(from), _msg(msg), _cmd(), _params()
 {
     bool end = false;
     _temp = msg;
     _cmd = getToNext(" ");
     if (_cmd[0] == ':')
-         _cmd = getToNext(" ");
-    while(!end)
+        _cmd = getToNext(" ");
+    while (!end)
     {
         std::string param = getToNext(" ");
         if (!_temp.empty())
@@ -54,13 +54,12 @@ std::string Command::getCommand() const
     return _cmd;
 }
 
-void Command::setCommand(const std::string& cmd)
+void Command::setCommand(const std::string &cmd)
 {
     _cmd = cmd;
 }
 
-
-Command& Command::operator=( const Command& other )
+Command &Command::operator=(const Command &other)
 {
     _cmd = other._cmd;
     _params = other._params;
@@ -68,26 +67,26 @@ Command& Command::operator=( const Command& other )
     return *this;
 }
 
-const std::string& Command::getNextParam()
+const std::string &Command::getNextParam()
 {
-	std::string& param = _params.front();
-	_params.pop();
-	return param;
+    std::string &param = _params.front();
+    _params.pop();
+    return param;
 }
 
 int Command::paramsSize()
 {
-	return _params.size();
+    return _params.size();
 }
 
-std::queue<std::string>& Command::getTargets()
+std::queue<std::string> &Command::getTargets()
 {
     return _targets;
 }
 
-const std::string& Command::getNextTarget()
+const std::string &Command::getNextTarget()
 {
-    std::string& target = _targets.front();
+    std::string &target = _targets.front();
     _targets.pop();
     return target;
 }

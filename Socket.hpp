@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Socket.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 12:41:49 by mmateo-t          #+#    #+#             */
+/*   Updated: 2023/05/03 12:45:46 by mmateo-t         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SOCKET_HPP
 #define SOCKET_HPP
 #include <sys/types.h>
@@ -23,7 +35,7 @@ class Socket
 	friend class IRCServer;
 
 public:
-	static const size_t buff_size = 1024;
+	static const size_t buff_size = 512;
 
 private:
 	int sockfd;

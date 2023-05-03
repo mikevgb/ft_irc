@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   User.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
+/*   Updated: 2023/05/03 12:45:47 by mmateo-t         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef USER_H
 #define USER_H
 #include "lib2.h"
 
-//class Channel;
+// class Channel;
 
 class User
 {
@@ -11,21 +23,22 @@ private:
 	std::string _nick;
 	std::string _user;
 	bool _isLogged;
-	std::set<Channel*> _channels;
+	std::set<Channel *> _channels;
+
 public:
 	User(size_t fd);
 	~User();
 	size_t getFd();
-	void setNick(const std::string& nick);
-	const std::string& getNick() const;
-	void setUser(const std::string& user);
-	const std::string& getUser() const;
+	void setNick(const std::string &nick);
+	const std::string &getNick() const;
+	void setUser(const std::string &user);
+	const std::string &getUser() const;
 	bool isLogged() const;
 	int changeToLogged();
 	const std::string getFullName() const;
-	void addChannel(Channel* channel);
-	void removeChannel(Channel* channel);
-	bool operator==(const User& other) const;
+	void addChannel(Channel *channel);
+	void removeChannel(Channel *channel);
+	bool operator==(const User &other) const;
 	void eraseUser();
 };
 

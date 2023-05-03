@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lib2.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 12:43:04 by mmateo-t          #+#    #+#             */
+/*   Updated: 2023/05/03 12:45:47 by mmateo-t         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <iostream>
 #include <map>
 #include <set>
@@ -13,11 +25,10 @@
 #include "Command.hpp"
 #include "CommandHandler.hpp"
 #include "IRCServer.hpp"
-//#include <string>
+// #include <string>
 #include <optional>
 
-
-//socket libs
+// socket libs
 #include <netinet/ip.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>

@@ -73,7 +73,7 @@ void IRCServer::acceptConnection()
 {
 	int new_sd = 0;
 
-	if (new_sd != -1) // FIXME: While vs if (Multiple queries at the same time)
+	if (new_sd != -1)
 	{
 		new_sd = accept(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, &_serverSocket->lenaddr);
 		if (new_sd < 0)
@@ -170,16 +170,13 @@ void IRCServer::pollLoop()
 }
 
 // TODO: Recive msg. CHECK IT AND FORMAT STRUCTURE!
-// handle poll time out -> use epoll -> https://stackoverflow.com/questions/40070698/how-to-detect-a-timed-out-client-with-poll
 // check for errors (errors!)
-// replace structs with vectors
 
 void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output messages
 {
 	logg(LOG_DEBUG) << "Data:" << msg << "\n";
-	std::list<std::string> comandos(Command::split(msg, "\r\n"));
-	// comandos.push_back(Command::split(msg,"\r\n"));
-	for (std::list<std::string>::iterator itcmd = comandos.begin(); itcmd != comandos.end(); itcmd++)
+	std::list<std::string> commands(Command::split(msg, "\r\n"));
+	for (std::list<std::string>::iterator itcmd = commands.begin(); itcmd != commands.end(); itcmd++)
 	{
 		Command *cmd = new Command(fd, *itcmd);
 		std::list<ResultCmd> results = _cmdHandler->executeCmd(cmd);
