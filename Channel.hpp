@@ -6,12 +6,12 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:53 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:29 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 13:10:23 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CHANNEL_H
-#define CHANNEL_H
+#ifndef CHANNEL_HPP
+#define CHANNEL_HPP
 #include "lib2.h"
 /*****************************
   o - give/take channel operator privileges;*
