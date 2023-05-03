@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ServerMsgs.hpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 12:42:07 by mmateo-t          #+#    #+#             */
+/*   Updated: 2023/05/03 12:45:44 by mmateo-t         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SERVER_MSG_H
 #define SERVER_MSG_H
 #include "Msg.hpp"
@@ -20,17 +32,15 @@
 #define RPL_TOPIC "332"
 #define END_NAME_LIST " :End of /NAMES list."
 
-
 class ServerMsgs
 {
 private:
-    
 public:
     ServerMsgs(/* args */);
     ~ServerMsgs();
     static std::string getColon();
-    static std::string getWelcomeMsg(const std::string& nick, const std::string& user);
-    static std::string getErrNickname(const std::string& nick);
+    static std::string getWelcomeMsg(const std::string &nick, const std::string &user);
+    static std::string getErrNickname(const std::string &nick);
     /*
     static std::string getResponseTopicChannel(const std::string& channel,const std::string& nick, const std::string& topic);
     static std::string getResponseUsersChannel(const std::string& channel,const std::string& nick, const std::string& users);

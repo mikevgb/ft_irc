@@ -1,70 +1,60 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IRCServer.hpp                                         :+:      :+:    :+:   */
+/*   IRCServer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/12 16:05:06 by mvillaes          #+#    #+#             */
-/*   Updated: 2023/04/19 13:55:13 by mmateo-t         ###   ########.fr       */
+/*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
+/*   Updated: 2023/05/03 12:45:33 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IRCSERVER_HPP
 #define IRCSERVER_HPP
-#define MAX_USERS 420
+#define MAX_USERS 1024
 #define MAXMSGSIZE 512
+#define HOST_SIZE 128
 
 #include "lib2.h"
+#include "Socket.hpp"
+#include "include/BSLogger.hpp"
+#include "include/Colors.hpp"
 
-class HandleCmds;
+class CommandHandler;
+class logger;
 
 class IRCServer
 {
-	private:
-	HandleCmds* _handleCmds; //std::unique_ptr
+private:
+	CommandHandler *_cmdHandler; // std::unique_ptr
 
-	//socket options
-	int _opt;
-	int _nfds;
-	int _rcv;
-	int _sockfd;
-	int _sock_opt;
+	Socket *_serverSocket;
 
-	//socket address
-	struct sockaddr_in bindSocket;
-	socklen_t _addr_size;
-
-	//server data
-	int _socketBind;
-	char _hostname[80];
-	int _escucha;
-	struct hostent* _p_he;
+	// server data
+	char _hostname[HOST_SIZE];
+	struct hostent *host;
 	struct in_addr _addr;
 
-	//poll fds
+	// poll fds
 	struct pollfd _pollFds[MAX_USERS];
-	int _pollReturn;
+	int _nfds;
 
-	//receive buffer
+	// receive buffer
 	char _buf[MAXMSGSIZE];
 
-	//accepted client socket
-	int _acceptConexSocket;
-	
-
-	public:
-	IRCServer();
+public:
+	IRCServer(const char *ip, const uint16_t port);
 	~IRCServer();
 
+	bool startServer();
 	void pollLoop();
 	void recvMessage(std::string s, int fd);
-	void ft_result(int var, std::string function);
+	void throwError(std::string msg);
 	void setUpPoll();
-	void acceptConex();
-	void lostConex(int i);
+	void acceptConnection();
+	void loseConnection(int i);
 	void setNonBlocking(int fdIn);
-
 };
 
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ResultCmd.hpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 12:42:17 by mmateo-t          #+#    #+#             */
+/*   Updated: 2023/05/03 12:45:41 by mmateo-t         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef RESULT_CMD
 #define RESULT_CMD
 #include <string>
@@ -7,22 +19,23 @@
 class ResultCmd
 {
 private:
-    bool _hasError;
-    int _resultCode;
-    std::string _msg;
-    std::set<int> _users;
+	bool _hasError;
+	int _resultCode;
+	std::string _msg;
+	std::set<int> _users;
+
 public:
-    ResultCmd();
-    ResultCmd(int resultCode);
-    ~ResultCmd();
-    void setMsg(const std::string& msg);
-    void addToMsg(const std::string& msg);
-    void addUser(int fd);
-    void setUsers(const std::set<int>& fds);
-    void setError(int errorCode);
-    int getResultCode();
-    const std::string& getMsg();
-    std::set<int>& getUsers();
+	ResultCmd();
+	ResultCmd(int resultCode);
+	~ResultCmd();
+	void setMsg(const std::string &msg);
+	void addToMsg(const std::string &msg);
+	void addUser(int fd);
+	void setUsers(const std::set<int> &fds);
+	void setError(int errorCode);
+	int getResultCode();
+	const std::string &getMsg();
+	std::set<int> &getUsers();
 };
 
 #endif
