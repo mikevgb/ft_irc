@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCServer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 15:35:54 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:46:34 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@
 #include "Socket.hpp"
 #include "include/BSLogger.hpp"
 #include "include/Colors.hpp"
-#include "Channel.hpp"
-#include "User.hpp"
-#include <list>
 
 class CommandHandler;
 class logger;
+class Channel;
+class User;
 
 class IRCServer
 {
@@ -46,8 +45,7 @@ private:
 	// receive buffer
 	char _buf[MAXMSGSIZE];
 
-	std::list<Channel *> channelList;
-	std::list<User *> userList;
+	std::string _password;
 
 public:
 	IRCServer(const uint16_t port, const std::string password);

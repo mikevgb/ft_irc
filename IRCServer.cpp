@@ -17,12 +17,13 @@ IRCServer::IRCServer(const uint16_t port, const std::string password)
 	_cmdHandler = new CommandHandler();
 	_serverSocket = new Socket(port);
 	_nfds = 1;
+	_password = password;
 
 	this->startServer();
 
 	/*server data*/ // FIXME: Handle main arguments
 	if (gethostname(_hostname, sizeof(_hostname)) != -1)
-		logg(LOG_INFO) << colors::blue << "Host: " << _hostname << colors::reset << "\n";
+		logg(LOG_INFO) << BLUE << "Host: " << _hostname << RESET << "\n";
 	host = gethostbyname(_hostname);
 
 	if (host != 0)
@@ -30,10 +31,10 @@ IRCServer::IRCServer(const uint16_t port, const std::string password)
 		for (int i = 0; host->h_addr_list[i] != 0; i++)
 		{
 			memcpy(&_addr, host->h_addr_list[i], sizeof(struct in_addr));
-			logg(LOG_INFO) << colors::yellow << "IP address: " << inet_ntoa(_addr) << colors::reset << "\n";
+			logg(LOG_INFO) << YELLOW << "IP address: " << inet_ntoa(_addr) << RESET << "\n";
 		}
 	}
-	logg(LOG_INFO) << colors::bright_green << "Port: " << (int)ntohs(_serverSocket->addr.sin_port) << colors::reset << "\n";
+	logg(LOG_INFO) << GREEN << "Port: " << (int)ntohs(_serverSocket->addr.sin_port) << RESET << "\n";
 
 	this->pollLoop();
 }
@@ -83,7 +84,7 @@ void IRCServer::acceptConnection()
 				throwError("accept() failed");
 			}
 		}
-		logg(LOG_INFO) << "New incoming connection - [" << colors::bright_blue << new_sd << colors::reset << "]\n";
+		logg(LOG_INFO) << "New incoming connection - [" << BLUE << new_sd << RESET << "]\n";
 		_pollFds[_nfds].fd = new_sd;
 		_pollFds[_nfds].events = POLLIN;
 		_cmdHandler->newUser(_pollFds[_nfds].fd);
@@ -105,7 +106,7 @@ void IRCServer::setUpPoll()
 
 void IRCServer::loseConnection(int i)
 {
-	logg(LOG_INFO) << "Connection lost on fd: " << colors::bright_blue << _pollFds[i].fd << colors::reset << "\n";
+	logg(LOG_INFO) << "Connection lost on fd: " << BLUE << _pollFds[i].fd << RESET << "\n";
 	if (close(_pollFds[i].fd) < 0)
 	{
 		throwError("Close() Error");

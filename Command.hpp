@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:45 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:30 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 20:25:07 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_H
-#define COMMAND_H
+#ifndef COMMAND_HPP
+#define COMMAND_HPP
 #include "lib2.h"
 
 class Command

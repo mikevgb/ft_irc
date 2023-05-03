@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:55:12 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:08:46 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ int main()
 	 */
 	logg.set_log_level(LOG_DEBUG);
 
-	IRCServer irc("127.0.0.1", 4242);
+	IRCServer irc(4242, "password");
 	return 0;
 }
