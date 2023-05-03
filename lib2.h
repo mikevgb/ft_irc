@@ -3,15 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   lib2.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 15:36:27 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:02:53 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIB_HPP
-#define LIB_HPP
 #include <iostream>
 #include <map>
 #include <set>
@@ -45,4 +43,3 @@
 #include <ctime>
 #include <cstring> //needed for linux
 #include <fcntl.h>
-#endif
