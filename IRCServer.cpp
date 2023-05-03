@@ -12,207 +12,217 @@
 
 #include "IRCServer.hpp"
 
-IRCServer::IRCServer()
+IRCServer::IRCServer(const char *ip, const uint16_t port)
 {
-    _handleCmds = new HandleCmds();
-    _opt = 1;
-    _nfds = 1;
-    _sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    ft_result(_sockfd, "socket");
+	_cmdHandler = new CommandHandler();
+	_serverSocket = new Socket(ip, port);
+	_nfds = 1;
 
-    /*make the socket reusable*/
-    _sock_opt = setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&_opt,
-            sizeof(_opt));
-    ft_result(_sock_opt, "setsockopt");
+	this->startServer();
 
-    /*bind*/
-    memset(&bindSocket, 0, sizeof(bindSocket));
-    bindSocket.sin_family = AF_INET;
-    bindSocket.sin_port = htons(4242);
-    bindSocket.sin_addr.s_addr = INADDR_ANY;
-    _socketBind = bind(_sockfd, (struct sockaddr*)&bindSocket, sizeof(bindSocket));
-    ft_result(_socketBind, "bind");
+	/*server data*/ // FIXME: Handle main arguments
+	if (gethostname(_hostname, sizeof(_hostname)) != -1)
+		logg(LOG_INFO) << colors::blue << "Host: " << _hostname << colors::reset << "\n";
+	host = gethostbyname(_hostname);
 
-    /*listen*/
-    _escucha = listen(_sockfd, 2); //that 2 should be the max number of connex 
-    ft_result(_escucha, "listen");
+	if (host != 0)
+	{
+		for (int i = 0; host->h_addr_list[i] != 0; i++)
+		{
+			memcpy(&_addr, host->h_addr_list[i], sizeof(struct in_addr));
+			logg(LOG_INFO) << colors::yellow << "IP address: " << inet_ntoa(_addr) << colors::reset << "\n";
+		}
+	}
+	logg(LOG_INFO) << colors::bright_green << "Port: " << (int)ntohs(_serverSocket->addr.sin_port) << colors::reset << "\n";
 
-    /*server data*/
-    if (gethostname(_hostname, sizeof(_hostname)) != -1)
-        std::cout << "IRCServer:Host: " << _hostname << std::endl;
-    _p_he = gethostbyname(_hostname);
-
-    if (_p_he != 0)
-    {
-        for (int i = 0; _p_he->h_addr_list[i] != 0; i++)
-        {
-            memcpy(&_addr, _p_he->h_addr_list[i], sizeof(struct in_addr));
-            std::cout << "IRCServer:IP address: " << inet_ntoa(_addr) << std::endl;
-        }
-    }
-    std::cout << "IRCServer:Port: " << (int)ntohs(bindSocket.sin_port) << std::endl;
+	this->pollLoop();
 }
 
 IRCServer::~IRCServer()
 {
-    std::cout << "IRCServer:socket obj destructor called" << std::endl;
-    close(_sockfd);
-    delete _handleCmds;
+	close(_serverSocket->sockfd);
+	delete _cmdHandler;
+	delete _serverSocket;
+	for (int i = 0; i < _nfds; i++)
+	{
+		if (_pollFds[i].fd >= 0)
+		{
+			close(_pollFds[i].fd);
+		}
+	}
 }
 
-void IRCServer::acceptConex()
+bool IRCServer::startServer()
 {
-    if (_acceptConexSocket != -1)
-    {
-        _acceptConexSocket = accept(_sockfd, (struct sockaddr*)&bindSocket, &_addr_size);
-        if (_acceptConexSocket < 0)
-            if (errno != EWOULDBLOCK)
-                ft_result(_acceptConexSocket, "accept");
-        _pollFds[_nfds].fd = _acceptConexSocket;
-        _pollFds[_nfds].events = POLLIN;
-        _handleCmds->newUser(_pollFds[_nfds].fd);
-        _nfds++;
-    }
-    setNonBlocking(_pollFds[_nfds].fd);
+	if (bind(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, sizeof(_serverSocket->addr)) == -1)
+	{
+		logg(LOG_ERROR) << "Failed to bind to port " << ntohs(_serverSocket->addr.sin_port) << "\n";
+		exit(EXIT_FAILURE);
+	}
+
+	logg(LOG_DEBUG) << "Socket successfully binded.\n";
+
+	if (listen(_serverSocket->sockfd, MAX_USERS) < 0)
+	{
+		throwError("Failed to listen on socket");
+	}
+	return true;
+}
+
+void IRCServer::acceptConnection()
+{
+	int new_sd = 0;
+
+	if (new_sd != -1)
+	{
+		new_sd = accept(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, &_serverSocket->lenaddr);
+		if (new_sd < 0)
+		{
+			if (errno != EWOULDBLOCK)
+			{
+				throwError("accept() failed");
+			}
+		}
+		logg(LOG_INFO) << "New incoming connection - [" << colors::bright_blue << new_sd << colors::reset << "]\n";
+		_pollFds[_nfds].fd = new_sd;
+		_pollFds[_nfds].events = POLLIN;
+		_cmdHandler->newUser(_pollFds[_nfds].fd);
+		_nfds++;
+	}
+
+	setNonBlocking(_pollFds[_nfds].fd);
 }
 
 void IRCServer::setUpPoll()
 {
-    // Clear the poll file descriptors array
-    memset(&_pollFds, 0, sizeof(_pollFds));
+	// Clear the poll file descriptors array
+	memset(&_pollFds, 0, sizeof(_pollFds));
 
-    // Set up the server socket
-    _pollFds[0].fd = _sockfd;
-    _pollFds[0].events = POLLIN;
+	// Set up the server socket
+	_pollFds[0].fd = _serverSocket->sockfd;
+	_pollFds[0].events = POLLIN;
 }
 
-void IRCServer::lostConex(int i)
+void IRCServer::loseConnection(int i)
 {
-    std::cout << "IRCServer:connection lost on fd: " << _pollFds[i].fd << std::endl;
-    int closeReturn = close(_pollFds[i].fd);
-    ft_result(closeReturn, "close");
-    _handleCmds->removeUser(_pollFds[i].fd);
-    _pollFds[i].fd = 0; //not sure of this
-    _nfds--;
+	logg(LOG_INFO) << "Connection lost on fd: " << colors::bright_blue << _pollFds[i].fd << colors::reset << "\n";
+	if (close(_pollFds[i].fd) < 0)
+	{
+		throwError("Close() Error");
+	}
+	_cmdHandler->removeUser(_pollFds[i].fd);
+	_pollFds[i].fd = -1;
+	_nfds--;
 }
 
 void IRCServer::pollLoop()
 {
-    _acceptConexSocket = 0;
-    setUpPoll();
+	int rc = 1;
 
-    while(1)
-    {
-        _pollReturn = poll(_pollFds, _nfds, 3000);
-        if (_pollReturn < 0)
-            ft_result(_pollReturn, "poll");
-        for (int i = 0; i < _nfds; i++)
-        {
-            if (_pollFds[i].revents == 0)
-                continue;
-            {
-                if (_pollFds[i].fd == _sockfd)
-                    acceptConex();   
-                else
-                {
-                    bool dataReceived = false;
-                    memset(&_buf, 0, sizeof(_buf));
-                    std::string data;
-                    _rcv = -1;
-                    while(!dataReceived)
-                    {
-                        _rcv = 0;
-                        _rcv = recv(_pollFds[i].fd, _buf, sizeof(_buf), 0);
-                        if (_rcv == 0)
-                        {
-                            lostConex(i);
-                            break;
-                        }
-                        else if (_rcv > 0)
-                        {
-                            dataReceived = true;
-                            //data.append(_buf, _rcv);
-                            data = std::string(_buf, _rcv);
-                            memset(&_buf, 0, sizeof(_buf));
-                        }   
-                        else if (_rcv == -1)
-                            ft_result(_rcv, "recv");
-                        
-                    }
-                    if (dataReceived)
-                    {
-                        std::cout << "IRCServer:dataReceived" << std::endl;
-                        recvMessage(data, _pollFds[i].fd);
-                    }
-                        
-                }
-            }
-        }
-    }
+	setUpPoll();
+	while (true)
+	{
+		logg(LOG_DEBUG) << "Waiting on poll()...\n";
+		rc = poll(_pollFds, _nfds, -1);
+		if (rc < 0)
+		{
+			throwError("poll() failed");
+		}
+		else
+		{
+			for (int i = 0; i < _nfds; i++)
+			{
+				if (_pollFds[i].revents == 0)
+				{
+					continue;
+				}
+				if (_pollFds[i].fd == _serverSocket->sockfd)
+				{
+					acceptConnection();
+				}
+				else
+				{
+					memset(&_buf, 0, sizeof(_buf));
+					while (true)
+					{
+						rc = recv(_pollFds[i].fd, _buf, sizeof(_buf), 0);
+						if (rc < 0)
+						{
+							if (errno != EWOULDBLOCK)
+							{
+								logg(LOG_ERR) << "  recv() failed\n";
+							}
+						}
+						else if (rc == 0)
+						{
+							loseConnection(i);
+						}
+						else
+						{
+							recvMessage(std::string(_buf, rc), _pollFds[i].fd);
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
 }
 
+// TODO: Recive msg. CHECK IT AND FORMAT STRUCTURE!
+// check for errors (errors!)
 
-//TODO: 
-//handle poll time out -> use epoll -> https://stackoverflow.com/questions/40070698/how-to-detect-a-timed-out-client-with-poll
-//check for errors (errors!)
-//replace structs with vectors
-
-void IRCServer::recvMessage(std::string s, int fd)
+void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output messages
 {
-    // std::string s(msg);
-    std::cout << "IRCServer:INSIDE recvMessage: " << s << std::endl;
-    (void)fd;
-    std::list<std::string> comandos(Command::split(s,"\r\n"));
-    //comandos.push_back(Command::split(s,"\r\n"));
-     for (std::list<std::string>::iterator itcmd=comandos.begin(); itcmd != comandos.end(); itcmd++)
-    {
-        Command* cmd = new Command(fd, *itcmd);
-        std::list<ResultCmd> results = _handleCmds->executeCmd(cmd);
-        std::list<ResultCmd>::iterator it;
-        
-        if (!results.empty())
-        {
-            for(it = results.begin(); it != results.end(); it++)
-            {            
-                ResultCmd result = *it;
-                std::cout << "IRCServer:recvMessage: " << result.getMsg() << std::endl;
-                std::set<int> users = result.getUsers();
-                std::set<int>::iterator itusers;
-                for(itusers = users.begin(); itusers != users.end(); itusers++)
-                {
-                    int fdUser = *itusers;
-                    std::string tmp = result.getMsg();
-                    std::cout << "IRCServer:recvMessage send to fd: " << fdUser << std::endl;
-                    if (!tmp.empty())
-                    {
-                        tmp += "\n";
-                        const char *arrayMsg = tmp.c_str();
-                        send(fdUser, arrayMsg, std::strlen(arrayMsg), 0);
-                    }
-                }
-            }
-            //TODO: Aquí tienes enviar la lista de resultados por sus respectivos fds
-            //cada result tiene una lista de usuarios a los que se manda el mismo mensaje
-        }
-        else
-            std::cout << "IRCServer:*** _handleCmds->executeCmd fail! (IRCServer::recvMessage) ***" << std::endl;
-    }
+	logg(LOG_DEBUG) << "Data:" << msg << "\n";
+	std::list<std::string> commands(Command::split(msg, "\r\n"));
+	for (std::list<std::string>::iterator itcmd = commands.begin(); itcmd != commands.end(); itcmd++)
+	{
+		Command *cmd = new Command(fd, *itcmd);
+		std::list<ResultCmd> results = _cmdHandler->executeCmd(cmd);
+		std::list<ResultCmd>::iterator it;
+
+		if (!results.empty())
+		{
+			for (it = results.begin(); it != results.end(); it++)
+			{
+				ResultCmd result = *it;
+				logg(LOG_DEBUG) << "recvMessage: " << result.getMsg() << "\n";
+				std::set<int> users = result.getUsers();
+				std::set<int>::iterator itusers;
+				for (itusers = users.begin(); itusers != users.end(); itusers++)
+				{
+					int fdUser = *itusers;
+					std::string tmp = result.getMsg();
+					logg(LOG_DEBUG) << "recvMessage send to fd: " << fdUser << "\n"; // TODO: Why the next FD is the sum of the previous fd plus 2?
+					if (!tmp.empty())
+					{
+						tmp += "\n";
+						const char *arrayMsg = tmp.c_str();
+						send(fdUser, arrayMsg, std::strlen(arrayMsg), 0);
+					}
+				}
+			}
+			// TODO: Aquí tienes enviar la lista de resultados por sus respectivos fds
+			// cada result tiene una lista de usuarios a los que se manda el mismo mensaje
+		}
+		else
+			logg(LOG_ERR) << "IRCServer:*** _cmdHandler->executeCmd fail! (IRCServer::recvMessage) ***\n";
+	}
 }
 
-void IRCServer::ft_result(int var, std::string function)
+void IRCServer::throwError(std::string msg)
 {
-    if (var < 0)
-    {
-        std::cerr << function << " IRCServer:error: " << std::strerror(errno) << std::endl;
-        exit(1);
-    }
-    else
-        std::cout << function << " OK:IRCServer" << std::endl;
+	logg(LOG_ERROR) << msg << " | Errno: " << std::strerror(errno) << "\n";
+	exit(EXIT_FAILURE);
 }
 
-void IRCServer::setNonBlocking(int fdIn)
+void IRCServer::setNonBlocking(int fd)
 {
-    int opts = fcntl(fdIn, F_GETFL); //get current fd flags
-    ft_result(opts, "fcntl");
-    fcntl(fdIn, F_SETFL, opts | O_NONBLOCK); //bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
+	int opts = fcntl(fd, F_GETFL); // get current fd flags
+	if (opts < 0)
+	{
+		throwError("ftcntl() failed");
+	}
+	fcntl(fd, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
 }
