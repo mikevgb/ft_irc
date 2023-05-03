@@ -6,10 +6,12 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:47 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 15:36:27 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef LIB_HPP
+#define LIB_HPP
 #include <iostream>
 #include <map>
 #include <set>
@@ -43,3 +45,4 @@
 #include <ctime>
 #include <cstring> //needed for linux
 #include <fcntl.h>
+#endif

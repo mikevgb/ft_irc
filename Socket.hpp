@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:41:49 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:46 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 13:45:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 #include "include/BSLogger.hpp"
 
 #define MSG "ECHO Daemon v1.0 \r\n"
+#define IP "127.0.0.1"
 
 class Socket
 {
@@ -46,7 +47,7 @@ private:
 	Socket();
 
 public:
-	Socket(const char *ip, const uint16_t port);
+	Socket(const uint16_t port);
 	bool initSocket();
 	~Socket();
 };

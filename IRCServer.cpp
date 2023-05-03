@@ -12,10 +12,10 @@
 
 #include "IRCServer.hpp"
 
-IRCServer::IRCServer(const char *ip, const uint16_t port)
+IRCServer::IRCServer(const uint16_t port, const std::string password)
 {
 	_cmdHandler = new CommandHandler();
-	_serverSocket = new Socket(ip, port);
+	_serverSocket = new Socket(port);
 	_nfds = 1;
 
 	this->startServer();

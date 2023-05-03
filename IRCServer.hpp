@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 13:14:09 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 15:35:54 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include "include/Colors.hpp"
 #include "Channel.hpp"
 #include "User.hpp"
+#include <list>
 
 class CommandHandler;
 class logger;
@@ -49,7 +50,7 @@ private:
 	std::list<User *> userList;
 
 public:
-	IRCServer(const char *ip, const uint16_t port);
+	IRCServer(const uint16_t port, const std::string password);
 	~IRCServer();
 
 	bool startServer();
