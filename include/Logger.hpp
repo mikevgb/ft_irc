@@ -6,12 +6,12 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:44:17 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/04 11:48:05 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/04 12:21:41 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef Logger_HPP
-#define Logger_HPP
+#ifndef LOGGER_HPP
+#define LOGGER_HPP
 
 #include <algorithm>
 #include <chrono>
