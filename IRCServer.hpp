@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 17:46:34 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 21:33:37 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,10 @@
 
 #include "lib2.h"
 #include "Socket.hpp"
-#include "include/BSLogger.hpp"
+#include "include/Logger.hpp"
 #include "include/Colors.hpp"
 
 class CommandHandler;
-class logger;
-class Channel;
-class User;
 
 class IRCServer
 {

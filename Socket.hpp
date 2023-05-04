@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:41:49 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 13:45:31 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/03 21:29:41 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include <string>
 #include <iostream>
 
-#include "include/BSLogger.hpp"
+#include "include/Logger.hpp"
 
 #define MSG "ECHO Daemon v1.0 \r\n"
 #define IP "127.0.0.1"
