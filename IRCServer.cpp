@@ -15,11 +15,8 @@
 IRCServer::IRCServer(const uint16_t port, const std::string password)
 {
 	_cmdHandler = new CommandHandler();
-	_serverSocket = new Socket(port);
 	_nfds = 1;
 	_password = password;
-
-	this->startServer();
 
 	/*server data*/ // FIXME: Handle main arguments
 	if (gethostname(_hostname, sizeof(_hostname)) != -1)
@@ -31,11 +28,12 @@ IRCServer::IRCServer(const uint16_t port, const std::string password)
 		for (int i = 0; host->h_addr_list[i] != 0; i++)
 		{
 			memcpy(&_addr, host->h_addr_list[i], sizeof(struct in_addr));
-			logg(LOG_INFO) << YELLOW << "IP address: " << inet_ntoa(_addr) << RESET << "\n";
 		}
 	}
+	_serverSocket = new Socket(inet_ntoa(_addr), port);
+	this->startServer();
+	logg(LOG_INFO) << YELLOW << "IP address: " << inet_ntoa(_addr) << RESET << "\n";
 	logg(LOG_INFO) << GREEN << "Port: " << (int)ntohs(_serverSocket->addr.sin_port) << RESET << "\n";
-
 	this->pollLoop();
 }
 
