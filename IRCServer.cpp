@@ -19,8 +19,12 @@ IRCServer::IRCServer(const uint16_t port, const std::string password)
 	_password = password;
 
 	/*server data*/ // FIXME: Handle main arguments
-	if (gethostname(_hostname, sizeof(_hostname)) != -1)
-		logg(LOG_INFO) << BLUE << "Host: " << _hostname << RESET << "\n";
+	if (gethostname(_hostname, sizeof(_hostname)) == -1)
+	{
+		throwError("Gethostname() failed");
+	}
+
+	logg(LOG_INFO) << BLUE << "Host: " << _hostname << RESET << "\n";
 	host = gethostbyname(_hostname);
 
 	if (host != 0)
@@ -47,12 +51,15 @@ IRCServer::~IRCServer()
 		if (_pollFds[i].fd >= 0)
 		{
 			close(_pollFds[i].fd);
+			_pollFds[i].fd = -1;
 		}
 	}
 }
 
 bool IRCServer::startServer()
 {
+	setNonBlocking(_serverSocket->sockfd);
+
 	if (bind(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, sizeof(_serverSocket->addr)) == -1)
 	{
 		logg(LOG_ERROR) << "Failed to bind to port " << ntohs(_serverSocket->addr.sin_port) << "\n";
@@ -88,8 +95,6 @@ void IRCServer::acceptConnection()
 		_cmdHandler->newUser(_pollFds[_nfds].fd);
 		_nfds++;
 	}
-
-	setNonBlocking(_pollFds[_nfds].fd);
 }
 
 void IRCServer::setUpPoll()
@@ -104,7 +109,7 @@ void IRCServer::setUpPoll()
 
 void IRCServer::loseConnection(int i)
 {
-	logg(LOG_INFO) << "Connection lost on fd: " << BLUE << _pollFds[i].fd << RESET << "\n";
+	logg(LOG_INFO) << "Connection lost on - fd[" << BLUE << _pollFds[i].fd << RESET << "]\n";
 	if (close(_pollFds[i].fd) < 0)
 	{
 		throwError("Close() Error");
@@ -158,7 +163,7 @@ void IRCServer::pollLoop()
 						}
 						else
 						{
-							recvMessage(std::string(_buf, rc), _pollFds[i].fd);
+							//recvMessage(std::string(_buf, rc), _pollFds[i].fd);
 						}
 						break;
 					}
@@ -221,7 +226,7 @@ void IRCServer::setNonBlocking(int fd)
 	int opts = fcntl(fd, F_GETFL); // get current fd flags
 	if (opts < 0)
 	{
-		throwError("ftcntl() failed");
+		throwError("ftcntl() failed"); //FIXME: Set non blocking failed
 	}
 	fcntl(fd, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
 }
