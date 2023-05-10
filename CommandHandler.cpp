@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:30 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/09 14:21:35 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 
 	std::list<ResultCmd> results;
 	std::string comando = _cmd->getCommand();
-	std::cout << "*****CommandHandler:mesaje: " << _cmd->getMsg() << std::endl;
-	std::cout << "CommandHandler:comando: " << comando << std::endl;
+	logg(LOG_DEBUG) << "MSG: " << _cmd->getMsg() << "\n";
+	logg(LOG_DEBUG) << "CMD: " << comando << "\n";
 	if (!_cmd->getCommand().compare("NICK"))
 	{
 		if (_cmd->paramsSize() == 0)

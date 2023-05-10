@@ -77,11 +77,10 @@ bool IRCServer::startServer()
 
 void IRCServer::acceptConnection()
 {
-	int new_sd = 0;
+	int new_sd;
 
-	if (new_sd != -1)
+	while ((new_sd = accept(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, &_serverSocket->lenaddr)) != -1)
 	{
-		new_sd = accept(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, &_serverSocket->lenaddr);
 		if (new_sd < 0)
 		{
 			if (errno != EWOULDBLOCK)
@@ -89,11 +88,19 @@ void IRCServer::acceptConnection()
 				throwError("accept() failed");
 			}
 		}
+
 		logg(LOG_INFO) << "New incoming connection - [" << BLUE << new_sd << RESET << "]\n";
-		_pollFds[_nfds].fd = new_sd;
-		_pollFds[_nfds].events = POLLIN;
-		_cmdHandler->newUser(_pollFds[_nfds].fd);
-		_nfds++;
+		for (int i = 0; i <= _nfds; i++)
+		{
+			if (_pollFds[i].fd <= 0)
+			{
+				_pollFds[i].fd = new_sd;
+				_pollFds[i].events = POLLIN;
+				_cmdHandler->newUser(_pollFds[i].fd);
+				_nfds++;
+				break;
+			}
+		}
 	}
 }
 
@@ -163,7 +170,8 @@ void IRCServer::pollLoop()
 						}
 						else
 						{
-							//recvMessage(std::string(_buf, rc), _pollFds[i].fd);
+							logg(LOG_DEBUG) << "MSG: " << _buf;
+							// recvMessage(std::string(_buf, rc), _pollFds[i].fd);
 						}
 						break;
 					}
@@ -226,7 +234,7 @@ void IRCServer::setNonBlocking(int fd)
 	int opts = fcntl(fd, F_GETFL); // get current fd flags
 	if (opts < 0)
 	{
-		throwError("ftcntl() failed"); //FIXME: Set non blocking failed
+		throwError("ftcntl() failed"); // FIXME: Set non blocking failed
 	}
 	fcntl(fd, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
 }
