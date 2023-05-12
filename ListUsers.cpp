@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 20:30:15 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:39:03 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,19 @@ bool ListUsers::addUser(User *user)
 	return false;
 }
 
-User *ListUsers::createUser(const size_t fd)
+bool ListUsers::createUser(const size_t fd)
 {
 	User *user = new User(fd);
 	std::map<size_t, User *>::iterator it = _usersByFd.find(fd);
 	std::map<size_t, User *>::iterator it2 = _usersByFd.end();
-	logg(LOG_DEBUG) << "New user | fd: " << BLUE << fd << RESET << "\n";
 	if (it != it2)
 	{
-		std::cout << "MIGUEL!!!! ME CAGO EN TUS MUERTOS!!!!!" << std::endl;
-		return NULL;
+		logg(LOG_ERROR) << "An unexpected issue occurs creating a new user\n";
+		return false;
 	}
 	_usersByFd[user->getFd()] = user;
-	return user;
+	logg(LOG_DEBUG) << "New user | fd: " << BLUE << fd << RESET << "\n";
+	return true;
 }
 
 int ListUsers::setNick(const std::string &nick, const size_t fd)

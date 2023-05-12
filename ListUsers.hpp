@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:51 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 20:30:51 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:39:13 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@ private:
 
 public:
 	typedef std::map<std::string, User *>::iterator iterator;
-	ListUsers(/* args */);
+	ListUsers();
 	~ListUsers();
-	User *createUser(const size_t fd);
+	bool createUser(const size_t fd);
 	int setNick(const std::string &nick, const size_t fd);
 	int setUser(const std::string &name, const size_t fd);
-	bool hasUser() const;
 	User *getUser(const std::string &nick);
 	User *getUser(const size_t fd);
 	int removeUser(const size_t fd);
