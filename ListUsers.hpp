@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:51 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 20:15:16 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:30:51 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ public:
 	User *getUser(const std::string &nick);
 	User *getUser(const size_t fd);
 	int removeUser(const size_t fd);
-	iterator begin();
-	iterator end();
 };
 
 #endif

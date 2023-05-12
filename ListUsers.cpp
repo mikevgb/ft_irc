@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 20:16:39 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:30:15 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,11 @@ User *ListUsers::getUser(const std::string &nick)
 }
 User *ListUsers::getUser(const size_t fd)
 {
-	// TODO comprobar si existe
+	std::map<size_t, User *>::iterator it;
+
+	it = _usersByFd.find(fd);
+	if (it == _usersByFd.end())
+		logg(LOG_ERROR) << "User with fd " << fd << " does not exists\n";
 	return _usersByFd[fd];
 }
 
@@ -124,14 +128,4 @@ int ListUsers::removeUser(const size_t fd)
 	}
 
 	return 0;
-}
-
-ListUsers::iterator ListUsers::begin()
-{
-	return _usersByName.begin();
-}
-
-ListUsers::iterator ListUsers::end()
-{
-	return _usersByName.end();
 }
