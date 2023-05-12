@@ -123,7 +123,7 @@ void IRCServer::loseConnection(int i)
 	{
 		throwError("Close() Error");
 	}
-	_cmdHandler->removeUser(_pollFds[i].fd);
+	_listUsers->removeUser(_pollFds[i].fd);
 	_pollFds[i].fd = -1;
 	_nfds--;
 }
@@ -189,7 +189,7 @@ void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output m
 {
 	logg(LOG_DEBUG) << "Data:" << msg << "\n";
 
-	//Command cmd(msg);
+	// Command cmd(msg);
 	std::list<std::string> commands(Command::split(msg, "\r\n"));
 	for (std::list<std::string>::iterator itcmd = commands.begin(); itcmd != commands.end(); itcmd++)
 	{

@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 20:03:44 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:21:52 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,6 @@ CommandHandler::~CommandHandler()
 {
 	delete _listUsers;
 	delete _listChannels;
-}
-
-bool CommandHandler::removeUser(const int fd)
-{
-	return _listUsers->removeUser(fd);
 }
 
 void CommandHandler::sendPRIVMSG(const std::string &nick)
