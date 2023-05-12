@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 17:08:46 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 18:42:24 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ void printUsage()
 	std::cout << "\t<password>: the password needed by any IRC client who wants to connect to your server\n";
 }
 
-int main()
+int main(int argc, char **argv)
 {
-	/* 	if (argc > 4 || argc < 3)
+	 	if (argc != 3)
 		{
 			printUsage();
 			exit(EXIT_FAILURE);
 		}
-	 */
+	
 	logg.set_log_level(LOG_DEBUG);
 
-	IRCServer irc(4242, "password");
+	IRCServer irc((uint16_t)atoi(argv[1]), argv[2]);
 	return 0;
 }

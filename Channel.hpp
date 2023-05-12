@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:53 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 13:10:23 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 19:34:46 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ private:
 	bool _isModerate;
 	bool _isTopicBlock;
 	bool _isBlockOutside;
+
+	static const size_t max_size = 50;
 
 public:
 	Channel(const std::string &name);

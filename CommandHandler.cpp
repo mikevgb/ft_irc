@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/09 14:21:35 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 19:36:55 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 			ResultCmd result(_users->setNick(cmd->getNextParam(), cmd->getSender()));
 			if (result.getResultCode() == 1)
 			{
-				result.setMsg(ServerMsgs::getWelcomeMsg(sender->getNick(), sender->getUser()));
+				result.setMsg(ServerMsgs::getWelcomeMsg(sender->getNick(), sender->getUsername()));
 				result.addUser(cmd->getSender());
 				results.push_back(result);
 			}
@@ -114,7 +114,7 @@ std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 			ResultCmd result(_users->setUser(cmd->getNextParam(), cmd->getSender()));
 			if (result.getResultCode() == 1)
 			{
-				result.setMsg(ServerMsgs::getWelcomeMsg(sender->getNick(), sender->getUser()));
+				result.setMsg(ServerMsgs::getWelcomeMsg(sender->getNick(), sender->getUsername()));
 				result.addUser(cmd->getSender());
 				results.push_back(result);
 			}

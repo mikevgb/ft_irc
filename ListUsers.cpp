@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:34 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 19:36:29 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool ListUsers::addUser(User *user)
 		std::cout << "nick " << user->getNick() << std::endl;
 		_usersByName.insert(std::pair<std::string, User *>(user->getNick(), user));
 		std::cout << "nick " << user->getNick() << std::endl;
-		std::cout << "user " << _usersByName[user->getNick()]->getUser() << std::endl;
+		std::cout << "user " << _usersByName[user->getNick()]->getUsername() << std::endl;
 		return true;
 	}
 	return false;
@@ -65,7 +65,7 @@ int ListUsers::setNick(const std::string &nick, const size_t fd)
 			addUser(user);
 			return 0;
 		}
-		else if (!user->isLogged() && user->getUser().length() > 0)
+		else if (!user->isLogged() && user->getUsername().length() > 0)
 		{
 			user->changeToLogged();
 			addUser(user);
@@ -84,14 +84,14 @@ int ListUsers::setUser(const std::string &name, const size_t fd)
 {
 	// TODO crear excepciones si no existe el usuario en la lista
 	User *user = getUser(fd);
-	user->setUser(name);
+	user->setUsername(name);
 	std::cout << "nick: " << user->getNick() << std::endl;
-	std::cout << "user: " << user->getUser() << std::endl;
+	std::cout << "user: " << user->getUsername() << std::endl;
 	if (!user->isLogged() && user->getNick().length() > 0)
 	{
 		user->changeToLogged();
 		addUser(user);
-		std::cout << "user 2: " << user->getUser() << std::endl;
+		std::cout << "user 2: " << user->getUsername() << std::endl;
 		return CODE_WELCOME;
 	}
 	return 0;
@@ -115,7 +115,6 @@ int ListUsers::removeUser(const size_t fd)
 	try
 	{
 		User *user = getUser(fd);
-		user->eraseUser();
 		_usersByName.erase(user->getNick());
 		_usersByFd.erase(fd);
 		delete user;
