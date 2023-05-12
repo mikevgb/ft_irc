@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 19:36:29 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:16:39 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,10 @@ bool ListUsers::addUser(User *user)
 
 User *ListUsers::createUser(const size_t fd)
 {
-	// TODO: No debería pasar, pero ver que hacer si ya exite el fd
 	User *user = new User(fd);
 	std::map<size_t, User *>::iterator it = _usersByFd.find(fd);
 	std::map<size_t, User *>::iterator it2 = _usersByFd.end();
-	std::cout << "New user created with fd " << fd << std::endl;
+	logg(LOG_DEBUG) << "New user | fd: " << BLUE << fd << RESET << "\n";
 	if (it != it2)
 	{
 		std::cout << "MIGUEL!!!! ME CAGO EN TUS MUERTOS!!!!!" << std::endl;

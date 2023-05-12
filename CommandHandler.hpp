@@ -6,12 +6,12 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:30 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:13:02 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HANDLE_CMDS_H
-#define HANDLE_CMDS_H
+#ifndef HANDLE_CMDS_HPP
+#define HANDLE_CMDS_HPP
 #include "lib2.h"
 #define PRIVMSG "PRIVMSG"
 #define JOIN "JOIN"
@@ -27,17 +27,15 @@ class ResultCmd;
 class CommandHandler
 {
 private:
-	ListUsers *_users;
-	ListChannels *_channels;
-	// No es necesaria una lista de comandos porque se ejecutan según se pasan
-	// std::queue<ResultCmd> *_listToSend;
+	ListUsers *_listUsers;
+	ListChannels *_listChannels;
 	std::string _sender;
 	Command *_cmd;
 	int _firstTimeFlag;
 
 public:
 	void sendPRIVMSG(const std::string &nick);
-	CommandHandler();
+	CommandHandler(ListUsers *listUsers, ListChannels *listChannels);
 	~CommandHandler();
 	std::list<ResultCmd> executeCmd(Command *cmd);
 	User *newUser(const int fd);

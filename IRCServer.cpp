@@ -14,7 +14,9 @@
 
 IRCServer::IRCServer(const uint16_t port, const std::string password)
 {
-	_cmdHandler = new CommandHandler();
+	_listUsers = new ListUsers();
+	_listChannels = new ListChannels();
+	_cmdHandler = new CommandHandler(_listUsers, _listChannels);
 	_nfds = 1;
 	_password = password;
 
@@ -96,7 +98,7 @@ void IRCServer::acceptConnection()
 			{
 				_pollFds[i].fd = new_sd;
 				_pollFds[i].events = POLLIN;
-				_cmdHandler->newUser(_pollFds[i].fd);
+				_listUsers->createUser(_pollFds[i].fd);
 				_nfds++;
 				break;
 			}
@@ -170,8 +172,7 @@ void IRCServer::pollLoop()
 						}
 						else
 						{
-							logg(LOG_DEBUG) << "MSG: " << _buf;
-							// recvMessage(std::string(_buf, rc), _pollFds[i].fd);
+							recvMessage(std::string(_buf, rc), _pollFds[i].fd);
 						}
 						break;
 					}
@@ -187,6 +188,8 @@ void IRCServer::pollLoop()
 void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output messages
 {
 	logg(LOG_DEBUG) << "Data:" << msg << "\n";
+
+	//Command cmd(msg);
 	std::list<std::string> commands(Command::split(msg, "\r\n"));
 	for (std::list<std::string>::iterator itcmd = commands.begin(); itcmd != commands.end(); itcmd++)
 	{

@@ -6,45 +6,41 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 19:36:55 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:03:44 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandHandler.hpp"
 
 // CommandHandler::CommandHandler()
-// :_users(), _channels(),_listToSend(),_sender(),_cmd()
+// :_listUsers(), _listChannels(),_listToSend(),_sender(),_cmd()
 // { }
 
-CommandHandler::CommandHandler()
-	: _sender(), _cmd()
+CommandHandler::CommandHandler(ListUsers *listUsers, ListChannels *listChannels)
 {
-	_users = new ListUsers();
-	_channels = new ListChannels();
+	_listUsers = listUsers;
+	_listChannels = listChannels;
 	_firstTimeFlag = 0;
 }
 
+
 CommandHandler::~CommandHandler()
 {
-	delete _users;
-}
-
-User *CommandHandler::newUser(const int fd)
-{
-	return _users->createUser(fd);
+	delete _listUsers;
+	delete _listChannels;
 }
 
 bool CommandHandler::removeUser(const int fd)
 {
-	return _users->removeUser(fd);
+	return _listUsers->removeUser(fd);
 }
 
 void CommandHandler::sendPRIVMSG(const std::string &nick)
 {
 	std::cout << "inside sendPRIVMSG" << std::endl;
 	ResultCmd result;
-	result.addUser(_users->getUser(nick)->getFd());
-	// send(_users->getUser(nick)->getFd(), msg, sizeof(msg), 0);
+	result.addUser(_listUsers->getUser(nick)->getFd());
+	// send(_listUsers->getUser(nick)->getFd(), msg, sizeof(msg), 0);
 
 	// std::string msg = _sender + PRIVMSG + _cmd->getParams();
 
@@ -61,14 +57,14 @@ std::list<ResultCmd> CommandHandler::mierdaDeFuncionDeMiguelQueNoSabeProgramarNi
 It first checks if the sender of the command is logged in, and if not,
 it returns an error message. Then, it checks the command name and calls
 the appropriate method to handle the command. For example, if the command
-is "NICK", it calls the setNick method of the _users object to set the
+is "NICK", it calls the setNick method of the _listUsers object to set the
 user's nickname.*/
 
 std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 {
 	_cmd = cmd;
 	std::string msg = _cmd->getMsg();
-	User *sender = _users->getUser(_cmd->getSender());
+	User *sender = _listUsers->getUser(_cmd->getSender());
 
 	// if (!sender->isLogged() && msg.find("USER") ==  std::string::npos && msg.find("NICK") ==  std::string::npos)
 	//     return mierdaDeFuncionDeMiguelQueNoSabeProgramarNiEscuchar();
@@ -88,7 +84,7 @@ std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 		}
 		else
 		{
-			ResultCmd result(_users->setNick(cmd->getNextParam(), cmd->getSender()));
+			ResultCmd result(_listUsers->setNick(cmd->getNextParam(), cmd->getSender()));
 			if (result.getResultCode() == 1)
 			{
 				result.setMsg(ServerMsgs::getWelcomeMsg(sender->getNick(), sender->getUsername()));
@@ -111,7 +107,7 @@ std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 		}
 		else
 		{
-			ResultCmd result(_users->setUser(cmd->getNextParam(), cmd->getSender()));
+			ResultCmd result(_listUsers->setUser(cmd->getNextParam(), cmd->getSender()));
 			if (result.getResultCode() == 1)
 			{
 				result.setMsg(ServerMsgs::getWelcomeMsg(sender->getNick(), sender->getUsername()));
@@ -143,7 +139,7 @@ std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 				std::string nick = nicks.front();
 				if (nick[0] == '#' || nick[0] == '!')
 				{
-					Channel *channel = _channels->getChannel(nick);
+					Channel *channel = _listChannels->getChannel(nick);
 					if (channel != NULL)
 					{
 						result.setUsers(channel->getUsers());
@@ -153,7 +149,7 @@ std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 				}
 				else
 				{
-					User *user = _users->getUser(nick);
+					User *user = _listUsers->getUser(nick);
 					if (user != NULL)
 					{
 						result.addUser(user->getFd());
@@ -189,7 +185,7 @@ std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 				std::string channel = channels.front();
 				std::cout << "CommandHandler:canal guardado:" << channel << std::endl;
 				ResultCmd result;
-				std::list<ResultCmd> msgsOfChannel = _channels->joinChannel(channel, sender);
+				std::list<ResultCmd> msgsOfChannel = _listChannels->joinChannel(channel, sender);
 				results.insert(results.end(), msgsOfChannel.begin(), msgsOfChannel.end());
 				channels.pop();
 			}
@@ -308,13 +304,13 @@ std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
 
 ListUsers *CommandHandler::getUsers()
 {
-	return _users;
+	return _listUsers;
 }
 
 // void CommandHandler::sendFt(std::string msg2send, int fd)
 // {
 //     ResultCmd result()
-//     User* sender = _users->getUser(_cmd->getSender());
+//     User* sender = _listUsers->getUser(_cmd->getSender());
 //     std::cout << "Message *" << msg2send << "* to fd " << sender->getFd() << std::endl;
 //     const char *answer = msg2send.c_str();
 //     if (fd == 0) //send to him self

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCServer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/04 12:23:15 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:04:33 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,15 @@
 #include "include/Colors.hpp"
 
 class CommandHandler;
+class ListUsers;
+class ListChannels;
 
 class IRCServer
 {
 private:
-	CommandHandler *_cmdHandler; // std::unique_ptr
+	CommandHandler *_cmdHandler;
+	ListUsers *_listUsers;
+	ListChannels *_listChannels;
 
 	Socket *_serverSocket;
 
