@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:48 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 14:13:08 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:27:38 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class Message
 		std::string getPrefix() const;
 		std::string getCmd() const;
 		std::list<std::string> getParams() const;
+		void setCmd(const std::string &cmd);
 		static std::list<std::string> split(std::string &msg, std::string delimiter);
 
 		static const size_t MAX_PARAMS = 15;

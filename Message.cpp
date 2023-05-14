@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 15:07:04 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:50:52 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ Message::Message(std::string buff)
 		this->_prefix = msg.front();
 		msg.pop_front();
 	}
-	this->_cmd = msg.front();
+	this->setCmd(msg.front());
 	msg.pop_front();
 	this->_params = msg;
 }
@@ -65,6 +65,15 @@ std::list<std::string> Message::getParams() const
 	return _params;
 }
 
+void Message::setCmd(const std::string &cmd)
+{
+	this->_cmd = cmd;
+	for (size_t i = 0; i < cmd.size(); i++)
+	{
+		this->_cmd[i] = toupper(cmd[i]);
+	}
+}
+
 std::list<std::string> Message::split(std::string &msg, std::string delimiter)
 {
 	size_t pos = 0;
@@ -73,6 +82,11 @@ std::list<std::string> Message::split(std::string &msg, std::string delimiter)
 
 	while ((pos = copy.find(delimiter)) != std::string::npos)
 	{
+		if (!(copy.substr(0, delimiter.size())).compare(delimiter))
+		{
+			copy.erase(0, delimiter.size());
+			continue;
+		}
 		std::string token = copy.substr(0, pos);
 		tokens.push_back(token);
 		copy.erase(0, pos + delimiter.length());

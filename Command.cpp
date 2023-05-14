@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 13:49:47 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:53:44 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,11 @@ std::string Command::getCommand() const
 
 void Command::setCommand(const std::string &cmd)
 {
-	// TODO: Crear una función para que el comando esté en minúsculas
-	_cmd = cmd;
+	this->_cmd = cmd;
+	for (size_t i = 0; i < cmd.size(); i++)
+	{
+		this->_cmd[i] = tolower(cmd[i]);
+	}
 }
 
 Command &Command::operator=(const Command &other)
