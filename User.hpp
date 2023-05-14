@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 19:34:29 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 19:39:41 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ public:
 	void setUsername(const std::string &user);
 	const std::string &getUsername() const;
 	bool isLogged() const;
-	int changeToLogged();
+	void changeToLogged();
 	const std::string getFullName() const;
 	void addChannel(Channel *channel);
 	void removeChannel(Channel *channel);

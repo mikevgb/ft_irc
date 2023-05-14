@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 19:34:20 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 19:39:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,9 @@ bool User::isLogged() const
 {
 	return _isLogged;
 }
-int User::changeToLogged()
+void User::changeToLogged()
 {
 	_isLogged = true;
-	return 0;
 }
 
 const std::string User::getFullName() const
