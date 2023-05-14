@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 17:50:52 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 18:07:42 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,21 @@
 // Constructors
 Message::Message(std::string buff)
 {
-	std::list<std::string> msg = split(buff, " ");
+	std::list<std::string> components = split(buff, " ");
 
-	//TODO: Extract prefix, cmd and params
-	if (msg.front().front() == ':')
+	if (components.front().front() == ':')
 	{
-		this->_prefix = msg.front();
-		msg.pop_front();
+		this->_prefix = components.front();
+		components.pop_front();
 	}
-	this->setCmd(msg.front());
-	msg.pop_front();
-	this->_params = msg;
+	this->setCmd(components.front());
+	components.pop_front();
+	this->_params = components;
+	if (this->_params.size() > MAX_PARAMS)
+	{
+		this->_params.resize(this->MAX_PARAMS);
+	}
+
 }
 
 Message::Message(const Message &copy)
