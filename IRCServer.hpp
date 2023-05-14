@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCServer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 20:04:33 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 13:53:52 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@
 #include "Socket.hpp"
 #include "include/Logger.hpp"
 #include "include/Colors.hpp"
+#include "Message.hpp"
 
 class CommandHandler;
 class ListUsers;
 class ListChannels;
+class Message;
 
 class IRCServer
 {
@@ -56,6 +58,7 @@ private:
 	void acceptConnection();
 	void loseConnection(int i);
 	void setNonBlocking(int fdIn);
+	void processMessage(std::string buff, int fd);
 
 public:
 	IRCServer(const uint16_t port, const std::string password);

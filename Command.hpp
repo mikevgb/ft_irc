@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:45 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/13 20:32:29 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 13:49:58 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ private:
 	std::string _temp;
 	const std::string getToNext();
 
+	static const size_t MAX_PARAMS = 15;
+
 public:
 	Command(int from, const std::string &msg);
-	Command(std::string msg);
 	Command(const Command &other);
 	~Command();
 	std::string getCommand() const;

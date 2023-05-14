@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/13 20:32:23 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 13:49:47 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,19 +112,6 @@ of itself using the setCommand() function. Finally, it generates the targets
 of the command by calling the generateTargets() function, which returns an
 int indicating the number of targets generated.
 */
-
-Command::Command(std::string msg)
-{
-	this->_cmdlist = split(msg, "\r\n");
-	this->_cmd = this->_cmdlist.front();
-	this->_cmdlist.pop_front();
-	this->_parameters = this->_cmdlist;
-	logg(LOG_DEBUG) << RED << "CMD: " << this->_cmd << RESET << "\n";
-	for (std::list<std::string>::iterator itcmd = this->_parameters.begin(); itcmd != _parameters.end(); itcmd++)
-	{
-		logg(LOG_DEBUG) << YELLOW << "Parameter: " << *itcmd << RESET << "\n";
-	}
-}
 
 Command::Command(int from, const std::string &msg)
 	: _from(from), _msg(msg), _cmd(), _params()
