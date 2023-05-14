@@ -189,7 +189,7 @@ void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output m
 {
 	logg(LOG_DEBUG) << "Data:" << msg << "\n";
 
-	// Command cmd(msg);
+	//Command *cmd = new Command(msg);
 	std::list<std::string> commands(Command::split(msg, "\r\n"));
 	for (std::list<std::string>::iterator itcmd = commands.begin(); itcmd != commands.end(); itcmd++)
 	{
@@ -224,6 +224,7 @@ void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output m
 		else
 			logg(LOG_ERR) << "IRCServer:*** _cmdHandler->executeCmd fail! (IRCServer::recvMessage) ***\n";
 	}
+	//delete cmd;
 }
 
 void IRCServer::throwError(std::string msg)

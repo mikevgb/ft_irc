@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:45 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 20:25:07 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:32:29 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,14 @@ private:
 	std::string _cmd;
 	std::queue<std::string> _params;
 	std::queue<std::string> _targets;
+	std::list<std::string> _cmdlist;
+	std::list<std::string> _parameters;
 	std::string _temp;
 	const std::string getToNext();
 
 public:
 	Command(int from, const std::string &msg);
+	Command(std::string msg);
 	Command(const Command &other);
 	~Command();
 	std::string getCommand() const;
@@ -43,7 +46,7 @@ public:
 	const std::string &getNextTarget();
 	int targetsSize();
 	int generateTargets();
-	static std::list<std::string> split(const std::string &str, std::string delimiter);
+	static std::list<std::string> split(std::string msg, std::string delimiter);
 	std::string toLowerString(std::string inputString);
 	std::string getMsg();
 };

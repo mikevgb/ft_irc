@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:29 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:32:23 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,19 @@ of itself using the setCommand() function. Finally, it generates the targets
 of the command by calling the generateTargets() function, which returns an
 int indicating the number of targets generated.
 */
+
+Command::Command(std::string msg)
+{
+	this->_cmdlist = split(msg, "\r\n");
+	this->_cmd = this->_cmdlist.front();
+	this->_cmdlist.pop_front();
+	this->_parameters = this->_cmdlist;
+	logg(LOG_DEBUG) << RED << "CMD: " << this->_cmd << RESET << "\n";
+	for (std::list<std::string>::iterator itcmd = this->_parameters.begin(); itcmd != _parameters.end(); itcmd++)
+	{
+		logg(LOG_DEBUG) << YELLOW << "Parameter: " << *itcmd << RESET << "\n";
+	}
+}
 
 Command::Command(int from, const std::string &msg)
 	: _from(from), _msg(msg), _cmd(), _params()
@@ -225,19 +238,19 @@ int Command::generateTargets()
 	return 0;
 }
 
-std::list<std::string> Command::split(const std::string &str, std::string delimiter)
+std::list<std::string> Command::split(std::string msg, std::string delimiter)
 {
 	size_t pos = 0;
 	std::list<std::string> tokens;
-	std::string targets(str);
-	while ((pos = targets.find(delimiter)) != std::string::npos)
+
+	while ((pos = msg.find(delimiter)) != std::string::npos)
 	{
-		std::string token = targets.substr(0, pos);
+		std::string token = msg.substr(0, pos);
 		tokens.push_back(token);
-		targets.erase(0, pos + delimiter.length());
+		msg.erase(0, pos + delimiter.length());
 	}
-	if (!targets.empty())
-		tokens.push_back(targets);
+	if (!msg.empty())
+		tokens.push_back(msg);
 	return tokens;
 }
 
