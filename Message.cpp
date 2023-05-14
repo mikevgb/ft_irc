@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 18:07:42 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 18:10:35 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,7 @@ Message::Message(std::string buff)
 	}
 	this->setCmd(components.front());
 	components.pop_front();
-	this->_params = components;
-	if (this->_params.size() > MAX_PARAMS)
-	{
-		this->_params.resize(this->MAX_PARAMS);
-	}
-
+	this->setParams(components);
 }
 
 Message::Message(const Message &copy)
@@ -75,6 +70,15 @@ void Message::setCmd(const std::string &cmd)
 	for (size_t i = 0; i < cmd.size(); i++)
 	{
 		this->_cmd[i] = toupper(cmd[i]);
+	}
+}
+
+void Message::setParams(const std::list<std::string> &params)
+{
+	this->_params = params;
+	if (this->_params.size() > MAX_PARAMS)
+	{
+		this->_params.resize(this->MAX_PARAMS);
 	}
 }
 
