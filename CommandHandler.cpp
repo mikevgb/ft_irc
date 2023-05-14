@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 20:21:52 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 19:51:55 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,18 @@ std::list<ResultCmd> CommandHandler::mierdaDeFuncionDeMiguelQueNoSabeProgramarNi
 	return results;
 }
 
+bool CommandHandler::executeCmd(Message *msg, int fd)
+{
+	this->_sender = this->_listUsers->getUser(fd);
+	if (!msg->getCmd().compare("NICK"))
+	{
+		logg(LOG_INFO) << "NICKNAME";
+
+	}
+	return true;
+}
+
+
 /*The executeCmd method is the main entry point for handling commands.
 It first checks if the sender of the command is logged in, and if not,
 it returns an error message. Then, it checks the command name and calls
@@ -55,11 +67,11 @@ the appropriate method to handle the command. For example, if the command
 is "NICK", it calls the setNick method of the _listUsers object to set the
 user's nickname.*/
 
-std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd)
+std::list<ResultCmd> CommandHandler::executeCmd(Command *cmd, int fd)
 {
 	_cmd = cmd;
 	std::string msg = _cmd->getMsg();
-	User *sender = _listUsers->getUser(_cmd->getSender());
+	User *sender = _listUsers->getUser(fd);
 
 	// if (!sender->isLogged() && msg.find("USER") ==  std::string::npos && msg.find("NICK") ==  std::string::npos)
 	//     return mierdaDeFuncionDeMiguelQueNoSabeProgramarNiEscuchar();

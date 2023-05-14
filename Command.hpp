@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:45 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 13:49:58 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 18:16:15 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ private:
 	std::string _cmd;
 	std::queue<std::string> _params;
 	std::queue<std::string> _targets;
-	std::list<std::string> _cmdlist;
-	std::list<std::string> _parameters;
 	std::string _temp;
 	const std::string getToNext();
 

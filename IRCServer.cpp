@@ -172,7 +172,7 @@ void IRCServer::pollLoop()
 						}
 						else
 						{
-							// recvMessage(std::string(_buf, rc), _pollFds[i].fd);
+							//recvMessage(std::string(_buf, rc), _pollFds[i].fd);
 							processMessage(std::string(_buf, rc), _pollFds[i].fd);
 						}
 						break;
@@ -194,7 +194,7 @@ void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output m
 	for (std::list<std::string>::iterator itcmd = commands.begin(); itcmd != commands.end(); itcmd++)
 	{
 		Command *cmd = new Command(fd, *itcmd);
-		std::list<ResultCmd> results = _cmdHandler->executeCmd(cmd);
+		std::list<ResultCmd> results = _cmdHandler->executeCmd(cmd, fd);
 		std::list<ResultCmd>::iterator it;
 
 		if (!results.empty())
@@ -224,7 +224,6 @@ void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output m
 		else
 			logg(LOG_ERR) << "IRCServer:*** _cmdHandler->executeCmd fail! (IRCServer::recvMessage) ***\n";
 	}
-	// delete cmd;
 }
 
 void IRCServer::processMessage(std::string buff, int fd)
@@ -234,8 +233,10 @@ void IRCServer::processMessage(std::string buff, int fd)
 
 	for (std::list<std::string>::iterator it = msgList.begin(); it != msgList.end(); it++)
 	{
-		Message msg(*it);
+		Message *msg = new Message(*it);
+		this->_cmdHandler->executeCmd(msg, fd);
 		logg(LOG_DEBUG) << msg << "\n";
+		delete msg;
 	}
 
 }

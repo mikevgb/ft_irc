@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 17:02:53 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/14 18:51:56 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include "Command.hpp"
 #include "CommandHandler.hpp"
 #include "IRCServer.hpp"
+#include "Message.hpp"
 // #include <string>
 #include <optional>
 
