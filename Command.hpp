@@ -6,13 +6,17 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:45 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 18:16:15 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:15:26 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
-#include "lib2.h"
+
+#include <string>
+#include <queue>
+#include <list>
+#include <iostream>
 
 class Command
 {

@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 13:53:52 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:14:04 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@
 #define MAXMSGSIZE 512
 #define HOST_SIZE 128
 
-#include "lib2.h"
 #include "Socket.hpp"
 #include "include/Logger.hpp"
 #include "include/Colors.hpp"
 #include "Message.hpp"
+#include "CommandHandler.hpp"
+#include <poll.h>
 
 class CommandHandler;
 class ListUsers;

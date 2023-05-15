@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 18:10:35 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:08:15 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,14 @@ Message::~Message()
 {
 }
 
-
 // Operators
-Message & Message::operator=(const Message &assign)
+Message &Message::operator=(const Message &assign)
 {
 	_prefix = assign.getPrefix();
 	_cmd = assign.getCmd();
 	_params = assign.getParams();
 	return *this;
 }
-
 
 // Getters / Setters
 std::string Message::getPrefix() const
@@ -104,9 +102,8 @@ std::list<std::string> Message::split(std::string &msg, std::string delimiter)
 	return tokens;
 }
 
-
 // Stream operators
-std::ostream & operator<<(std::ostream &stream, const Message &object)
+std::ostream &operator<<(std::ostream &stream, const Message &object)
 {
 	stream << "Prefix: " << object.getPrefix() << std::endl;
 	stream << "Cmd: " << object.getCmd() << std::endl;
