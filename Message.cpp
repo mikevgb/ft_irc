@@ -6,22 +6,18 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/15 15:46:51 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/15 17:02:36 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Message.hpp"
 
 // Constructors
-Message::Message(std::string buff)
+Message::Message(const std::string buff)
 {
-	if (buff.size() > MAX_SIZE)
-	{
-		buff.resize(MAX_SIZE);
-		buff.replace(MAX_SIZE - 2, 2, MSG_DELIMITER);
-	}
+	this->setMsg(buff);
 
-	std::list<std::string> components = split(buff, " ");
+	std::list<std::string> components = split(this->_msg, " ");
 
 	if (components.front().front() == ':')
 	{
@@ -31,6 +27,10 @@ Message::Message(std::string buff)
 	this->setCmd(components.front());
 	components.pop_front();
 	this->setParams(components);
+}
+
+Message::Message()
+{
 }
 
 Message::Message(const Message &copy)
@@ -51,6 +51,7 @@ Message &Message::operator=(const Message &assign)
 	_prefix = assign.getPrefix();
 	_cmd = assign.getCmd();
 	_params = assign.getParams();
+	_msg = assign.getMsg();
 	return *this;
 }
 
@@ -63,9 +64,31 @@ std::string Message::getCmd() const
 {
 	return _cmd;
 }
+
+std::string Message::getMsg() const
+{
+	return _msg;
+}
+
 std::list<std::string> Message::getParams() const
 {
 	return _params;
+}
+
+void Message::setMsg(const std::string &msg)
+{
+	this->_msg = msg;
+
+	if (this->_msg.size() > MAX_SIZE)
+	{
+		this->_msg.resize(MAX_SIZE);
+		this->_msg.replace(MAX_SIZE - 2, 2, MSG_DELIMITER);
+	}
+}
+
+void Message::setPrefix(const std::string &prefix)
+{
+	this->_prefix = prefix;
 }
 
 void Message::setCmd(const std::string &cmd)
@@ -111,6 +134,7 @@ std::list<std::string> Message::split(std::string &msg, std::string delimiter)
 // Stream operators
 std::ostream &operator<<(std::ostream &stream, const Message &object)
 {
+	stream << "Message: " << object.getMsg() << std::endl;
 	stream << "Prefix: " << object.getPrefix() << std::endl;
 	stream << "Cmd: " << object.getCmd() << std::endl;
 
