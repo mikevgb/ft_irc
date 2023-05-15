@@ -234,8 +234,8 @@ void IRCServer::processMessage(std::string buff, int fd)
 	for (std::list<std::string>::iterator it = msgList.begin(); it != msgList.end(); it++)
 	{
 		Message *msg = new Message(*it);
-		this->_cmdHandler->executeCmd(msg, fd);
-		logg(LOG_DEBUG) << msg << "\n";
+		//_cmdHandler->executeCmd(msg, fd);
+		logg(LOG_DEBUG) << *msg << "\n";
 		delete msg;
 	}
 

@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/15 15:08:15 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:46:51 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 // Constructors
 Message::Message(std::string buff)
 {
+	if (buff.size() > MAX_SIZE)
+	{
+		buff.resize(MAX_SIZE);
+		buff.replace(MAX_SIZE - 2, 2, MSG_DELIMITER);
+	}
+
 	std::list<std::string> components = split(buff, " ");
 
 	if (components.front().front() == ':')

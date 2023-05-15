@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:48 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/15 15:08:09 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:43:08 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ public:
 	static std::list<std::string> split(std::string &msg, std::string delimiter);
 
 	static const size_t MAX_PARAMS = 15;
+	static const size_t MAX_SIZE = 512;
 
 private:
 	std::string _prefix;
