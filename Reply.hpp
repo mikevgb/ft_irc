@@ -1,25 +1,30 @@
 #ifndef REPLY_HPP
-# define REPLY_HPP
+#define REPLY_HPP
 
-# include <iostream>
-# include <string>
-# include "Message.hpp"
+#include <iostream>
+#include <string>
+#include "Message.hpp"
 
 class Reply : public Message
 {
-	public:
-		// Constructors
-		Reply();
-		Reply(const Reply &copy);
+private:
+	int code;
 
-		// Destructor
-		~Reply();
+public:
+	// Constructors
+	Reply();
+	Reply(int code);
+	Reply(const Reply &copy);
 
-		// Operators
-		Reply & operator=(const Reply &assign);
+	// Destructor
+	~Reply();
 
-	private:
+	// Operators
+	Reply &operator=(const Reply &assign);
 
+	//Getters and Setters
+	int getCode() const;
+	void setCode(const int code);
 };
 
 #endif

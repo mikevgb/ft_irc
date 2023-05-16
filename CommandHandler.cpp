@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/16 18:41:32 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:32:06 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,11 @@ void CommandHandler::initCommandMap()
 
 int CommandHandler::nick(std::list<std::string> params)
 {
-	(void) params;
-	logg(LOG_INFO) << "NICK";
+	if (params.empty())
+	{
+		return false;
+
+	}
 	return 0;
 }
 
@@ -66,7 +69,7 @@ int CommandHandler::executeCmd(const std::string cmd, const std::list<std::strin
 	}
 	else
 	{
-		logg(LOG_ERROR) << "Command not found\n";
+		return false;
 	}
 	return true;
 }
@@ -350,4 +353,9 @@ void CommandHandler::setMessage(const Message &msg)
 void CommandHandler::setUser(const int fd)
 {
 	this->_sender = _listUsers->getUser(fd);
+}
+
+std::list<User *> CommandHandler::getTargets() const
+{
+	return this->_targets2;
 }

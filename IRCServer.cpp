@@ -228,6 +228,7 @@ void IRCServer::recvMessage(std::string msg, int fd)
 
 void IRCServer::processMessage(std::string buff, int fd)
 {
+	int code;
 	std::list<std::string> msgList = Message::split(buff, MSG_DELIMITER);
 	_cmdHandler->setUser(fd);
 
@@ -235,8 +236,16 @@ void IRCServer::processMessage(std::string buff, int fd)
 	{
 		Message msg(*it);
 		_cmdHandler->setMessage(msg);
+		code = _cmdHandler->executeCmd(msg.getCmd(),msg.getParams());
 		std::cout << _cmdHandler->getMessage();
-		_cmdHandler->executeCmd(msg.getCmd(),msg.getParams());
+		Reply rp(code);
+
+/* 		std::list<User *>::iterator user_it;
+		for (user_it = _cmdHandler->getTargets().begin(); user_it != _cmdHandler->getTargets().end(); it++)
+		{
+			std::string msg = "XAXITO\n"; //FIXME: This method should return the appropiate message
+			send((*user_it)->getFd(), msg.c_str(), std::strlen(msg.c_str()), 0);
+		} */
 	}
 
 }
