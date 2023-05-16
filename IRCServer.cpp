@@ -235,7 +235,7 @@ void IRCServer::processMessage(std::string buff, int fd)
 	{
 		Message *msg = new Message(*it);
 		//_cmdHandler->executeCmd(msg, fd);
-		logg(LOG_DEBUG) << *msg << "\n";
+		std::cout << BLUE << *msg << RESET;
 		delete msg;
 	}
 
