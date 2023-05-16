@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 19:51:55 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/16 14:05:38 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandHandler.hpp"
-
-// CommandHandler::CommandHandler()
-// :_listUsers(), _listChannels(),_listToSend(),_sender(),_cmd()
-// { }
 
 CommandHandler::CommandHandler(ListUsers *listUsers, ListChannels *listChannels)
 {
@@ -22,7 +18,6 @@ CommandHandler::CommandHandler(ListUsers *listUsers, ListChannels *listChannels)
 	_listChannels = listChannels;
 	_firstTimeFlag = 0;
 }
-
 
 CommandHandler::~CommandHandler()
 {
@@ -42,24 +37,17 @@ void CommandHandler::sendPRIVMSG(const std::string &nick)
 	// que en sender se cargue el getFullName nick@user@server que debe devolver el usuario
 }
 
-std::list<ResultCmd> CommandHandler::mierdaDeFuncionDeMiguelQueNoSabeProgramarNiEscuchar()
-{
-	std::list<ResultCmd> results;
-	return results;
-}
-
-bool CommandHandler::executeCmd(Message *msg, int fd)
+/* bool CommandHandler::executeCmd(const Message &msg, int fd);
 {
 	this->_sender = this->_listUsers->getUser(fd);
+	this->_msg = msg;
 	if (!msg->getCmd().compare("NICK"))
 	{
 		logg(LOG_INFO) << "NICKNAME";
-
 	}
 	return true;
 }
-
-
+ */
 /*The executeCmd method is the main entry point for handling commands.
 It first checks if the sender of the command is logged in, and if not,
 it returns an error message. Then, it checks the command name and calls
@@ -325,3 +313,13 @@ ListUsers *CommandHandler::getUsers()
 //     else
 //         send(fd, answer, std::strlen(answer), 0);
 // }
+
+Message CommandHandler::getMessage() const
+{
+	return this->_msg;
+}
+
+void CommandHandler::setMessage(const Message &msg)
+{
+	this->_msg = msg;
+}

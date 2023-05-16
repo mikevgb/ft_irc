@@ -172,8 +172,8 @@ void IRCServer::pollLoop()
 						}
 						else
 						{
-							//recvMessage(std::string(_buf, rc), _pollFds[i].fd);
-							processMessage(std::string(_buf, rc), _pollFds[i].fd);
+							recvMessage(std::string(_buf, rc), _pollFds[i].fd);
+							//processMessage(std::string(_buf, rc), _pollFds[i].fd);
 						}
 						break;
 					}
@@ -209,7 +209,7 @@ void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output m
 				{
 					int fdUser = *itusers;
 					std::string tmp = result.getMsg();
-					logg(LOG_DEBUG) << "recvMessage send to fd: " << fdUser << "\n"; // TODO: Why the next FD is the sum of the previous fd plus 2?
+					logg(LOG_DEBUG) << "recvMessage send to fd: " << fdUser << "\n";
 					if (!tmp.empty())
 					{
 						tmp += "\n";
@@ -233,10 +233,9 @@ void IRCServer::processMessage(std::string buff, int fd)
 
 	for (std::list<std::string>::iterator it = msgList.begin(); it != msgList.end(); it++)
 	{
-		Message *msg = new Message(*it);
+		Message msg(*it);
 		//_cmdHandler->executeCmd(msg, fd);
-		std::cout << BLUE << *msg << RESET;
-		delete msg;
+		std::cout << BLUE << msg << RESET;
 	}
 
 }

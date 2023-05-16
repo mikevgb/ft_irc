@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:48 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/15 17:01:25 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/16 14:03:59 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,17 @@
 
 class Message
 {
+
+protected:
+	std::string _msg;
+	std::string _prefix;
+	std::string _cmd;
+	std::list<std::string> _params;
+
+
 public:
 	// Constructors
+	Message();
 	Message(std::string msg);
 	Message(const Message &copy);
 
@@ -46,14 +55,6 @@ public:
 
 	static const size_t MAX_PARAMS = 15;
 	static const size_t MAX_SIZE = 512;
-
-protected:
-	std::string _prefix;
-	std::string _msg;
-	std::string _cmd;
-	std::list<std::string> _params;
-
-	Message();
 };
 
 // Stream operators

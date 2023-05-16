@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/15 17:02:36 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/16 14:26:36 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Message::Message(const std::string buff)
 
 	std::list<std::string> components = split(this->_msg, " ");
 
-	if (components.front().front() == ':')
+	if (components.front().at(0) == ':')
 	{
 		this->_prefix = components.front();
 		components.pop_front();

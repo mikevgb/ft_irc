@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Logger.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:44:17 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/04 12:21:41 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/16 14:18:49 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #define LOGGER_HPP
 
 #include <algorithm>
-#include <chrono>
 #include <cmath>
 #include <ctime>
 #include <iomanip>

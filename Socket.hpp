@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:41:49 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/09 13:21:56 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/16 14:24:30 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#include <strings.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>

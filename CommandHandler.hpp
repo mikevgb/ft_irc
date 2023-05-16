@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 19:42:20 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/16 14:05:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #define JOIN "JOIN"
 #define USER "USER"
 #define CAPASUPPORTANSWER "CAP * LS :"
+#include "Reply.hpp"
 
 class User;
 class ListUsers;
@@ -24,6 +25,7 @@ class ListChannels;
 class Command;
 class ResultCmd;
 class Message;
+class Reply;
 
 class CommandHandler
 {
@@ -33,7 +35,7 @@ private:
 	User *_sender;
 	std::list<std::string> _targets;
 	Command *_cmd;
-	Message *msg;
+	Message _msg;
 	int _firstTimeFlag;
 
 public:
@@ -41,12 +43,13 @@ public:
 	CommandHandler(ListUsers *listUsers, ListChannels *listChannels);
 	~CommandHandler();
 	std::list<ResultCmd> executeCmd(Command *cmd, int fd);
-	bool executeCmd(Message *msg, int fd);
+	//bool executeCmd(const Message & msg, int fd);
 	User *newUser(const int fd);
 	bool removeUser(const int fd);
 	ListUsers *getUsers();
 	void sendFt(std::string sendToMySelf, int fd = 0); // if no fd is provided it will send to user that call's it
-	std::list<ResultCmd> mierdaDeFuncionDeMiguelQueNoSabeProgramarNiEscuchar();
+	Message getMessage() const;
+	void setMessage(const Message &msg);
 };
 
 #endif
