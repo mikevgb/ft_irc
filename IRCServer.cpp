@@ -186,7 +186,7 @@ void IRCServer::pollLoop()
 // TODO: Recive msg. CHECK IT AND FORMAT STRUCTURE!
 // check for errors (errors!)
 
-void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output messages
+void IRCServer::recvMessage(std::string msg, int fd)
 {
 	logg(LOG_DEBUG) << "Data:" << msg << "\n";
 
@@ -229,13 +229,12 @@ void IRCServer::recvMessage(std::string msg, int fd) // FIXME: Reformat output m
 void IRCServer::processMessage(std::string buff, int fd)
 {
 	std::list<std::string> msgList = Message::split(buff, MSG_DELIMITER);
-	(void)fd;
+	_cmdHandler->setUser(fd);
 
 	for (std::list<std::string>::iterator it = msgList.begin(); it != msgList.end(); it++)
 	{
-		Message msg(*it);
-		//_cmdHandler->executeCmd(msg, fd);
-		std::cout << BLUE << msg << RESET;
+		_cmdHandler->setMessage(Message(*it));
+		std::cout << _cmdHandler->getMessage();
 	}
 
 }
@@ -251,7 +250,7 @@ void IRCServer::setNonBlocking(int fd)
 	int opts = fcntl(fd, F_GETFL); // get current fd flags
 	if (opts < 0)
 	{
-		throwError("ftcntl() failed"); // FIXME: Set non blocking failed
+		throwError("ftcntl() failed");
 	}
 	fcntl(fd, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
 }

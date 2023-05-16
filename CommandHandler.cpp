@@ -6,17 +6,36 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/16 14:05:38 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/16 18:37:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandHandler.hpp"
+
+void CommandHandler::initCommandMap()
+{
+	this->commandMap["NICK"] = nick;
+	this->commandMap["USER"] = user;
+}
+
+int CommandHandler::nick(std::list<std::string> params)
+{
+	(void) params;
+	return 0;
+}
+
+int CommandHandler::user(std::list<std::string> params)
+{
+	(void) params;
+	return 0;
+}
 
 CommandHandler::CommandHandler(ListUsers *listUsers, ListChannels *listChannels)
 {
 	_listUsers = listUsers;
 	_listChannels = listChannels;
 	_firstTimeFlag = 0;
+	initCommandMap();
 }
 
 CommandHandler::~CommandHandler()
@@ -37,17 +56,19 @@ void CommandHandler::sendPRIVMSG(const std::string &nick)
 	// que en sender se cargue el getFullName nick@user@server que debe devolver el usuario
 }
 
-/* bool CommandHandler::executeCmd(const Message &msg, int fd);
+int CommandHandler::executeCmd(const std::string cmd, const std::list<std::string> params)
 {
-	this->_sender = this->_listUsers->getUser(fd);
-	this->_msg = msg;
-	if (!msg->getCmd().compare("NICK"))
+	if (commandMap.find(cmd) != commandMap.end())
 	{
-		logg(LOG_INFO) << "NICKNAME";
+		return commandMap[cmd](params);
+	}
+	else
+	{
+		logg(LOG_ERROR) << "Command not found\n";
 	}
 	return true;
 }
- */
+
 /*The executeCmd method is the main entry point for handling commands.
 It first checks if the sender of the command is logged in, and if not,
 it returns an error message. Then, it checks the command name and calls
@@ -322,4 +343,9 @@ Message CommandHandler::getMessage() const
 void CommandHandler::setMessage(const Message &msg)
 {
 	this->_msg = msg;
+}
+
+void CommandHandler::setUser(const int fd)
+{
+	this->_sender = _listUsers->getUser(fd);
 }
