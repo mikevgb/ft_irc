@@ -172,8 +172,8 @@ void IRCServer::pollLoop()
 						}
 						else
 						{
-							recvMessage(std::string(_buf, rc), _pollFds[i].fd);
-							//processMessage(std::string(_buf, rc), _pollFds[i].fd);
+							//recvMessage(std::string(_buf, rc), _pollFds[i].fd);
+							processMessage(std::string(_buf, rc), _pollFds[i].fd);
 						}
 						break;
 					}
@@ -233,8 +233,10 @@ void IRCServer::processMessage(std::string buff, int fd)
 
 	for (std::list<std::string>::iterator it = msgList.begin(); it != msgList.end(); it++)
 	{
-		_cmdHandler->setMessage(Message(*it));
+		Message msg(*it);
+		_cmdHandler->setMessage(msg);
 		std::cout << _cmdHandler->getMessage();
+		_cmdHandler->executeCmd(msg.getCmd(),msg.getParams());
 	}
 
 }

@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/16 18:37:31 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/16 18:41:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@ void CommandHandler::initCommandMap()
 int CommandHandler::nick(std::list<std::string> params)
 {
 	(void) params;
+	logg(LOG_INFO) << "NICK";
 	return 0;
 }
 
 int CommandHandler::user(std::list<std::string> params)
 {
 	(void) params;
+	logg(LOG_INFO) << "USER";
 	return 0;
 }
 
