@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/17 18:56:46 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/17 19:05:22 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ private:
 	Message _msg;
 	int _firstTimeFlag;
 
-	std::map<std::string, int (CommandHandler::*)(std::list<std::string>)> commandMap;
-
 	void initCommandMap();
 
 public:
@@ -59,9 +57,6 @@ public:
 	void setUser(const int fd);
 	std::list<User *> getTargets() const;
 
-	// Command functions
-	int nick(std::list<std::string> params);
-	int user(std::list<std::string> params);
 };
 
 #endif
