@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/17 19:09:37 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/17 19:45:02 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 Command::Command(const std::string &cmd) : _cmd(cmd)
 {
+	this->initCommandMap();
 }
 
 Command::Command(const Command &other)
@@ -39,4 +40,32 @@ Command &Command::operator=(const Command &other)
 {
 	_cmd = other._cmd;
 	return *this;
+}
+
+void Command::initCommandMap()
+{
+	this->commandMap["NICK"] = nick;
+	this->commandMap["USER"] = user;
+}
+
+int Command::nick(std::list<std::string> params, User *sender)
+{
+	if (params.empty())
+	{
+		return false;
+	}
+	sender->setNick(params.front());
+	logg(LOG_INFO) << "NICK:" << params.front();
+	return 0;
+}
+
+int Command::user(std::list<std::string> params, User *sender)
+{
+		if (params.empty())
+	{
+		return false;
+	}
+	sender->setUsername(params.front());
+	logg(LOG_INFO) << "USER:" << params.front();
+	return 0;
 }

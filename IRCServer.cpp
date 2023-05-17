@@ -183,52 +183,8 @@ void IRCServer::pollLoop()
 	}
 }
 
-// TODO: Recive msg. CHECK IT AND FORMAT STRUCTURE!
-// check for errors (errors!)
-
-void IRCServer::recvMessage(std::string msg, int fd)
-{
-	logg(LOG_DEBUG) << "Data:" << msg << "\n";
-
-	std::list<std::string> commands(Command::split(msg, "\r\n"));
-	for (std::list<std::string>::iterator itcmd = commands.begin(); itcmd != commands.end(); itcmd++)
-	{
-		Command *cmd = new Command(fd, *itcmd);
-		std::list<ResultCmd> results = _cmdHandler->executeCmd(cmd, fd);
-		std::list<ResultCmd>::iterator it;
-
-		if (!results.empty())
-		{
-			for (it = results.begin(); it != results.end(); it++)
-			{
-				ResultCmd result = *it;
-				logg(LOG_DEBUG) << "recvMessage: " << result.getMsg() << "\n";
-				std::set<int> users = result.getUsers();
-				std::set<int>::iterator itusers;
-				for (itusers = users.begin(); itusers != users.end(); itusers++)
-				{
-					int fdUser = *itusers;
-					std::string tmp = result.getMsg();
-					logg(LOG_DEBUG) << "recvMessage send to fd: " << fdUser << "\n";
-					if (!tmp.empty())
-					{
-						tmp += "\n";
-						const char *arrayMsg = tmp.c_str();
-						send(fdUser, arrayMsg, std::strlen(arrayMsg), 0);
-					}
-				}
-			}
-			// TODO: Aquí tienes enviar la lista de resultados por sus respectivos fds
-			// cada result tiene una lista de usuarios a los que se manda el mismo mensaje
-		}
-		else
-			logg(LOG_ERR) << "IRCServer:*** _cmdHandler->executeCmd fail! (IRCServer::recvMessage) ***\n";
-	}
-}
-
 void IRCServer::processMessage(std::string buff, int fd)
 {
-	int code;
 	std::list<std::string> msgList = Message::split(buff, MSG_DELIMITER);
 	_cmdHandler->setUser(fd);
 
@@ -236,7 +192,7 @@ void IRCServer::processMessage(std::string buff, int fd)
 	{
 		Message msg(*it);
 		_cmdHandler->setMessage(msg);
-		code = _cmdHandler->executeCmd();
+		_cmdHandler->executeCmd();
 		std::cout << _cmdHandler->getMessage();
 	}
 }
