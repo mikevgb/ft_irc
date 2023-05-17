@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/16 19:57:19 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:56:46 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,15 @@ private:
 	Message _msg;
 	int _firstTimeFlag;
 
-	std::map<std::string, int(*)(std::list<std::string>)> commandMap;
+	std::map<std::string, int (CommandHandler::*)(std::list<std::string>)> commandMap;
 
 	void initCommandMap();
-
-	// Command functions
-	static int nick(std::list<std::string> params);
-	static int user(std::list<std::string> params);
 
 public:
 	void sendPRIVMSG(const std::string &nick);
 	CommandHandler(ListUsers *listUsers, ListChannels *listChannels);
 	~CommandHandler();
-	int executeCmd(const std::string cmd, std::list<std::string> params);
+	int executeCmd();
 	std::list<ResultCmd> executeCmd(Command *cmd, int fd);
 	User *newUser(const int fd);
 	bool removeUser(const int fd);
@@ -62,6 +58,10 @@ public:
 	void setMessage(const Message &msg);
 	void setUser(const int fd);
 	std::list<User *> getTargets() const;
+
+	// Command functions
+	int nick(std::list<std::string> params);
+	int user(std::list<std::string> params);
 };
 
 #endif

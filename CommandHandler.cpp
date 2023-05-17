@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/16 20:32:06 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:55:12 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int CommandHandler::nick(std::list<std::string> params)
 	if (params.empty())
 	{
 		return false;
-
 	}
+	this->_sender->setNick(params.front());
 	return 0;
 }
 
@@ -61,8 +61,11 @@ void CommandHandler::sendPRIVMSG(const std::string &nick)
 	// que en sender se cargue el getFullName nick@user@server que debe devolver el usuario
 }
 
-int CommandHandler::executeCmd(const std::string cmd, const std::list<std::string> params)
+int CommandHandler::executeCmd()
 {
+	std::string cmd = this->_msg.getCmd();
+	std::list<std::string> params = this->_msg.getParams();
+
 	if (commandMap.find(cmd) != commandMap.end())
 	{
 		return commandMap[cmd](params);
