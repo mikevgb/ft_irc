@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/20 10:29:32 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/20 11:41:51 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,24 +48,30 @@ void Command::initCommandMap()
 	this->commandMap["USER"] = &user;
 }
 
-int Command::nick(std::list<std::string> params, User *sender)
+//FIXME: Set errors in Reply
+
+Reply Command::nick(std::list<std::string> params, User *sender)
 {
+	Reply rp;
+
 	if (params.empty())
 	{
-		return false;
+		rp.setCode(1);
 	}
 	sender->setNick(params.front());
 	logg(LOG_INFO) << "NICK:" << params.front();
-	return 0;
+	return rp;
 }
 
-int Command::user(std::list<std::string> params, User *sender)
+Reply Command::user(std::list<std::string> params, User *sender)
 {
-		if (params.empty())
+	Reply rp;
+
+	if (params.empty())
 	{
-		return false;
+		return rp;
 	}
 	sender->setUsername(params.front());
 	logg(LOG_INFO) << "USER:" << params.front();
-	return 0;
+	return rp;
 }
