@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:48 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/16 14:03:59 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/20 10:48:47 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ public:
 	void setCmd(const std::string &cmd);
 	void setParams(const std::list<std::string> &params);
 
-	static std::list<std::string> split(std::string &msg, std::string delimiter);
+	static std::list<std::string> split(std::string msg, std::string delimiter);
 
 	static const size_t MAX_PARAMS = 15;
 	static const size_t MAX_SIZE = 512;

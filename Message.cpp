@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/16 14:26:36 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/20 10:50:26 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ Message::Message()
 
 Message::Message(const Message &copy)
 {
+	_msg = copy.getMsg();
 	_prefix = copy.getPrefix();
 	_cmd = copy.getCmd();
 	_params = copy.getParams();
@@ -109,7 +110,7 @@ void Message::setParams(const std::list<std::string> &params)
 	}
 }
 
-std::list<std::string> Message::split(std::string &msg, std::string delimiter)
+std::list<std::string> Message::split(std::string msg, std::string delimiter)
 {
 	size_t pos = 0;
 	std::string copy(msg);
