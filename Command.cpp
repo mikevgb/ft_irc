@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/17 19:45:02 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/20 10:29:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ Command &Command::operator=(const Command &other)
 
 void Command::initCommandMap()
 {
-	this->commandMap["NICK"] = nick;
-	this->commandMap["USER"] = user;
+	this->commandMap["NICK"] = &nick;
+	this->commandMap["USER"] = &user;
 }
 
 int Command::nick(std::list<std::string> params, User *sender)

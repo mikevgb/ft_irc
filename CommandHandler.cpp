@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/17 19:47:52 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/20 10:41:09 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ int CommandHandler::executeCmd()
 {
 	int code = 0;
 
-	if (Command::commandMap.find(this->_msg.getCmd()) != Command::commandMap.end())
+	if (this->_cmd->commandMap.find(this->_msg.getCmd()) != this->_cmd->commandMap.end())
 	{
-		code = Command::commandMap[this->_msg.getCmd()](this->_msg.getParams(), this->_sender);
+		code = this->_cmd->commandMap[this->_msg.getCmd()](this->_msg.getParams(), this->_sender);
 	}
 	else
 	{
@@ -52,7 +52,7 @@ Message CommandHandler::getMessage() const
 	return this->_msg;
 }
 
-void CommandHandler::setMessage(const Message &msg)
+void CommandHandler::setMessage(const Message msg)
 {
 	this->_msg = msg;
 	this->_cmd->setCommand(msg.getCmd());

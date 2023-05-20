@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/17 19:47:22 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/20 10:41:20 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ public:
 	int executeCmd();
 	ListUsers *getUsers();
 	Message getMessage() const;
-	void setMessage(const Message &msg);
+	void setMessage(const Message msg);
 	void setUser(const int fd);
 	std::list<User *> getTargets() const;
 

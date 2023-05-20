@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:34 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/20 10:12:12 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ class ListChannels
 {
 private:
 	std::map<std::string, Channel *> _channels;
-	int removeChannel(Channel *channel);
 	bool hasKey(const std::string &key);
+	int removeChannel(Channel *channel);
 
 public:
 	typedef std::map<std::string, Channel>::const_iterator iterator;

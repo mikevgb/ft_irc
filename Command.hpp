@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:45 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/17 19:31:05 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/20 10:38:10 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ public:
 	void setCommand(const std::string &cmd);
 
 	static const size_t MAX_PARAMS = 15;
-	static std::map<std::string, int (*)(std::list<std::string>, User *)> commandMap;
+	typedef int (*CommandFunction)(std::list<std::string>, User *); // Define the function pointer type
+	std::map<std::string, CommandFunction> commandMap;
 
 	// Command functions
 	static int nick(std::list<std::string> params, User *);
