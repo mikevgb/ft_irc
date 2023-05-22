@@ -6,14 +6,14 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/14 19:39:31 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/22 14:20:24 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "User.hpp"
 
 User::User(size_t fd)
-	: _fd(fd), _nick(), _username(), _channels()
+	: _fd(fd), _nick(), _username(), _channels(), forbittenChar(",!?*@")
 {
 	_isLogged = false;
 }
@@ -29,8 +29,20 @@ size_t User::getFd()
 
 void User::setNick(const std::string &nick)
 {
-	_nick = nick;
+	bool isForbbiten = false;
+
+	for (size_t i = 0; i < this->forbittenChar.size(); i++)
+	{
+		if (nick.find(this->forbittenChar[i]) != std::string::npos)
+		{
+			isForbbiten = true;
+			break;
+		}
+	}
+	if (!isForbbiten)
+		_nick = nick;
 }
+
 const std::string &User::getNick() const
 {
 	return _nick;
