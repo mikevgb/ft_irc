@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:28 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/22 17:17:00 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+
+//TODO: Channel names are strings (beginning with specified prefix characters). Apart from the requirement of the first character being a valid channel type prefix character;
+//the only restriction on a channel name is that it may not contain any spaces (' ', 0x20), a control G / BELL ('^G', 0x07), or a comma (',', 0x2C) (which is used as a list item separator by the protocol).
+
+
 Channel::Channel(const std::string &name)
 	: _name(name), _topic("Nuevo canal"), _password(), _users(), _admins(), _voiced(), _baned()
 {
