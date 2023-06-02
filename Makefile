@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+         #
+#    By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 12:42:39 by mmateo-t          #+#    #+#              #
-#    Updated: 2023/06/02 12:42:36 by mmateo-t         ###   ########.fr        #
+#    Updated: 2023/06/02 16:37:13 by mmateo-t         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,6 @@ SRCS:=	User.cpp \
 		Channel.cpp \
 		ListUsers.cpp \
 		ListChannels.cpp \
-		Command.cpp \
 		ResultCmd.cpp \
 		CommandHandler.cpp \
 		ServerMsgs.cpp \

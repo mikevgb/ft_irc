@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/22 14:29:30 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/02 17:05:19 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ User::User(size_t fd)
 
 User::~User()
 {
+	close(this->_fd);
 }
 
 size_t User::getFd()
