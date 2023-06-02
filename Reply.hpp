@@ -3,12 +3,15 @@
 
 #include <iostream>
 #include <string>
+#include <set>
+#include "User.hpp"
 #include "Message.hpp"
 
 class Reply : public Message
 {
 private:
 	int code;
+	std::set<int> targets;
 
 public:
 	// Constructors
@@ -24,7 +27,10 @@ public:
 
 	//Getters and Setters
 	int getCode() const;
+	std::set<int> getTargets() const;
 	void setCode(const int code);
+	int addTarget(int fd);
+
 };
 
 #endif

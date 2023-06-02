@@ -172,7 +172,7 @@ void IRCServer::pollLoop()
 						}
 						else
 						{
-							//recvMessage(std::string(_buf, rc), _pollFds[i].fd);
+							// recvMessage(std::string(_buf, rc), _pollFds[i].fd);
 							processMessage(std::string(_buf, rc), _pollFds[i].fd);
 						}
 						break;
@@ -183,17 +183,68 @@ void IRCServer::pollLoop()
 	}
 }
 
+void IRCServer::recvMessage(std::string msg, int fd)
+{
+	logg(LOG_DEBUG) << "Data:" << msg << "\n";
+
+	std::list<std::string> commands(Command::split(msg, "\r\n"));
+	for (std::list<std::string>::iterator itcmd = commands.begin(); itcmd != commands.end(); itcmd++)
+	{
+		Command *cmd = new Command(fd, *itcmd);
+		std::list<ResultCmd> results = _cmdHandler->executeCmd(cmd, fd);
+		std::list<ResultCmd>::iterator it;
+
+		if (!results.empty())
+		{
+			for (it = results.begin(); it != results.end(); it++)
+			{
+				ResultCmd result = *it;
+				logg(LOG_DEBUG) << "recvMessage: " << result.getMsg() << "\n";
+				std::set<int> users = result.getUsers();
+				std::set<int>::iterator itusers;
+				for (itusers = users.begin(); itusers != users.end(); itusers++)
+				{
+					int fdUser = *itusers;
+					std::string tmp = result.getMsg();
+					logg(LOG_DEBUG) << "recvMessage send to fd: " << fdUser << "\n";
+					if (!tmp.empty())
+					{
+						tmp += "\n";
+						const char *arrayMsg = tmp.c_str();
+						send(fdUser, arrayMsg, std::strlen(arrayMsg), 0);
+					}
+				}
+			}
+			// TODO: Aquí tienes enviar la lista de resultados por sus respectivos fds
+			// cada result tiene una lista de usuarios a los que se manda el mismo mensaje
+		}
+		else
+			logg(LOG_ERR) << "IRCServer:*** _cmdHandler->executeCmd fail! (IRCServer::recvMessage) ***\n";
+	}
+}
+
 void IRCServer::processMessage(std::string buff, int fd)
 {
 	std::list<std::string> msgList = Message::split(buff, MSG_DELIMITER);
+	std::list<Reply> replies;
 	_cmdHandler->setUser(fd);
 
 	for (std::list<std::string>::iterator it = msgList.begin(); it != msgList.end(); it++)
 	{
 		Message msg(*it);
 		_cmdHandler->setMessage(msg);
-		_cmdHandler->executeCmd();
+		replies = _cmdHandler->executeCmd();
 		std::cout << _cmdHandler->getMessage();
+
+		for (std::list<Reply>::iterator rp = replies.begin(); rp != replies.end(); rp++)
+		{
+			std::set<int> targets = (*rp).getTargets();
+			for (std::set<int>::iterator user = targets.begin(); user != targets.end(); user++)
+			{
+				const char *arrayMsg = (*rp).getMsg().c_str();
+				send(*user, arrayMsg, std::strlen(arrayMsg), 0);
+			}
+		}
 	}
 }
 

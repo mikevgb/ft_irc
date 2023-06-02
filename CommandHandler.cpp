@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/20 11:42:11 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/05/22 17:32:30 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,16 @@ CommandHandler::~CommandHandler()
 	delete _cmd;
 }
 
-Reply CommandHandler::executeCmd()
+
+std::list<Reply> CommandHandler::executeCmd()
 {
-	Reply rp;
+	std::list<Reply> replies;
 
 	if (this->_cmd->commandMap.find(this->_msg.getCmd()) != this->_cmd->commandMap.end())
 	{
-		rp = this->_cmd->commandMap[this->_msg.getCmd()](this->_msg.getParams(), this->_sender);
+		replies = this->_cmd->commandMap[this->_msg.getCmd()](this->_msg.getParams(), this->_sender);
 	}
-	return rp;
+	return replies;
 }
 
 ListUsers *CommandHandler::getUsers()
