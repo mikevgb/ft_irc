@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/02 17:07:55 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/02 19:45:07 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void CommandHandler::executeCmd(std::list<Reply> &replies)
 	if (this->commandMap.find(this->_msg.getCmd()) != this->commandMap.end())
 	{
 		CommandFunction cf = this->commandMap[this->_msg.getCmd()];
-		replies = (this->*cf)(this->_msg.getParams(), this->_sender);
+		(this->*cf)(this->_msg.getParams(), this->_sender, replies);
 	}
 }
 
@@ -70,9 +70,8 @@ void CommandHandler::initCommandMap()
 
 //FIXME: Set errors in Reply
 
-std::list<Reply> CommandHandler::nick(std::list<std::string> params, User *sender)
+void CommandHandler::nick(std::list<std::string> params, User *sender, std::list<Reply> &replies)
 {
-	std::list<Reply> list;
 	Reply rp;
 
 	if (params.empty())
@@ -80,35 +79,30 @@ std::list<Reply> CommandHandler::nick(std::list<std::string> params, User *sende
 		rp.setCode(1);
 	}
 	sender->setNick(params.front());
-	rp.addTarget(sender->getFd());
+	rp.addTarget((int)sender->getFd());
 	rp.setMsg("CHAOS");
-	list.push_back(rp);
-	return list;
+	replies.push_back(rp);
 }
 
-std::list<Reply> CommandHandler::user(std::list<std::string> params, User *sender)
+void CommandHandler::user(std::list<std::string> params, User *sender, std::list<Reply> &replies)
 {
-	std::list<Reply> list;
 	Reply rp;
 
 	if (params.empty())
 	{
-		return list;
+		return;
 	}
 	sender->setUsername(params.front());
 	logg(LOG_INFO) << "USER:" << params.front();
-	list.push_back(rp);
-	return list;
+	replies.push_back(rp);
 }
 
-std::list<Reply> CommandHandler::quit(std::list<std::string> params, User *sender)
+void CommandHandler::quit(std::list<std::string> params, User *sender, std::list<Reply> &replies)
 {
-	std::list<Reply> list;
 	Reply rp;
 
 	this->_listUsers->removeUser(sender->getFd());
 	rp.setCode(0);
 	rp.setMsg(params.front());
-	list.push_back(rp);
-	return (list);
+	replies.push_back(rp);
 }

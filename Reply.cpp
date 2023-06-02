@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Reply.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/02 14:10:14 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/02 19:12:30 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,12 @@ Reply::~Reply()
 // Operators
 Reply &Reply::operator=(const Reply &assign)
 {
-	(void)assign;
-	this->_code = assign._code;
-	this->_targets = assign._targets;
-	this->_msg = assign._msg;
+	if (this != &assign)
+	{
+		this->_code = assign._code;
+		this->_targets = assign._targets;
+		this->_msg = assign._msg;
+	}
 	return *this;
 }
 
