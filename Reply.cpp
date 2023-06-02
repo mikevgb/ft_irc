@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Reply.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/22 17:38:59 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/02 14:10:14 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Reply::Reply()
 
 Reply::Reply(const int code)
 {
-	this->code = code;
+	this->_code = code;
 }
 
 Reply::Reply(const Reply &copy) : Message(copy)
@@ -36,26 +36,29 @@ Reply::~Reply()
 Reply &Reply::operator=(const Reply &assign)
 {
 	(void)assign;
+	this->_code = assign._code;
+	this->_targets = assign._targets;
+	this->_msg = assign._msg;
 	return *this;
 }
 
 // Getters and Setters
 int Reply::getCode() const
 {
-	return this->code;
+	return this->_code;
 }
 
 void Reply::setCode(const int code)
 {
-	this->code = code;
+	this->_code = code;
 }
 
 void Reply::addTarget(int fd)
 {
-	this->targets.insert(fd);
+	this->_targets.insert(fd);
 }
 
-std::set<int> &Reply::getTargets()
+std::set<int> Reply::getTargets() const
 {
-	return this->targets;
+	return this->_targets;
 }

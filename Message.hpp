@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:48 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/20 10:48:47 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/02 13:09:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ protected:
 	std::string _prefix;
 	std::string _cmd;
 	std::list<std::string> _params;
-
 
 public:
 	// Constructors

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/22 17:32:30 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/02 14:13:00 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,12 @@ CommandHandler::~CommandHandler()
 }
 
 
-std::list<Reply> CommandHandler::executeCmd()
+void CommandHandler::executeCmd(std::list<Reply> &replies)
 {
-	std::list<Reply> replies;
-
 	if (this->_cmd->commandMap.find(this->_msg.getCmd()) != this->_cmd->commandMap.end())
 	{
 		replies = this->_cmd->commandMap[this->_msg.getCmd()](this->_msg.getParams(), this->_sender);
 	}
-	return replies;
 }
 
 ListUsers *CommandHandler::getUsers()

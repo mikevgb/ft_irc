@@ -6,14 +6,13 @@
 #    By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 12:42:39 by mmateo-t          #+#    #+#              #
-#    Updated: 2023/05/16 14:27:14 by mmateo-t         ###   ########.fr        #
+#    Updated: 2023/06/02 12:42:36 by mmateo-t         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME:= ircserv
 CXX:= g++
 RM:= rm -rf
-#CXXFLAGS:= -Wall -Werror -Wextra
 CPPSTD:= -std=c++98 -pedantic
 CXXFLAGS:=  -g -Wall -Werror -Wextra $(CPPSTD)
 SRCS:=	User.cpp \

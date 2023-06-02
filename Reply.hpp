@@ -10,8 +10,8 @@
 class Reply : public Message
 {
 private:
-	int code;
-	std::set<int> targets;
+	int _code;
+	std::set<int> _targets;
 
 public:
 	// Constructors
@@ -29,7 +29,7 @@ public:
 	int getCode() const;
 	std::set<int> getTargets() const;
 	void setCode(const int code);
-	int addTarget(int fd);
+	void addTarget(int fd);
 
 };
 

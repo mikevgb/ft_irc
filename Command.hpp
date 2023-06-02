@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:45 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/20 11:42:02 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/02 12:51:06 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ public:
 	void setCommand(const std::string &cmd);
 
 	static const size_t MAX_PARAMS = 15;
-	typedef Reply (*CommandFunction)(std::list<std::string>, User *); // Define the function pointer type
+	typedef std::list<Reply> (*CommandFunction)(std::list<std::string>, User *); // Define the function pointer type
 	std::map<std::string, CommandFunction> commandMap;
 
 	// Command functions
-	static Reply nick(std::list<std::string> params, User *);
-	static Reply user(std::list<std::string> params, User *);
+	static std::list<Reply> nick(std::list<std::string> params, User *);
+	static std::list<Reply> user(std::list<std::string> params, User *);
 };
 
 #endif

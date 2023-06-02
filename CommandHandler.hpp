@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/22 18:24:23 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/02 14:28:45 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ private:
 public:
 	CommandHandler(ListUsers *listUsers, ListChannels *listChannels);
 	~CommandHandler();
-	std::set<Reply> executeCmd();
+	void executeCmd(std::list<Reply> &);
 	ListUsers *getUsers();
 	Message getMessage() const;
 	void setMessage(const Message msg);

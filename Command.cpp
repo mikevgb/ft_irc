@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/20 11:41:51 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/02 12:58:11 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void Command::initCommandMap()
 
 //FIXME: Set errors in Reply
 
-Reply Command::nick(std::list<std::string> params, User *sender)
+std::list<Reply> Command::nick(std::list<std::string> params, User *sender)
 {
+	std::list<Reply> list;
 	Reply rp;
 
 	if (params.empty())
@@ -60,18 +61,21 @@ Reply Command::nick(std::list<std::string> params, User *sender)
 	}
 	sender->setNick(params.front());
 	logg(LOG_INFO) << "NICK:" << params.front();
-	return rp;
+	list.push_back(rp);
+	return list;
 }
 
-Reply Command::user(std::list<std::string> params, User *sender)
+std::list<Reply> Command::user(std::list<std::string> params, User *sender)
 {
+	std::list<Reply> list;
 	Reply rp;
 
 	if (params.empty())
 	{
-		return rp;
+		return list;
 	}
 	sender->setUsername(params.front());
 	logg(LOG_INFO) << "USER:" << params.front();
-	return rp;
+	list.push_back(rp);
+	return list;
 }
