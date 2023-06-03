@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/03 12:51:53 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:27:19 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void CommandHandler::setUser(const int fd)
 
 std::list<User *> CommandHandler::getTargets() const
 {
-	return this->_targets2;
+	return this->_targets;
 }
 
 void CommandHandler::initCommandMap()

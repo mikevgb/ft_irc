@@ -6,7 +6,7 @@
 #    By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 12:42:39 by mmateo-t          #+#    #+#              #
-#    Updated: 2023/06/03 12:52:38 by mmateo-t         ###   ########.fr        #
+#    Updated: 2023/06/03 15:55:06 by mmateo-t         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS:=	User.cpp \
 		Socket.cpp \
 		Message.cpp \
 		Reply.cpp \
+		NumericalReplies.cpp \
 		main.cpp
 
 OBJS:= $(SRCS:%.cpp=%.o)

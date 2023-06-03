@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCServer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/22 17:17:21 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:44:40 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ private:
 	Socket *_serverSocket;
 
 	// server data
-	char _hostname[HOST_SIZE];
 	struct hostent *host;
 	struct in_addr _addr;
 
@@ -65,6 +64,8 @@ private:
 public:
 	IRCServer(const uint16_t port, const std::string password);
 	~IRCServer();
+	
+	char _hostname[HOST_SIZE];
 };
 
 #endif

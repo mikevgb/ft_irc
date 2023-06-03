@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/02 18:46:20 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:26:51 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ private:
 	ListUsers *_listUsers;
 	ListChannels *_listChannels;
 	User *_sender;
-	std::list<std::string> _targets;
-	std::list<User *> _targets2;
+	std::list<User *> _targets;
 	Message _msg;
 	int _firstTimeFlag;
 
