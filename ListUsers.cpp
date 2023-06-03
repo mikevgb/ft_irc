@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 20:39:03 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:23:51 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,9 @@ int ListUsers::setUser(const std::string &name, const size_t fd)
 
 User *ListUsers::getUser(const std::string &nick)
 {
-	std::cout << "buscar por: " << nick << std::endl;
 	if (_usersByName.find(nick) != _usersByName.end())
 		return _usersByName[nick];
-	return NULL;
+	return nullptr;
 }
 User *ListUsers::getUser(const size_t fd)
 {

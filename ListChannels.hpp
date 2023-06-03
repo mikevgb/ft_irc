@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/20 10:12:12 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:34:56 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIST_CHANNELS_H
-#define LIST_CHANNELS_H
+#ifndef LIST_CHANNELS_HPP
+#define LIST_CHANNELS_HPP
 #include "lib2.h"
 
 class User;

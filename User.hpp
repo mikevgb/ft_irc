@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/03 12:43:08 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:35:19 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ public:
 	User(size_t fd);
 	~User();
 	size_t getFd() const;
-	void setNick(const std::string &nick);
+	bool setNick(const std::string &nick);
 	const std::string &getNick() const;
-	void setUsername(const std::string &user);
+	bool setUsername(const std::string &user);
 	const std::string &getUsername() const;
 	bool isLogged() const;
 	void changeToLogged();

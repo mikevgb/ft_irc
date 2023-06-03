@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/03 12:49:38 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:24:49 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,12 @@ void Reply::addTarget(const int & fd)
 std::set<int> Reply::getTargets() const
 {
 	return this->_targets;
+}
+
+std::string Reply::getReplyMsg() const
+{
+	//TODO: Return the full msg
+	std::string msg = this->getMsg();
+	msg += "\n";
+	return msg;
 }

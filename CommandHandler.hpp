@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/03 15:26:51 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:07:48 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ private:
 	Message _msg;
 	int _firstTimeFlag;
 
-	typedef void (CommandHandler::*CommandFunction)(std::list<std::string>, User *, std::list<Reply> &); // Define the function pointer type
+	typedef void (CommandHandler::*CommandFunction)(std::list<std::string>, std::list<Reply> &); // Define the function pointer type
 	std::map<std::string, CommandFunction> commandMap;
 
 	void initCommandMap();
@@ -61,9 +61,9 @@ public:
 
 
 	// Command functions
-	void nick(std::list<std::string> params, User *, std::list<Reply> &);
-	void user(std::list<std::string> params, User *, std::list<Reply> &);
-	void quit(std::list<std::string> params, User *, std::list<Reply> &);
+	void nick(std::list<std::string> params, std::list<Reply> &);
+	void user(std::list<std::string> params, std::list<Reply> &);
+	void quit(std::list<std::string> params, std::list<Reply> &);
 
 };
 

@@ -139,15 +139,14 @@ std::string ERR_NOOPERHOST() { return ":No O-lines for your host"; }
 std::string ERR_UMODEUNKNOWNFLAG() { return ":Unknown MODE flag"; }
 std::string ERR_USERSDONTMATCH() { return ":Cant change mode for other users"; }
 
-
 std::string getReplies(unsigned short code, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string arg5, std::string arg6, std::string arg7)
 {
 	std::string target;
-/* 	if (user->getStatus() == PASSWORD || user->getStatus() == REGISTER)
-		target = "*";
-	else
-		target = user->getNickname();
-	target += " "; */
+	/* 	if (user->getStatus() == PASSWORD || user->getStatus() == REGISTER)
+			target = "*";
+		else
+			target = user->getNickname();
+		target += " "; */
 
 	switch (code)
 	{

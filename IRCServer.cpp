@@ -201,8 +201,7 @@ void IRCServer::processMessage(std::string buff, int fd)
 			std::set<int> targets = (*rp).getTargets();
  			for (std::set<int>::iterator user = targets.begin(); user != targets.end(); user++)
 			{
-				std::string msg = (*rp).getMsg();
-				msg += "\n";
+				std::string msg = (*rp).getReplyMsg();
 				send(*user, msg.c_str(), msg.length(), 0);
 			}
 		}
