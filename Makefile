@@ -3,13 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+         #
+#    By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 12:42:39 by mmateo-t          #+#    #+#              #
-#    Updated: 2023/06/02 16:37:13 by mmateo-t         ###   ########.fr        #
+#    Updated: 2023/06/03 12:52:38 by mmateo-t         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+PORT= 4242
+PASSWORD=""
 NAME:= ircserv
 CXX:= g++
 RM:= rm -rf
@@ -43,5 +45,8 @@ fclean: clean
 	${RM} ${NAME}
 
 re: fclean all
+
+run: all
+	./ircserv $(PORT) $(PASSWORD)
 
 .PHONY: all fclean clean re
