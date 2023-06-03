@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/02 19:45:07 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:51:53 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ void CommandHandler::nick(std::list<std::string> params, User *sender, std::list
 		rp.setCode(1);
 	}
 	sender->setNick(params.front());
-	rp.addTarget((int)sender->getFd());
-	rp.setMsg("CHAOS");
+	rp.addTarget(sender->getFd());
+	rp.setMsg("Error");
 	replies.push_back(rp);
 }
 

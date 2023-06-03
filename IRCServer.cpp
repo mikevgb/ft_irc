@@ -198,7 +198,6 @@ void IRCServer::processMessage(std::string buff, int fd)
 
 		for (std::list<Reply>::iterator rp = replies.begin(); rp != replies.end(); rp++)
 		{
-			//TODO: TARGETS DONT WORK FINE, REVIEW THTAT
 			std::set<int> targets = (*rp).getTargets();
  			for (std::set<int>::iterator user = targets.begin(); user != targets.end(); user++)
 			{

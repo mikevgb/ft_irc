@@ -29,8 +29,7 @@ public:
 	int getCode() const;
 	std::set<int> getTargets() const;
 	void setCode(const int code);
-	void addTarget(int fd);
-
+	void addTarget(const int & fd);
 };
 
 #endif

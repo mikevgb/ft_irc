@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/22 14:22:06 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:43:08 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ private:
 public:
 	User(size_t fd);
 	~User();
-	size_t getFd();
+	size_t getFd() const;
 	void setNick(const std::string &nick);
 	const std::string &getNick() const;
 	void setUsername(const std::string &user);

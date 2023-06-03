@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Reply.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/02 19:12:30 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:49:38 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ Reply::Reply(const int code)
 
 Reply::Reply(const Reply &copy) : Message(copy)
 {
-	(void)copy;
+	this->_targets = copy._targets;
+	this->_code = copy._code;
 }
 
 // Destructor
@@ -55,7 +56,7 @@ void Reply::setCode(const int code)
 	this->_code = code;
 }
 
-void Reply::addTarget(int fd)
+void Reply::addTarget(const int & fd)
 {
 	this->_targets.insert(fd);
 }
