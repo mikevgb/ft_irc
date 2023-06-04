@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/20 10:50:26 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:29:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Message.hpp"
 
 // Constructors
-Message::Message(const std::string buff)
+Message::Message(const std::string buff) : _prefix(""), _cmd("")
 {
 	this->setMsg(buff);
 
@@ -104,6 +104,7 @@ void Message::setCmd(const std::string &cmd)
 void Message::setParams(const std::list<std::string> &params)
 {
 	this->_params = params;
+
 	if (this->_params.size() > MAX_PARAMS)
 	{
 		this->_params.resize(this->MAX_PARAMS);
@@ -135,14 +136,14 @@ std::list<std::string> Message::split(std::string msg, std::string delimiter)
 // Stream operators
 std::ostream &operator<<(std::ostream &stream, const Message &object)
 {
-	stream << "Message: " << object.getMsg() << std::endl;
-	stream << "Prefix: " << object.getPrefix() << std::endl;
-	stream << "Cmd: " << object.getCmd() << std::endl;
+	logg(LOG_INFO) << LGREEN << "Message: [" << object.getMsg() << "]\n" << RESET;
+	logg(LOG_DEBUG) << GREEN << "Prefix: [" << object.getPrefix() << "]\n" << RESET;
+	logg(LOG_DEBUG) << RED << "Cmd: [" << object.getCmd() << "]\n" << RESET;
 
 	std::list<std::string> params = object.getParams();
 	for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
 	{
-		stream << "Param: " << *it << std::endl;
+		logg(LOG_DEBUG) << YELLOW << "Param: [" << *it << "]\n" << RESET;
 	}
 	return stream;
 }

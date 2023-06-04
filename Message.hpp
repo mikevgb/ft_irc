@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:48 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/02 13:09:31 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:25:36 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include "include/Logger.hpp"
+#include "include/Colors.hpp"
 
 #define MSG_DELIMITER "\r\n"
 
