@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/03 17:35:19 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/04 19:07:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ private:
 	std::string _nick;
 	std::string _username;
 	bool _isLogged;
+	bool _isOperator;
 	std::set<Channel *> _channels;
 	const std::string forbittenChar;
 
