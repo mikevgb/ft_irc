@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/03 21:23:11 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:13:19 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ CommandHandler::~CommandHandler()
 	delete _listUsers;
 	delete _listChannels;
 }
-
 
 void CommandHandler::executeCmd(std::list<Reply> &replies)
 {
@@ -46,7 +45,7 @@ Message CommandHandler::getMessage() const
 	return this->_msg;
 }
 
-void CommandHandler::setMessage(const Message msg)
+void CommandHandler::setMessage(const Message &msg)
 {
 	this->_msg = msg;
 }
@@ -68,7 +67,7 @@ void CommandHandler::initCommandMap()
 	this->commandMap["QUIT"] = &CommandHandler::quit;
 }
 
-//FIXME: Set errors in Reply
+// FIXME: Set errors in Reply
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
 {
@@ -78,21 +77,22 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 
 	if (params.empty())
 	{
-		//rp.setMsg(ERR_NONICKNAMEGIVEN())
+		rp.setMsg("Error");
+		// rp.setMsg(ERR_NONICKNAMEGIVEN())
 	}
-	if(this->_listUsers->getUser(nick))
+	if (this->_listUsers->getUser(nick))
 	{
-		//rp.setMsg(ERR_NICKNAMEINUSE(nick));
+		// rp.setMsg(ERR_NICKNAMEINUSE(nick));
 	}
 	if (_sender->setNick(nick))
 	{
-		//rp.setMsg(ERR_ERRONEUSNICKNAME(params.front))
+		rp.setMsg("Error");
+		// rp.setMsg(ERR_ERRONEUSNICKNAME(params.front))
 	}
-	//if (_sender.getMode() == 'r')
+	// if (_sender.getMode() == 'r')
 	{
-		//rp.setMsg(ERR_RESTRICTED);
+		// rp.setMsg(ERR_RESTRICTED);
 	}
-	rp.setMsg(WELCOME_MSG);
 	rp.addTarget(_sender->getFd());
 	replies.push_back(rp);
 }

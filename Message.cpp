@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/04 17:29:31 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:58:53 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,21 @@ Message::Message(const std::string buff) : _prefix(""), _cmd("")
 
 	std::list<std::string> components = split(this->_msg, " ");
 
-	if (components.front().at(0) == ':')
+	try
 	{
-		this->_prefix = components.front();
+		if (components.front().at(0) == ':')
+		{
+			this->_prefix = components.front();
+			components.pop_front();
+		}
+		this->setCmd(components.front());
 		components.pop_front();
+		this->setParams(components);
 	}
-	this->setCmd(components.front());
-	components.pop_front();
-	this->setParams(components);
+	catch (const std::exception &e)
+	{
+		logg(LOG_DEBUG) << "Empty message" << '\n';
+	}
 }
 
 Message::Message()
@@ -130,20 +137,29 @@ std::list<std::string> Message::split(std::string msg, std::string delimiter)
 	}
 	if (!copy.empty())
 		tokens.push_back(copy);
+
+	// Remove '\n' in last param if exists
+	if ((pos = tokens.back().find_last_of('\n')) != std::string::npos)
+		tokens.back().erase(pos);
+
 	return tokens;
 }
 
 // Stream operators
 std::ostream &operator<<(std::ostream &stream, const Message &object)
 {
-	logg(LOG_INFO) << LGREEN << "Message: [" << object.getMsg() << "]\n" << RESET;
-	logg(LOG_DEBUG) << GREEN << "Prefix: [" << object.getPrefix() << "]\n" << RESET;
-	logg(LOG_DEBUG) << RED << "Cmd: [" << object.getCmd() << "]\n" << RESET;
+	logg(LOG_DEBUG) << LGREEN << "Message: [" << object.getMsg() << "]\n"
+					<< RESET;
+	logg(LOG_DEBUG) << GREEN << "Prefix: [" << object.getPrefix() << "]\n"
+					<< RESET;
+	logg(LOG_DEBUG) << RED << "Cmd: [" << object.getCmd() << "]\n"
+					<< RESET;
 
 	std::list<std::string> params = object.getParams();
 	for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
 	{
-		logg(LOG_DEBUG) << YELLOW << "Param: [" << *it << "]\n" << RESET;
+		logg(LOG_DEBUG) << YELLOW << "Param: [" << *it << "]\n"
+						<< RESET;
 	}
 	return stream;
 }
