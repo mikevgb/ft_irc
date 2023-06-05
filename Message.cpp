@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/04 17:58:53 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:53:49 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ std::list<std::string> Message::split(std::string msg, std::string delimiter)
 		tokens.push_back(copy);
 
 	// Remove '\n' in last param if exists
-	if ((pos = tokens.back().find_last_of('\n')) != std::string::npos)
+	if (!tokens.empty() && (pos = tokens.back().find_last_of('\n')) != std::string::npos)
 		tokens.back().erase(pos);
 
 	return tokens;
