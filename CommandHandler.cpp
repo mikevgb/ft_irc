@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 19:28:45 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 20:28:35 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void CommandHandler::initCommandMap()
 	this->commandMap["NICK"] = &CommandHandler::nick;
 	this->commandMap["USER"] = &CommandHandler::user;
 	this->commandMap["QUIT"] = &CommandHandler::quit;
+	this->commandMap["PRIVMSG"] = &CommandHandler::privmsg;
+	
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
@@ -92,8 +94,7 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 	}
 	else
 	{
-		logg(LOG_INFO) << "Nickname assign: " LBLUE << nick << RESET << "\n";
-		rp.setMsg(RPL_WELCOME(nick));
+		logg(LOG_INFO) << "New Nickname: " LBLUE << nick << RESET << "\n";
 	}
 	rp.addTarget(_sender->getFd());
 	replies.push_back(rp);
@@ -116,6 +117,7 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 		{
 			if(i == 1)
 			{
+				//TODO: Implement mode
 				//this->_sender.setMode(*it);
 			}
 			if (i >= 3)
@@ -139,10 +141,42 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 
 void CommandHandler::quit(std::list<std::string> params, std::list<Reply> &replies)
 {
+	//TODO: Don't work;
 	Reply rp;
 
 	this->_listUsers->removeUser(_sender->getFd());
 	rp.setCode(0);
 	rp.setMsg(params.front());
+	replies.push_back(rp);
+}
+
+void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &replies)
+{
+	Reply rp;
+	std::string msg;
+	User *user;
+
+	if (params.size() < 2)
+	{
+		this->_msg.setMsg(ERR_NORECIPIENT(this->_msg.getCmd()));
+		rp.addTarget(this->_sender->getFd());
+	}
+	else
+	{
+		user = this->_listUsers->getUser(params.front());
+		if (!user)
+		{
+			rp.setMsg(ERR_NOSUCHNICK(params.front()));
+			rp.addTarget(this->_sender->getFd());
+			return;
+		}
+		rp.addTarget(user->getFd());
+		params.pop_front();
+		for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
+		{
+			msg += (" " + *it);
+		}
+		rp.setMsg(msg);
+	}
 	replies.push_back(rp);
 }
