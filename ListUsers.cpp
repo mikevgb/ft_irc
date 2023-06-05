@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:18:12 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:39:36 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,13 @@ bool ListUsers::createUser(const size_t fd)
 
 User *ListUsers::getUser(const std::string &nick)
 {
-	if (_usersByNick.find(nick) != _usersByNick.end())
-		return _usersByNick[nick];
+	for (std::set<User *>::iterator it = this->_listOfUsers.begin(); it != this->_listOfUsers.end(); it++)
+	{
+		if ((*it)->getNick() == nick)
+		{
+			return *it;
+		}
+	}
 	return nullptr;
 }
 User *ListUsers::getUser(const size_t fd)

@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/04 17:13:19 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:47:41 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,21 +77,24 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 
 	if (params.empty())
 	{
-		rp.setMsg("Error");
-		// rp.setMsg(ERR_NONICKNAMEGIVEN())
+		rp.setMsg(ERR_NONICKNAMEGIVEN());
 	}
-	if (this->_listUsers->getUser(nick))
+	else if (this->_listUsers->getUser(nick))
 	{
-		// rp.setMsg(ERR_NICKNAMEINUSE(nick));
+		rp.setMsg(ERR_NICKNAMEINUSE(nick));
 	}
-	if (_sender->setNick(nick))
-	{
-		rp.setMsg("Error");
-		// rp.setMsg(ERR_ERRONEUSNICKNAME(params.front))
-	}
-	// if (_sender.getMode() == 'r')
+/* 	// if (_sender.getMode() == 'r')
 	{
 		// rp.setMsg(ERR_RESTRICTED);
+	} */
+	else if (_sender->setNick(nick))
+	{
+		rp.setMsg(ERR_ERRONEUSNICKNAME(nick));
+	}
+	else
+	{
+		logg(LOG_INFO) << "Nickname assign: " LBLUE << nick << RESET << "\n";
+		rp.setMsg(RPL_WELCOME(nick));
 	}
 	rp.addTarget(_sender->getFd());
 	replies.push_back(rp);

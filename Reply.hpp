@@ -6,6 +6,7 @@
 #include <set>
 #include "User.hpp"
 #include "Message.hpp"
+#include "NumericalReplies.hpp"
 
 class Reply : public Message
 {
