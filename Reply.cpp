@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/03 21:24:49 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 19:27:58 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,7 @@ std::set<int> Reply::getTargets() const
 
 std::string Reply::getReplyMsg() const
 {
-	//TODO: Return the full msg
-	std::string msg = this->getMsg();
-	msg += "\n";
-	return msg;
+	//TODO: Build the whole reply adding hostname and converting code to a string
+	//msg = std::string(IRCServer::_hostname) +std::to_string(this->getCode()) + " " + this->getMsg();
+	return this->getMsg() + "\n";
 }

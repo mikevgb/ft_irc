@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/04 19:07:32 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 19:11:56 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ private:
 	size_t _fd;
 	std::string _nick;
 	std::string _username;
+	std::string _realname;
 	bool _isLogged;
 	bool _isOperator;
 	std::set<Channel *> _channels;
@@ -38,6 +39,8 @@ public:
 	const std::string &getNick() const;
 	bool setUsername(const std::string &user);
 	const std::string &getUsername() const;
+	std::string getRealName() const;
+	void setRealName(const std::string &user);
 	bool isLogged() const;
 	void changeToLogged();
 	const std::string getFullName() const;

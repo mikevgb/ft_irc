@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:47:41 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 19:28:45 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ void CommandHandler::initCommandMap()
 	this->commandMap["QUIT"] = &CommandHandler::quit;
 }
 
-// FIXME: Set errors in Reply
-
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
 {
 	Reply rp;
@@ -77,16 +75,17 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 
 	if (params.empty())
 	{
+		rp.setCode(431);
 		rp.setMsg(ERR_NONICKNAMEGIVEN());
 	}
 	else if (this->_listUsers->getUser(nick))
 	{
 		rp.setMsg(ERR_NICKNAMEINUSE(nick));
 	}
-/* 	// if (_sender.getMode() == 'r')
-	{
-		// rp.setMsg(ERR_RESTRICTED);
-	} */
+	/* 	// if (_sender.getMode() == 'r')
+		{
+			// rp.setMsg(ERR_RESTRICTED);
+		} */
 	else if (_sender->setNick(nick))
 	{
 		rp.setMsg(ERR_ERRONEUSNICKNAME(nick));
@@ -103,13 +102,38 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 void CommandHandler::user(std::list<std::string> params, std::list<Reply> &replies)
 {
 	Reply rp;
+	size_t i = 1;
 
-	if (params.empty())
+	if (params.size() < 4)
 	{
-		return;
+		rp.setMsg(ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
 	}
-	_sender->setUsername(params.front());
-	logg(LOG_INFO) << "USER:" << params.front();
+	else
+	{
+		_sender->setUsername(params.front());
+		params.pop_front();
+		for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
+		{
+			if(i == 1)
+			{
+				//this->_sender.setMode(*it);
+			}
+			if (i >= 3)
+			{
+				this->_sender->setRealName(*it);
+			}
+			i++;
+		}
+		this->_sender->changeToLogged();
+		logg(LOG_INFO) << "Username: " << ORANGE << this->_sender->getUsername() << RESET << " logged\n";
+		logg(LOG_INFO) << "User: [" << this->_sender->getUsername() << "] | Real name: [" << this->_sender->getRealName() << "]\n";
+		if (this->_sender->isLogged() && !this->_sender->getNick().empty())
+		{
+			rp.setMsg(RPL_WELCOME(this->_sender->getNick()));
+		}
+	}
+
+	rp.addTarget(this->_sender->getFd());
 	replies.push_back(rp);
 }
 

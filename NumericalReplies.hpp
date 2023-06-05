@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 16:29:27 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:32:34 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 17:56:00 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ std::string ERR_NOSUCHCHANNEL(std::string channel);
 std::string ERR_CANNOTSENDTOCHAN(std::string channel);
 std::string ERR_TOOMANYCHANNELS(std::string channel);
 std::string ERR_WASNOSUCHNICK(std::string nickname);
-std::string ERR_TOOMANYTARGETS(std::string target);
+std::string ERR_TOOMANYTARGETS();
 std::string ERR_NOSUCHSERVICE(std::string service);
 std::string ERR_NOORIGIN();
 std::string ERR_NORECIPIENT(std::string command);

@@ -6,14 +6,14 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:21:08 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 19:11:52 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "User.hpp"
 
 User::User(size_t fd)
-	: _fd(fd), _nick(), _username(), _channels(), forbittenChar(",!?*@.&#")
+	: _fd(fd), _nick(), _username(), _realname(), _channels(), forbittenChar(",!?*@.&#")
 {
 	_isLogged = false;
 	_isOperator = false;
@@ -89,4 +89,28 @@ void User::addChannel(Channel *channel)
 void User::removeChannel(Channel *channel)
 {
 	_channels.erase(channel);
+}
+
+std::string User::getRealName() const
+{
+	return this->_realname;
+}
+
+void User::setRealName(const std::string &user)
+{
+	if (this->_realname.empty())
+	{
+		if (user.front() == ':')
+		{
+			this->_realname = user.substr(1);
+		}
+		else
+		{
+			this->_realname = user;
+		}
+	}
+	else
+	{
+		this->_realname += (" " + user);
+	}
 }

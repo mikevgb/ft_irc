@@ -193,8 +193,8 @@ void IRCServer::processMessage(std::string buff, int fd)
 	{
 		Message msg(*it);
 		_cmdHandler->setMessage(msg);
-		_cmdHandler->executeCmd(replies);
 		std::cout << _cmdHandler->getMessage();
+		_cmdHandler->executeCmd(replies);
 
 		for (std::list<Reply>::iterator rp = replies.begin(); rp != replies.end(); rp++)
 		{
