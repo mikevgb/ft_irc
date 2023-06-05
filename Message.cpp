@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 15:53:49 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 20:08:49 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ std::ostream &operator<<(std::ostream &stream, const Message &object)
 					<< RESET;
 	logg(LOG_DEBUG) << GREEN << "Prefix: [" << object.getPrefix() << "]\n"
 					<< RESET;
-	logg(LOG_DEBUG) << RED << "Cmd: [" << object.getCmd() << "]\n"
+	logg(LOG_DEBUG) << BLUE << "Cmd: [" << object.getCmd() << "]\n"
 					<< RESET;
 
 	std::list<std::string> params = object.getParams();
