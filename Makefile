@@ -6,7 +6,7 @@
 #    By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 12:42:39 by mmateo-t          #+#    #+#              #
-#    Updated: 2023/06/05 16:22:37 by mmateo-t         ###   ########.fr        #
+#    Updated: 2023/06/05 16:25:19 by mmateo-t         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,6 @@ SRCS:=	User.cpp \
 		ListUsers.cpp \
 		ListChannels.cpp \
 		CommandHandler.cpp \
-		Msg.cpp \
 		IRCServer.cpp \
 		Socket.cpp \
 		Message.cpp \
