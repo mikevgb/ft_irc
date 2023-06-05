@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:33 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:19:43 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool ListChannels::hasKey(const std::string &key)
 {
 	return _channels.find(key) != _channels.end();
 }
-
+/* 
 Channel *ListChannels::getChannel(const std::string &name)
 {
 	if (hasKey(name))
@@ -121,3 +121,4 @@ int ListChannels::outOfChannel(User *user, const std::string &name)
 		removeChannel(channel);
 	return 0;
 }
+ */

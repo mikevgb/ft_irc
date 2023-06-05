@@ -6,14 +6,14 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:23 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/03 12:45:37 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:20:59 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MSG_H
 #define MSG_H
 #include <string>
-// #include "ServerMsgs.hpp"
+// 
 #define SPACE " "
 #define COLON ":"
 #define AT "@"

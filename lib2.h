@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib2.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/02 16:36:43 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:22:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 #include <algorithm>
 #include <queue>
 #include <list>
-#include "ServerMsgs.hpp"
+
 #include "User.hpp"
 #include "Channel.hpp"
 #include "ListUsers.hpp"
 #include "ListChannels.hpp"
-#include "ResultCmd.hpp"
+
 #include "CommandHandler.hpp"
 #include "IRCServer.hpp"
 #include "Message.hpp"

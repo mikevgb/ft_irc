@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/22 17:17:00 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:21:35 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ const std::string &Channel::getName() const
 	return _name;
 }
 
-int Channel::setTopic(const std::string &topic, User *user)
+/* int Channel::setTopic(const std::string &topic, User *user)
 {
 	if (!isTopicBlock() || isAdmin(user))
 	{
@@ -466,3 +466,4 @@ std::string Channel::getListUsers() const
 	}
 	return users;
 }
+ */

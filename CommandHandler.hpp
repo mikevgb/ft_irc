@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/04 17:13:26 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:22:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 #include <algorithm>
 #include <queue>
 #include <list>
-#include "ServerMsgs.hpp"
+
 #include "User.hpp"
 #include "Channel.hpp"
 #include "ListUsers.hpp"
 #include "ListChannels.hpp"
-#include "ResultCmd.hpp"
+
 #include "Message.hpp"
 #include "Reply.hpp"
 

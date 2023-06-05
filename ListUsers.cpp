@@ -6,14 +6,14 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:06:57 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:18:12 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ListUsers.hpp"
 
 ListUsers::ListUsers(/* args */)
-	: _usersByName(), _usersByFd()
+	: _usersByNick(), _usersByFd()
 {
 }
 
@@ -23,12 +23,11 @@ ListUsers::~ListUsers()
 
 bool ListUsers::addUser(User *user)
 {
-	if (_usersByName.find(user->getNick()) == _usersByName.end())
+	if (_usersByNick.find(user->getNick()) == _usersByNick.end())
 	{
+		_usersByNick.insert(std::pair<std::string, User *>(user->getNick(), user));
 		std::cout << "nick " << user->getNick() << std::endl;
-		_usersByName.insert(std::pair<std::string, User *>(user->getNick(), user));
-		std::cout << "nick " << user->getNick() << std::endl;
-		std::cout << "user " << _usersByName[user->getNick()]->getUsername() << std::endl;
+		std::cout << "user " << _usersByNick[user->getNick()]->getUsername() << std::endl;
 		return true;
 	}
 	return false;
@@ -49,18 +48,18 @@ bool ListUsers::createUser(const size_t fd)
 	return true;
 }
 
-int ListUsers::setNick(const std::string &nick, const size_t fd)
+/* int ListUsers::setNick(const std::string &nick, const size_t fd)
 {
 	std::cout << "set nick: " << nick << std::endl;
 	// TODO comprobar que pasa en IRC si el usuario que tiene size_tenta ponerse el mismo nick
 	User *user = getUser(fd);
 	const std::string &oldNick = user->getNick();
-	if (_usersByName.find(nick) == _usersByName.end())
+	if (_usersByNick.find(nick) == _usersByNick.end())
 	{
 		user->setNick(nick);
 		if (user->isLogged())
 		{
-			_usersByName.erase(oldNick);
+			_usersByNick.erase(oldNick);
 			addUser(user);
 			return 0;
 		}
@@ -77,9 +76,9 @@ int ListUsers::setNick(const std::string &nick, const size_t fd)
 		return ERR_NICKNAMEINUSE;
 	}
 	return 0;
-}
+} */
 
-int ListUsers::setUser(const std::string &name, const size_t fd)
+/* int ListUsers::setUser(const std::string &name, const size_t fd)
 {
 	// TODO crear excepciones si no existe el usuario en la lista
 	User *user = getUser(fd);
@@ -94,12 +93,12 @@ int ListUsers::setUser(const std::string &name, const size_t fd)
 		return CODE_WELCOME;
 	}
 	return 0;
-}
+} */
 
 User *ListUsers::getUser(const std::string &nick)
 {
-	if (_usersByName.find(nick) != _usersByName.end())
-		return _usersByName[nick];
+	if (_usersByNick.find(nick) != _usersByNick.end())
+		return _usersByNick[nick];
 	return nullptr;
 }
 User *ListUsers::getUser(const size_t fd)
@@ -117,8 +116,9 @@ int ListUsers::removeUser(const size_t fd)
 	try
 	{
 		User *user = getUser(fd);
-		_usersByName.erase(user->getNick());
+		_usersByNick.erase(user->getNick());
 		_usersByFd.erase(fd);
+		this->_listOfUsers.erase(user);
 		delete user;
 	}
 	catch (const std::exception &e)
