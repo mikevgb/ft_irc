@@ -26,7 +26,7 @@ IRCServer::IRCServer(const uint16_t port, const std::string password)
 		throwError("Gethostname() failed");
 	}
 
-	logg(LOG_INFO) << BLUE << "Host: " << _hostname << RESET << "\n";
+	logg(LOG_INFO) << ROSE << "Host: " << _hostname << RESET << "\n";
 	host = gethostbyname(_hostname);
 
 	if (host != 0)
@@ -91,7 +91,7 @@ void IRCServer::acceptConnection()
 			}
 		}
 
-		logg(LOG_INFO) << "New incoming connection - [" << BLUE << new_sd << RESET << "]\n";
+		logg(LOG_INFO) << "New incoming connection - [" << ROSE << new_sd << RESET << "]\n";
 		for (int i = 0; i <= _nfds; i++)
 		{
 			if (_pollFds[i].fd <= 0)
@@ -118,7 +118,7 @@ void IRCServer::setUpPoll()
 
 void IRCServer::loseConnection(int i)
 {
-	logg(LOG_INFO) << "Connection lost on - fd[" << BLUE << _pollFds[i].fd << RESET << "]\n";
+	logg(LOG_INFO) << "Connection lost on - fd[" << ROSE << _pollFds[i].fd << RESET << "]\n";
 	if (close(_pollFds[i].fd) < 0)
 	{
 		throwError("Close() Error");

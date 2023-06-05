@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/03 21:23:51 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:06:57 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ bool ListUsers::addUser(User *user)
 bool ListUsers::createUser(const size_t fd)
 {
 	User *user = new User(fd);
-	std::map<size_t, User *>::iterator it = _usersByFd.find(fd);
-	std::map<size_t, User *>::iterator it2 = _usersByFd.end();
-	if (it != it2)
+
+	if (_usersByFd.find(fd) != _usersByFd.end())
 	{
 		logg(LOG_ERROR) << "An unexpected issue occurs creating a new user\n";
 		return false;
 	}
+	this->_listOfUsers.insert(user);
 	_usersByFd[user->getFd()] = user;
-	logg(LOG_DEBUG) << "New user | fd: " << BLUE << fd << RESET << "\n";
+	logg(LOG_DEBUG) << "New user | fd: " << ROSE << fd << RESET << "\n";
 	return true;
 }
 

@@ -6,14 +6,13 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:51 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 20:39:13 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:02:33 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_USERS_HPP
 #define LIST_USERS_HPP
 #include "lib2.h"
-#define maxFd
 
 class User;
 
@@ -22,6 +21,7 @@ class ListUsers
 private:
 	std::map<std::string, User *> _usersByName;
 	std::map<size_t, User *> _usersByFd;
+	std::set<User *> _listOfUsers;
 	bool addUser(User *user);
 
 public:
