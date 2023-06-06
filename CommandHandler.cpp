@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 12:22:34 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 15:40:39 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void CommandHandler::initCommandMap()
 	this->commandMap["USER"] = &CommandHandler::user;
 	this->commandMap["QUIT"] = &CommandHandler::quit;
 	this->commandMap["PRIVMSG"] = &CommandHandler::privmsg;
+	this->commandMap["CAP"] = &CommandHandler::cap;
 	
 }
 
@@ -177,4 +178,9 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 		rp.setMsg(msg);
 	}
 	replies.push_back(rp);
+}
+
+void CommandHandler::cap(std::list<std::string> params, std::list<Reply> &replies)
+{
+	
 }

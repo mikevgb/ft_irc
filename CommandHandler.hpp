@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 20:15:39 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 15:40:53 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ public:
 	void user(std::list<std::string> params, std::list<Reply> &);
 	void quit(std::list<std::string> params, std::list<Reply> &);
 	void privmsg(std::list<std::string> params, std::list<Reply> &replies);
+	void cap(std::list<std::string> params, std::list<Reply> &replies);
 
 };
 
