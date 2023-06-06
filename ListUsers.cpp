@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:39:36 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:05:09 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ User *ListUsers::getUser(const std::string &nick)
 			return *it;
 		}
 	}
-	return nullptr;
+	return NULL;
 }
 User *ListUsers::getUser(const size_t fd)
 {

@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 19:11:52 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:03:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool User::setNick(const std::string &nick)
 {
 	bool isForbbiten = false;
 
-	if (nick.front() == '$' || nick.front() == ':')
+	if (nick.at(0) == '$' || nick.at(0) == ':')
 	{
 		isForbbiten = true;
 		return isForbbiten;
@@ -100,7 +100,7 @@ void User::setRealName(const std::string &user)
 {
 	if (this->_realname.empty())
 	{
-		if (user.front() == ':')
+		if (user.at(0) == ':')
 		{
 			this->_realname = user.substr(1);
 		}
