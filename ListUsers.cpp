@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 17:05:09 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 18:02:22 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int ListUsers::removeUser(const size_t fd)
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << e.what() << '\n';
+		logg(LOG_ERROR) << e.what() << '\n';
 	}
 
 	return 0;

@@ -119,10 +119,6 @@ void IRCServer::setUpPoll()
 void IRCServer::loseConnection(int i)
 {
 	logg(LOG_INFO) << "Connection lost on - fd[" << ROSE << _pollFds[i].fd << RESET << "]\n";
-	if (close(_pollFds[i].fd) < 0)
-	{
-		throwError("Close() Error");
-	}
 	_listUsers->removeUser(_pollFds[i].fd);
 	_pollFds[i].fd = -1;
 	_nfds--;
