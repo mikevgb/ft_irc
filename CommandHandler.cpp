@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 17:07:17 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:51:46 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,16 @@ std::list<User *> CommandHandler::getTargets() const
 	return this->_targets;
 }
 
+bool CommandHandler::sendAsyncMessage(int fd, std::string msg)
+{
+	if (send(fd, msg.c_str(), msg.length(), 0) == -1)
+	{
+		logg(LOG_ERROR) << "An expected error occurs while sending a message\n";
+		return false;
+	}
+	return true;
+}
+
 void CommandHandler::initCommandMap()
 {
 	this->commandMap["NICK"] = &CommandHandler::nick;
@@ -67,6 +77,8 @@ void CommandHandler::initCommandMap()
 	this->commandMap["QUIT"] = &CommandHandler::quit;
 	this->commandMap["PRIVMSG"] = &CommandHandler::privmsg;
 	this->commandMap["CAP"] = &CommandHandler::cap;
+	this->commandMap["PING"] = &CommandHandler::ping;
+	this->commandMap["PONG"] = &CommandHandler::pong;
 	
 }
 
@@ -185,3 +197,26 @@ void CommandHandler::cap(std::list<std::string> params, std::list<Reply> &replie
 	(void)replies;
 	(void)params;
 }
+
+void CommandHandler::ping(std::list<std::string> params, std::list<Reply> &replies)
+{
+	Reply rp;
+	std::string msg;
+
+	if (params.empty())
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	msg = "PONG " + params.front() + "\n";
+	this->sendAsyncMessage(this->_sender->getFd(), msg);
+	rp.addTarget(this->_sender->getFd());
+	replies.push_back(rp);
+	
+}
+
+void CommandHandler::pong(std::list<std::string> params, std::list<Reply> &replies)
+{
+	(void)replies;
+	(void)params;
+}
+
