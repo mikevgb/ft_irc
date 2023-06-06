@@ -31,7 +31,7 @@ public:
 	std::set<int> getTargets() const;
 	void setCode(const int code);
 	void addTarget(const int & fd);
-	std::string getReplyMsg() const;
+	std::string getReplyMsg(std::string hostname) const;
 };
 
 #endif

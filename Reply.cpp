@@ -6,14 +6,14 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 19:27:58 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 12:04:55 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Reply.hpp"
 
 // Constructors
-Reply::Reply()
+Reply::Reply() : _code(0)
 {
 }
 
@@ -66,9 +66,11 @@ std::set<int> Reply::getTargets() const
 	return this->_targets;
 }
 
-std::string Reply::getReplyMsg() const
+std::string Reply::getReplyMsg(std::string hostname) const
 {
-	//TODO: Build the whole reply adding hostname and converting code to a string
-	//msg = std::string(IRCServer::_hostname) +std::to_string(this->getCode()) + " " + this->getMsg();
-	return this->getMsg() + "\n";
+	if (this->_code != 0)
+	{
+	
+	}
+	return ":" + hostname + " " + std::to_string(this->getCode()) + " " + this->getMsg() + "\n";
 }

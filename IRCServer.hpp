@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/03 15:44:40 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 11:57:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ private:
 	// server data
 	struct hostent *host;
 	struct in_addr _addr;
+	char _hostname[HOST_SIZE];
 
 	// poll fds
 	struct pollfd _pollFds[MAX_USERS];
@@ -60,12 +61,12 @@ private:
 	void loseConnection(int i);
 	void setNonBlocking(int fdIn);
 	void processMessage(std::string buff, int fd);
+	std::string getHostname() const;
 
 public:
 	IRCServer(const uint16_t port, const std::string password);
 	~IRCServer();
 	
-	char _hostname[HOST_SIZE];
 };
 
 #endif

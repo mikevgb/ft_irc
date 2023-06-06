@@ -201,7 +201,7 @@ void IRCServer::processMessage(std::string buff, int fd)
 			std::set<int> targets = (*rp).getTargets();
  			for (std::set<int>::iterator user = targets.begin(); user != targets.end(); user++)
 			{
-				std::string msg = (*rp).getReplyMsg();
+				std::string msg = (*rp).getReplyMsg(this->getHostname());
 				logg(LOG_DEBUG) << "Reply: " << RED << msg << RESET << "\n";
 				send(*user, msg.c_str(), msg.length(), 0);
 			}
@@ -223,4 +223,9 @@ void IRCServer::setNonBlocking(int fd)
 		throwError("ftcntl() failed");
 	}
 	fcntl(fd, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
+}
+
+std::string IRCServer::getHostname() const
+{
+	return std::string(this->_hostname);
 }
