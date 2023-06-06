@@ -32,6 +32,7 @@ public:
 	void setCode(const int code);
 	void addTarget(const int & fd);
 	std::string getReplyMsg(std::string hostname) const;
+	void setReplyMsg(const int code, const std::string message);
 };
 
 #endif

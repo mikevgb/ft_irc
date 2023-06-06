@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 20:28:35 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 12:22:34 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,20 +77,19 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 
 	if (params.empty())
 	{
-		rp.setCode(431);
-		rp.setMsg(ERR_NONICKNAMEGIVEN());
+		rp.setReplyMsg(C_ERR_NONICKNAMEGIVEN, ERR_NONICKNAMEGIVEN());
 	}
 	else if (this->_listUsers->getUser(nick))
 	{
-		rp.setMsg(ERR_NICKNAMEINUSE(nick));
+		rp.setReplyMsg(C_ERR_NICKNAMEINUSE, ERR_NICKNAMEINUSE(nick));
 	}
 	/* 	// if (_sender.getMode() == 'r')
 		{
-			// rp.setMsg(ERR_RESTRICTED);
+			// rp.setReplyMsg(ERR_RESTRICTED);
 		} */
 	else if (_sender->setNick(nick))
 	{
-		rp.setMsg(ERR_ERRONEUSNICKNAME(nick));
+		rp.setReplyMsg(C_ERR_ERRONEUSNICKNAME, ERR_ERRONEUSNICKNAME(nick));
 	}
 	else
 	{
@@ -107,7 +106,7 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 
 	if (params.size() < 4)
 	{
-		rp.setMsg(ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
 	}
 	else
 	{
@@ -131,7 +130,7 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 		logg(LOG_INFO) << "User: [" << this->_sender->getUsername() << "] | Real name: [" << this->_sender->getRealName() << "]\n";
 		if (this->_sender->isLogged() && !this->_sender->getNick().empty())
 		{
-			rp.setMsg(RPL_WELCOME(this->_sender->getNick()));
+			rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick()));
 		}
 	}
 
@@ -145,8 +144,7 @@ void CommandHandler::quit(std::list<std::string> params, std::list<Reply> &repli
 	Reply rp;
 
 	this->_listUsers->removeUser(_sender->getFd());
-	rp.setCode(0);
-	rp.setMsg(params.front());
+	rp.setReplyMsg(0, params.front());
 	replies.push_back(rp);
 }
 
@@ -166,7 +164,7 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 		user = this->_listUsers->getUser(params.front());
 		if (!user)
 		{
-			rp.setMsg(ERR_NOSUCHNICK(params.front()));
+			rp.setReplyMsg(C_ERR_NOSUCHNICK, ERR_NOSUCHNICK(params.front()));
 			rp.addTarget(this->_sender->getFd());
 			return;
 		}

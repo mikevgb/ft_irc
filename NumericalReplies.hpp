@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 16:29:27 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 17:56:00 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 12:20:29 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,144 @@
 #define NUMERICAL_REPLIES_HPP
 
 #include <string>
+
+#define C_RPL_WELCOME 001
+#define C_RPL_YOURHOST 002
+#define C_RPL_CREATED 003
+#define C_RPL_MYINFO 004
+#define C_RPL_BOUNCE 005
+#define C_RPL_TRACELINK 200
+#define C_RPL_TRACECONNECTING 201
+#define C_RPL_TRACEHANDSHAKE 202
+#define C_RPL_TRACEUNKNOWN 203
+#define C_RPL_TRACEOPERATOR 204
+#define C_RPL_TRACEUSER 205
+#define C_RPL_TRACESERVER 206
+#define C_RPL_TRACENEWTYPE 208
+#define C_RPL_STATSLINKINFO 211
+#define C_RPL_STATSCOMMANDS 212
+#define C_RPL_STATSCLINE 213
+#define C_RPL_STATSNLINE 214
+#define C_RPL_STATSILINE 215
+#define C_RPL_STATSKLINE 216
+#define C_RPL_STATSYLINE 218
+#define C_RPL_ENDOFSTATS 219
+#define C_RPL_UMODEIS 221
+#define C_RPL_STATSLLINE 241
+#define C_RPL_STATSUPTIME 242 
+#define C_RPL_STATSOLINE 243
+#define C_RPL_STATSHLINE 244
+#define C_RPL_LUSERCLIENT 251
+#define C_RPL_LUSEROP 252
+#define C_RPL_LUSERUNKNOWN 253
+#define C_RPL_LUSERCHANNELS 254
+#define C_RPL_LUSERME 255
+#define C_RPL_ADMINME 256
+#define C_RPL_ADMINLOC1 257
+#define C_RPL_ADMINLOC2 258
+#define C_RPL_ADMINEMAIL 259
+#define C_RPL_TRACELOG 261
+#define C_RPL_TRACEEND 262
+#define C_RPL_TRYAGAIN 263
+#define C_RPL_NONE 300 
+#define C_RPL_AWAY 301
+#define C_RPL_USERHOST 302
+#define C_RPL_ISON 303
+#define C_RPL_UNAWAY 305 
+#define C_RPL_NOWAWAY 306 
+#define C_RPL_WHOISUSER 311
+#define C_RPL_WHOISSERVER 312
+#define C_RPL_WHOISOPERATOR 313
+#define C_RPL_WHOWASUSER 314
+#define C_RPL_ENDOFWHO 315
+#define C_RPL_WHOISIDLE 317
+#define C_RPL_ENDOFWHOIS 318
+#define C_RPL_WHOISCHANNELS 319
+#define C_RPL_LISTSTART 321 
+#define C_RPL_LIST 322
+#define C_RPL_LISTEND 323 
+#define C_RPL_CHANNELMODEIS 324
+#define C_RPL_UNIQOPIS 325
+#define C_RPL_NOTOPIC 331
+#define C_RPL_TOPIC 332
+#define C_RPL_INVITING 341
+#define C_RPL_SUMMONING 342
+#define C_RPL_INVITELIST 346
+#define C_RPL_ENDOFINVITELIST 347
+#define C_RPL_EXCEPTLIST 348
+#define C_RPL_VERSION 351
+#define C_RPL_WHOREPLY 352
+#define C_RPL_NAMREPLY 353
+#define C_RPL_LINKS 364
+#define C_RPL_ENDOFLINKS 365
+#define C_RPL_ENDOFNAMES 366
+#define C_RPL_BANLIST 367
+#define C_RPL_ENDOFBANLIST 368
+#define C_RPL_ENDOFWHOWAS 369
+#define C_RPL_INFO 371
+#define C_RPL_MOTD 372
+#define C_RPL_ENDOFINFO 374 
+#define C_RPL_MOTDSTART 375
+#define C_RPL_ENDOFMOTD 376 
+#define C_RPL_YOUREOPER 381 
+#define C_RPL_REHASHING 382
+#define C_RPL_YOURESERVICE 383
+#define C_RPL_TIME 391
+#define C_RPL_USERSSTART 392 
+#define C_RPL_USERS 393 
+#define C_RPL_ENDOFUSERS 394 
+#define C_RPL_NOUSERS 395 
+#define C_ERR_NOSUCHNICK 401
+#define C_ERR_NOSUCHSERVER 402
+#define C_ERR_NOSUCHCHANNEL 403
+#define C_ERR_CANNOTSENDTOCHAN 404
+#define C_ERR_TOOMANYCHANNELS 405
+#define C_ERR_WASNOSUCHNICK 406
+#define C_ERR_TOOMANYTARGETS 407 
+#define C_ERR_NOSUCHSERVICE 408
+#define C_ERR_NOORIGIN 409 
+#define C_ERR_NORECIPIENT 411
+#define C_ERR_NOTEXTTOSEND 412 
+#define C_ERR_NOTOPLEVEL 413
+#define C_ERR_WILDTOPLEVEL 414
+#define C_ERR_BADMASK 415
+#define C_ERR_UNKNOWNCOMMAND 421
+#define C_ERR_NOMOTD 422 
+#define C_ERR_NOADMININFO 423
+#define C_ERR_FILEERROR 424
+#define C_ERR_NONICKNAMEGIVEN 431 
+#define C_ERR_ERRONEUSNICKNAME 432
+#define C_ERR_NICKNAMEINUSE 433
+#define C_ERR_NICKCOLLISION 436
+#define C_ERR_USERNOTINCHANNEL 441
+#define C_ERR_NOTONCHANNEL 442
+#define C_ERR_USERONCHANNEL 443
+#define C_ERR_NOLOGIN 444
+#define C_ERR_SUMMONDISABLED 445 
+#define C_ERR_USERSDISABLED 446 
+#define C_ERR_NOTREGISTERED 451 
+#define C_ERR_NEEDMOREPARAMS 461
+#define C_ERR_ALREADYREGISTRED 462 
+#define C_ERR_NOPERMFORHOST 463 
+#define C_ERR_PASSWDMISMATCH 464 
+#define C_ERR_YOUREBANNEDCREEP 465 
+#define C_ERR_KEYSET 467
+#define C_ERR_CHANNELISFULL 471
+#define C_ERR_UNKNOWNMODE 472
+#define C_ERR_INVITEONLYCHAN 473
+#define C_ERR_BANNEDFROMCHAN 474
+#define C_ERR_BADCHANNELKEY 475
+#define C_ERR_BADCHANMASK 476
+#define C_ERR_NOCHANMODES 477
+#define C_ERR_BANLISTFULL 478
+#define C_ERR_NOPRIVILEGES 481 
+#define C_ERR_CHANOPRIVSNEEDED 482
+#define C_ERR_CANTKILLSERVER 483 
+#define C_ERR_RESTRICTED 484 
+#define C_ERR_UNIQOPPRIVSNEEDED 485 
+#define C_ERR_NOOPERHOST 491 
+#define C_ERR_UMODEUNKNOWNFLAG 501 
+#define C_ERR_USERSDONTMATCH 502 
 
 std::string RPL_WELCOME(std::string prefix);
 std::string RPL_YOURHOST(std::string servername, std::string ver);

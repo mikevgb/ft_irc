@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 12:04:55 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 12:22:43 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,15 @@ int Reply::getCode() const
 
 void Reply::setCode(const int code)
 {
-	this->_code = code;
+	if (this->_code < 0)
+	{
+		logg(LOG_WARNING) << "Code cannot lower than zero.\n";
+	}
+	else
+		this->_code = code;
 }
 
-void Reply::addTarget(const int & fd)
+void Reply::addTarget(const int &fd)
 {
 	this->_targets.insert(fd);
 }
@@ -70,7 +75,12 @@ std::string Reply::getReplyMsg(std::string hostname) const
 {
 	if (this->_code != 0)
 	{
-	
 	}
 	return ":" + hostname + " " + std::to_string(this->getCode()) + " " + this->getMsg() + "\n";
+}
+
+void Reply::setReplyMsg(const int code, const std::string message)
+{
+	this->_code = code;
+	this->_msg = message;
 }
