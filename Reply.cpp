@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 12:22:43 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 15:29:43 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,11 @@ std::set<int> Reply::getTargets() const
 
 std::string Reply::getReplyMsg(std::string hostname) const
 {
-	if (this->_code != 0)
+	if (this->_code > 0)
 	{
+		return ":" + hostname + " " + std::to_string(this->getCode()) + " " + this->getMsg() + "\n";
 	}
-	return ":" + hostname + " " + std::to_string(this->getCode()) + " " + this->getMsg() + "\n";
+	return "";
 }
 
 void Reply::setReplyMsg(const int code, const std::string message)
