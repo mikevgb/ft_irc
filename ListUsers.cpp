@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 18:02:22 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 18:16:05 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,14 @@ int ListUsers::removeUser(const size_t fd)
 		_usersByNick.erase(user->getNick());
 		_usersByFd.erase(fd);
 		this->_listOfUsers.erase(user);
+		if (!user->getNick().empty() && !user->getUsername().empty())
+		{
+			logg(LOG_INFO) << "User -> [Nick: " << user->getNick() << " | User: " << user->getUsername() << "] disconnected\n" << RESET;
+		}
+		else
+		{
+			logg(LOG_INFO) << "User -> [FD: " << user->getFd() << "] disconnected\n" << RESET;
+		}
 		delete user;
 	}
 	catch (const std::exception &e)

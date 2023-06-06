@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 17:43:44 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 18:44:19 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include "Channel.hpp"
 #include "ListUsers.hpp"
 #include "ListChannels.hpp"
-
+#include "IRCServer.hpp"
 #include "Message.hpp"
 #include "Reply.hpp"
 
@@ -33,10 +33,12 @@ class ListChannels;
 class ResultCmd;
 class Message;
 class Reply;
+class IRCServer;
 
 class CommandHandler
 {
 private:
+	IRCServer *server;
 	ListUsers *_listUsers;
 	ListChannels *_listChannels;
 	User *_sender;
@@ -50,7 +52,7 @@ private:
 	void initCommandMap();
 
 public:
-	CommandHandler(ListUsers *listUsers, ListChannels *listChannels);
+	CommandHandler(IRCServer *server, ListUsers *listUsers, ListChannels *listChannels);
 	~CommandHandler();
 	void executeCmd(std::list<Reply> &);
 	ListUsers *getUsers();

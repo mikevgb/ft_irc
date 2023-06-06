@@ -16,7 +16,7 @@ IRCServer::IRCServer(const uint16_t port, const std::string password)
 {
 	_listUsers = new ListUsers();
 	_listChannels = new ListChannels();
-	_cmdHandler = new CommandHandler(_listUsers, _listChannels);
+	_cmdHandler = new CommandHandler(this, _listUsers, _listChannels);
 	_nfds = 1;
 	_password = password;
 
@@ -118,7 +118,7 @@ void IRCServer::setUpPoll()
 
 void IRCServer::loseConnection(int i)
 {
-	logg(LOG_INFO) << "Connection lost on - fd[" << ROSE << _pollFds[i].fd << RESET << "]\n";
+	logg(LOG_INFO) << "Connection lost on - fd[" << ORANGE << _pollFds[i].fd << RESET << "]\n";
 	_listUsers->removeUser(_pollFds[i].fd);
 	_pollFds[i].fd = -1;
 	_nfds--;
@@ -224,4 +224,18 @@ void IRCServer::setNonBlocking(int fd)
 std::string IRCServer::getHostname() const
 {
 	return std::string(this->_hostname);
+}
+
+bool IRCServer::disconnect(const int fd)
+{
+	for (int i = 0; i < this->_nfds; i++)
+	{
+		if (this->_pollFds[i].fd == fd)
+		{
+			loseConnection(i);
+			return true;
+		}	
+	}
+	logg(LOG_ERROR) << "The user couldn't disconnect\n";
+	return false;
 }

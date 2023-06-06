@@ -6,14 +6,15 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 17:51:46 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/06 18:49:02 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandHandler.hpp"
 
-CommandHandler::CommandHandler(ListUsers *listUsers, ListChannels *listChannels)
+CommandHandler::CommandHandler(IRCServer *server, ListUsers *listUsers, ListChannels *listChannels)
 {
+	this->server = server;
 	_listUsers = listUsers;
 	_listChannels = listChannels;
 	_firstTimeFlag = 0;
@@ -62,6 +63,7 @@ std::list<User *> CommandHandler::getTargets() const
 
 bool CommandHandler::sendAsyncMessage(int fd, std::string msg)
 {
+	msg.append("\n");
 	if (send(fd, msg.c_str(), msg.length(), 0) == -1)
 	{
 		logg(LOG_ERROR) << "An expected error occurs while sending a message\n";
@@ -79,7 +81,6 @@ void CommandHandler::initCommandMap()
 	this->commandMap["CAP"] = &CommandHandler::cap;
 	this->commandMap["PING"] = &CommandHandler::ping;
 	this->commandMap["PONG"] = &CommandHandler::pong;
-	
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
@@ -127,10 +128,10 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 		params.pop_front();
 		for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
 		{
-			if(i == 1)
+			if (i == 1)
 			{
-				//TODO: Implement mode
-				//this->_sender.setMode(*it);
+				// TODO: Implement mode
+				// this->_sender.setMode(*it);
 			}
 			if (i >= 3)
 			{
@@ -153,12 +154,17 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 
 void CommandHandler::quit(std::list<std::string> params, std::list<Reply> &replies)
 {
-	//TODO: Don't work;
-	Reply rp;
+	(void)replies;
+	//TODO: Send msg to all users of channels
+	std::string msg;
 
-	this->_listUsers->removeUser(_sender->getFd());
-	rp.setReplyMsg(0, params.front());
-	replies.push_back(rp);
+	msg = "QUIT";
+	for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
+	{
+		msg += (" " + *it);
+	}
+	this->sendAsyncMessage(this->_sender->getFd(), msg);
+	this->server->disconnect(this->_sender->getFd());
 }
 
 void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &replies)
@@ -207,11 +213,10 @@ void CommandHandler::ping(std::list<std::string> params, std::list<Reply> &repli
 	{
 		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
 	}
-	msg = "PONG " + params.front() + "\n";
+	msg = this->server->getHostname() + " PONG " + params.front() + "\n";
 	this->sendAsyncMessage(this->_sender->getFd(), msg);
 	rp.addTarget(this->_sender->getFd());
 	replies.push_back(rp);
-	
 }
 
 void CommandHandler::pong(std::list<std::string> params, std::list<Reply> &replies)
@@ -219,4 +224,3 @@ void CommandHandler::pong(std::list<std::string> params, std::list<Reply> &repli
 	(void)replies;
 	(void)params;
 }
-
