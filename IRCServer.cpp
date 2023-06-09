@@ -168,7 +168,6 @@ void IRCServer::pollLoop()
 						}
 						else
 						{
-							// recvMessage(std::string(_buf, rc), _pollFds[i].fd);
 							processMessage(std::string(_buf, rc), _pollFds[i].fd);
 						}
 						break;
@@ -236,6 +235,6 @@ bool IRCServer::disconnect(const int fd)
 			return true;
 		}	
 	}
-	logg(LOG_ERROR) << "The user couldn't disconnect\n";
+	logg(LOG_ERROR) << "The user couldn't be disconnected\n";
 	return false;
 }

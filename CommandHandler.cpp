@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 18:49:02 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/07 19:36:08 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void CommandHandler::initCommandMap()
 	this->commandMap["CAP"] = &CommandHandler::cap;
 	this->commandMap["PING"] = &CommandHandler::ping;
 	this->commandMap["PONG"] = &CommandHandler::pong;
+	this->commandMap["JOIN"] = &CommandHandler::join;
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
@@ -200,8 +201,14 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 
 void CommandHandler::cap(std::list<std::string> params, std::list<Reply> &replies)
 {
+	std::string msg;
+
+	if(params.front() == "LS" || params.front() == "LIST")
+	{
+		msg = "CAP * " + params.front() + " :";
+		this->sendAsyncMessage(this->_sender->getFd(), msg);	
+	}
 	(void)replies;
-	(void)params;
 }
 
 void CommandHandler::ping(std::list<std::string> params, std::list<Reply> &replies)
@@ -220,6 +227,12 @@ void CommandHandler::ping(std::list<std::string> params, std::list<Reply> &repli
 }
 
 void CommandHandler::pong(std::list<std::string> params, std::list<Reply> &replies)
+{
+	(void)replies;
+	(void)params;
+}
+
+void CommandHandler::join(std::list<std::string> params, std::list<Reply> &replies)
 {
 	(void)replies;
 	(void)params;
