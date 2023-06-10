@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/10 17:42:17 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/10 19:57:02 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ std::list<User *> CommandHandler::getTargets() const
 
 bool CommandHandler::sendAsyncMessage(int fd, std::string msg)
 {
-	msg.append("\n");
-	if (send(fd, msg.c_str(), msg.length(), 0) == -1)
+	std::string toSend = ":" + this->server->getHostname() + " " + msg + "\n";
+	if (send(fd, toSend.c_str(), toSend.length(), 0) == -1)
 	{
 		logg(LOG_ERROR) << "An expected error occurs while sending a message\n";
 		return false;
 	}
-	logg(LOG_INFO) << "Send:" << msg;
+	logg(LOG_INFO) << "Sent: " << ROSE << toSend << RESET;
 	return true;
 }
 
@@ -220,7 +220,7 @@ void CommandHandler::ping(std::list<std::string> params, std::list<Reply> &repli
 	{
 		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
 	}
-	msg = this->server->getHostname() + " PONG " + params.front() + "\n";
+	msg = "PONG " + params.front();
 	this->sendAsyncMessage(this->_sender->getFd(), msg);
 	rp.addTarget(this->_sender->getFd());
 	replies.push_back(rp);

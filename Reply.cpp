@@ -6,18 +6,18 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 15:29:43 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/10 20:01:43 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Reply.hpp"
 
 // Constructors
-Reply::Reply() : _code(0)
+Reply::Reply() : _code("")
 {
 }
 
-Reply::Reply(const int code)
+Reply::Reply(const std::string code)
 {
 	this->_code = code;
 }
@@ -46,19 +46,14 @@ Reply &Reply::operator=(const Reply &assign)
 }
 
 // Getters and Setters
-int Reply::getCode() const
+std::string Reply::getCode() const
 {
 	return this->_code;
 }
 
-void Reply::setCode(const int code)
+void Reply::setCode(const std::string code)
 {
-	if (this->_code < 0)
-	{
-		logg(LOG_WARNING) << "Code cannot lower than zero.\n";
-	}
-	else
-		this->_code = code;
+	this->_code = code;
 }
 
 void Reply::addTarget(const int &fd)
@@ -71,16 +66,16 @@ std::set<int> Reply::getTargets() const
 	return this->_targets;
 }
 
-std::string Reply::getReplyMsg(std::string hostname) const
+std::string Reply::getReplyMsg(const std::string hostname, const std::string nick) const
 {
-	if (this->_code > 0)
+	if (!this->_code.empty())
 	{
-		return ":" + hostname + " " + std::to_string(this->getCode()) + " " + this->getMsg() + "\n";
+		return ":" + hostname + " " + this->_code + " " + nick + " " + this->_msg + "\n";
 	}
 	return "";
 }
 
-void Reply::setReplyMsg(const int code, const std::string message)
+void Reply::setReplyMsg(const std::string code, const std::string message)
 {
 	this->_code = code;
 	this->_msg = message;

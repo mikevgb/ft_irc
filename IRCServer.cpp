@@ -197,7 +197,7 @@ void IRCServer::processMessage(std::string buff, int fd)
 			std::set<int> targets = (*rp).getTargets();
 			for (std::set<int>::iterator user = targets.begin(); user != targets.end(); user++)
 			{
-				std::string msg = (*rp).getReplyMsg(this->getHostname());
+				std::string msg = (*rp).getReplyMsg(this->getHostname(), this->_listUsers->getUser(fd)->getNick());
 				logg(LOG_DEBUG) << "Reply: " << RED << msg << RESET << "\n";
 				send(*user, msg.c_str(), msg.length(), 0);
 			}

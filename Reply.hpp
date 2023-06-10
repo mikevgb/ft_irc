@@ -11,13 +11,13 @@
 class Reply : public Message
 {
 private:
-	int _code;
+	std::string _code;
 	std::set<int> _targets;
 
 public:
 	// Constructors
 	Reply();
-	Reply(int code);
+	Reply(const std::string code);
 	Reply(const Reply &copy);
 
 	// Destructor
@@ -27,12 +27,12 @@ public:
 	Reply &operator=(const Reply &assign);
 
 	//Getters and Setters
-	int getCode() const;
+	std::string getCode() const;
 	std::set<int> getTargets() const;
-	void setCode(const int code);
+	void setCode(const std::string code);
 	void addTarget(const int & fd);
-	std::string getReplyMsg(std::string hostname) const;
-	void setReplyMsg(const int code, const std::string message);
+	std::string getReplyMsg(const std::string hostname, const std::string nick) const;
+	void setReplyMsg(const std::string code, const std::string message);
 };
 
 #endif
