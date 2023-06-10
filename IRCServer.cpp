@@ -103,7 +103,6 @@ void IRCServer::acceptConnection()
 				break;
 			}
 		}
-		setNonBlocking(_pollFds[_nfds].fd);
 	}
 }
 
