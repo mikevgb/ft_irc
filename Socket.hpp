@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:41:49 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/16 14:24:30 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/10 16:45:09 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ private:
 	Socket();
 
 public:
-	Socket(const char *ip, const uint16_t port);
+	Socket(const uint16_t port);
 	bool initSocket();
 	~Socket();
 };

@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/07 19:36:08 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/10 17:42:17 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ bool CommandHandler::sendAsyncMessage(int fd, std::string msg)
 		logg(LOG_ERROR) << "An expected error occurs while sending a message\n";
 		return false;
 	}
+	logg(LOG_INFO) << "Send:" << msg;
 	return true;
 }
 
@@ -87,7 +88,6 @@ void CommandHandler::initCommandMap()
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
 {
 	Reply rp;
-
 	std::string nick = params.front();
 
 	if (params.empty())
@@ -156,7 +156,7 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 void CommandHandler::quit(std::list<std::string> params, std::list<Reply> &replies)
 {
 	(void)replies;
-	//TODO: Send msg to all users of channels
+	// TODO: Send msg to all users of channels
 	std::string msg;
 
 	msg = "QUIT";
@@ -203,10 +203,10 @@ void CommandHandler::cap(std::list<std::string> params, std::list<Reply> &replie
 {
 	std::string msg;
 
-	if(params.front() == "LS" || params.front() == "LIST")
+	if (params.front() == "LS" || params.front() == "LIST")
 	{
 		msg = "CAP * " + params.front() + " :";
-		this->sendAsyncMessage(this->_sender->getFd(), msg);	
+		this->sendAsyncMessage(this->_sender->getFd(), msg);
 	}
 	(void)replies;
 }

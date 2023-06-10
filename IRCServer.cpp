@@ -20,6 +20,8 @@ IRCServer::IRCServer(const uint16_t port, const std::string password)
 	_nfds = 1;
 	_password = password;
 
+	_serverSocket = new Socket(port);
+	this->startServer();
 	/*server data*/ // FIXME: Handle main arguments
 	if (gethostname(_hostname, sizeof(_hostname)) == -1)
 	{
@@ -36,8 +38,6 @@ IRCServer::IRCServer(const uint16_t port, const std::string password)
 			memcpy(&_addr, host->h_addr_list[i], sizeof(struct in_addr));
 		}
 	}
-	_serverSocket = new Socket(inet_ntoa(_addr), port);
-	this->startServer();
 	logg(LOG_INFO) << YELLOW << "IP address: " << inet_ntoa(_addr) << RESET << "\n";
 	logg(LOG_INFO) << GREEN << "Port: " << (int)ntohs(_serverSocket->addr.sin_port) << RESET << "\n";
 	this->pollLoop();
@@ -62,7 +62,7 @@ bool IRCServer::startServer()
 {
 	setNonBlocking(_serverSocket->sockfd);
 
-	if (bind(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, sizeof(_serverSocket->addr)) == -1)
+	if (bind(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, sizeof(_serverSocket->addr)) < 0)
 	{
 		logg(LOG_ERROR) << "Failed to bind to port " << ntohs(_serverSocket->addr.sin_port) << "\n";
 		exit(EXIT_FAILURE);
@@ -103,6 +103,7 @@ void IRCServer::acceptConnection()
 				break;
 			}
 		}
+		setNonBlocking(_pollFds[_nfds].fd);
 	}
 }
 
@@ -194,7 +195,7 @@ void IRCServer::processMessage(std::string buff, int fd)
 		for (std::list<Reply>::iterator rp = replies.begin(); rp != replies.end(); rp++)
 		{
 			std::set<int> targets = (*rp).getTargets();
- 			for (std::set<int>::iterator user = targets.begin(); user != targets.end(); user++)
+			for (std::set<int>::iterator user = targets.begin(); user != targets.end(); user++)
 			{
 				std::string msg = (*rp).getReplyMsg(this->getHostname());
 				logg(LOG_DEBUG) << "Reply: " << RED << msg << RESET << "\n";
@@ -233,7 +234,7 @@ bool IRCServer::disconnect(const int fd)
 		{
 			loseConnection(i);
 			return true;
-		}	
+		}
 	}
 	logg(LOG_ERROR) << "The user couldn't be disconnected\n";
 	return false;
