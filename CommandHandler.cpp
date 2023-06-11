@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/10 19:57:02 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/11 16:40:43 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 		logg(LOG_INFO) << "User: [" << this->_sender->getUsername() << "] | Real name: [" << this->_sender->getRealName() << "]\n";
 		if (this->_sender->isLogged() && !this->_sender->getNick().empty())
 		{
-			rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick()));
+			rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick(), this->_sender->getUsername(), this->server->getHostname()));
 		}
 	}
 

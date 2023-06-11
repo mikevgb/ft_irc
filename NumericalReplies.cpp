@@ -1,6 +1,6 @@
 #include "NumericalReplies.hpp"
 
-std::string RPL_WELCOME(std::string prefix) { return ":Welcome to the Internet Relay Network " + prefix; }
+std::string RPL_WELCOME(std::string nick, std::string user, std::string host) { return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host; }
 std::string RPL_YOURHOST(std::string servername, std::string ver) { return ":Your host is " + servername + ", running version " + ver; }
 std::string RPL_CREATED(std::string date) { return ":This server was created " + date; }
 std::string RPL_MYINFO(std::string servername, std::string version, std::string umodes, std::string cmodes) { return servername + " " + version + " " + umodes + " " + cmodes; }

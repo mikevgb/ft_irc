@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 16:29:27 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/10 19:11:26 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/11 16:40:22 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@
 #define C_ERR_UMODEUNKNOWNFLAG "501" 
 #define C_ERR_USERSDONTMATCH "502" 
 
-std::string RPL_WELCOME(std::string prefix);
+std::string RPL_WELCOME(std::string nick, std::string user, std::string host);
 std::string RPL_YOURHOST(std::string servername, std::string ver);
 std::string RPL_CREATED(std::string date);
 std::string RPL_MYINFO(std::string servername, std::string version, std::string umodes, std::string cmodes);
