@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/11 17:17:40 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/11 18:12:54 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,7 @@ void CommandHandler::initCommandMap()
 	this->commandMap["QUIT"] = &CommandHandler::quit;
 	this->commandMap["PRIVMSG"] = &CommandHandler::privmsg;
 	this->commandMap["CAP"] = &CommandHandler::cap;
-	this->commandMap["PING"] = &CommandHandler::ping;
-	this->commandMap["PONG"] = &CommandHandler::pong;
+	this->commandMap["PING"] = &CommandHandler::pong;
 	this->commandMap["JOIN"] = &CommandHandler::join;
 }
 
@@ -107,7 +106,13 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 		if (_sender->setNick(nick))
 			rp.setReplyMsg(C_ERR_ERRONEUSNICKNAME, ERR_ERRONEUSNICKNAME(nick));
 		else
+		{
+			if(!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
+				this->_sender->changeToLogged();
 			logg(LOG_INFO) << "New Nickname: " LBLUE << nick << RESET << "\n";
+			if (this->_sender->isLogged())
+				rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick(), this->_sender->getUsername(), this->server->getHostname()));
+		}
 	}
 	rp.addTarget(_sender->getFd());
 	replies.push_back(rp);
@@ -139,10 +144,11 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 			}
 			i++;
 		}
-		this->_sender->changeToLogged();
+		if(!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
+			this->_sender->changeToLogged();
 		logg(LOG_INFO) << "Username: " << ORANGE << this->_sender->getUsername() << RESET << " logged\n";
 		logg(LOG_INFO) << "User: [" << this->_sender->getUsername() << "] | Real name: [" << this->_sender->getRealName() << "]\n";
-		if (this->_sender->isLogged() && !this->_sender->getNick().empty())
+		if (this->_sender->isLogged())
 		{
 			rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick(), this->_sender->getUsername(), this->server->getHostname()));
 		}
@@ -210,7 +216,7 @@ void CommandHandler::cap(std::list<std::string> params, std::list<Reply> &replie
 	(void)replies;
 }
 
-void CommandHandler::ping(std::list<std::string> params, std::list<Reply> &replies)
+void CommandHandler::pong(std::list<std::string> params, std::list<Reply> &replies)
 {
 	Reply rp;
 	std::string msg;
@@ -223,12 +229,6 @@ void CommandHandler::ping(std::list<std::string> params, std::list<Reply> &repli
 	this->sendAsyncMessage(this->_sender->getFd(), msg);
 	rp.addTarget(this->_sender->getFd());
 	replies.push_back(rp);
-}
-
-void CommandHandler::pong(std::list<std::string> params, std::list<Reply> &replies)
-{
-	(void)replies;
-	(void)params;
 }
 
 void CommandHandler::join(std::list<std::string> params, std::list<Reply> &replies)
