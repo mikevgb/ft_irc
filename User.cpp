@@ -6,14 +6,14 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 18:00:28 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/11 17:07:05 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "User.hpp"
 
 User::User(size_t fd)
-	: _fd(fd), _nick(), _username(), _realname(), _channels(), forbittenChar(",!?*@.&#")
+	: _fd(fd), _nick(""), _username(""), _realname(""), _channels(), forbittenChar(",!?*@.&#")
 {
 	_isLogged = false;
 	_isOperator = false;

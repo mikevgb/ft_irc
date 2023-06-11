@@ -201,6 +201,7 @@ void IRCServer::processMessage(std::string buff, int fd)
 				send(*user, msg.c_str(), msg.length(), 0);
 			}
 		}
+		replies.clear();
 	}
 }
 

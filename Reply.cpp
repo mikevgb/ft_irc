@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 16:51:52 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/10 20:01:43 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/11 17:57:48 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,12 @@ std::set<int> Reply::getTargets() const
 	return this->_targets;
 }
 
-std::string Reply::getReplyMsg(const std::string hostname, const std::string nick) const
+std::string Reply::getReplyMsg(const std::string hostname, std::string nick) const
 {
+	if (nick.empty())
+	{
+		nick = "*";
+	}
 	if (!this->_code.empty())
 	{
 		return ":" + hostname + " " + this->_code + " " + nick + " " + this->_msg + "\n";

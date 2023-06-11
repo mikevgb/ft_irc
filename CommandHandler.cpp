@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/11 16:40:43 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/11 17:17:40 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,12 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 		{
 			// rp.setReplyMsg(ERR_RESTRICTED);
 		} */
-	else if (_sender->setNick(nick))
-	{
-		rp.setReplyMsg(C_ERR_ERRONEUSNICKNAME, ERR_ERRONEUSNICKNAME(nick));
-	}
 	else
 	{
-		logg(LOG_INFO) << "New Nickname: " LBLUE << nick << RESET << "\n";
+		if (_sender->setNick(nick))
+			rp.setReplyMsg(C_ERR_ERRONEUSNICKNAME, ERR_ERRONEUSNICKNAME(nick));
+		else
+			logg(LOG_INFO) << "New Nickname: " LBLUE << nick << RESET << "\n";
 	}
 	rp.addTarget(_sender->getFd());
 	replies.push_back(rp);
