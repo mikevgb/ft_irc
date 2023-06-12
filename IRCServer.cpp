@@ -12,7 +12,7 @@
 
 #include "IRCServer.hpp"
 
-IRCServer::IRCServer(const uint16_t port, const std::string password) : _logged()
+IRCServer::IRCServer(const uint16_t port, const std::string password)
 {
 	_listUsers = new ListUsers();
 	_listChannels = new ListChannels();
@@ -176,14 +176,7 @@ void IRCServer::pollLoop()
 						else
 						{
 							processMessage(std::string(_buf, rc), _pollFds[i].fd);
-							if (!_logged)
-							{
-								this->_cmdHandler->error("Can't login on IRCServer", _pollFds[i].fd);
-								disconnect(_pollFds[i].fd);
-							}
 						}
-
-						
 						break;
 					}
 				}
@@ -203,8 +196,11 @@ void IRCServer::processMessage(std::string buff, int fd)
 		Message msg(*it);
 		_cmdHandler->setMessage(msg);
 		std::cout << _cmdHandler->getMessage();
+		if (!checkLogin(msg.getCmd(), fd))
+		{
+			break;
+		}
 		_cmdHandler->executeCmd(replies);
-
 		for (std::list<Reply>::iterator rp = replies.begin(); rp != replies.end(); rp++)
 		{
 			std::set<int> targets = (*rp).getTargets();
@@ -238,4 +234,15 @@ void IRCServer::setNonBlocking(int fd)
 std::string IRCServer::getHostname() const
 {
 	return std::string(this->_hostname);
+}
+
+bool IRCServer::checkLogin(const std::string cmd, const int fd)
+{
+	if (cmd == "NICK" && !this->_listUsers->getUser(fd)->isLogged())
+	{
+		this->_cmdHandler->error("Can't connect to IRC Server", fd);
+		this->disconnect(fd);
+		return false;
+	}
+	return true;
 }

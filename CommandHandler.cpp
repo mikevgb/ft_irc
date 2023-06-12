@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/12 18:43:34 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/12 19:33:42 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,10 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 			if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
 				this->_sender->changeToLogged();
 			logg(LOG_INFO) << "New Nickname: " LBLUE << nick << RESET << "\n";
-			if (this->_sender->isLogged())
+			if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
+			{
 				rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick(), this->_sender->getUsername(), this->server->getHostname()));
+			}
 		}
 	}
 	rp.addTarget(_sender->getFd());
@@ -140,11 +142,9 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 			}
 			i++;
 		}
-		if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
-			this->_sender->changeToLogged();
 		logg(LOG_INFO) << "Username: " << ORANGE << this->_sender->getUsername() << RESET << " logged\n";
 		logg(LOG_INFO) << "User: [" << this->_sender->getUsername() << "] | Real name: [" << this->_sender->getRealName() << "]\n";
-		if (this->_sender->isLogged())
+		if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
 		{
 			rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick(), this->_sender->getUsername(), this->server->getHostname()));
 		}
@@ -241,13 +241,13 @@ void CommandHandler::pass(std::list<std::string> params, std::list<Reply> &repli
 	{
 		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
 	}
-	else if (this->server->_logged)
+	else if (this->_sender->isLogged())
 	{
 		rp.setReplyMsg(C_ERR_ALREADYREGISTRED, ERR_ALREADYREGISTRED());
 	}
 	else if (this->server->_password == password)
 	{
-		this->server->_logged = true;
+		this->_sender->changeToLogged();
 	}
 	else
 	{
