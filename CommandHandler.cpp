@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/11 18:12:54 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/12 17:14:35 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void CommandHandler::initCommandMap()
 	this->commandMap["CAP"] = &CommandHandler::cap;
 	this->commandMap["PING"] = &CommandHandler::pong;
 	this->commandMap["JOIN"] = &CommandHandler::join;
+	this->commandMap["ERROR"] = &CommandHandler::error;
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
@@ -107,7 +108,7 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 			rp.setReplyMsg(C_ERR_ERRONEUSNICKNAME, ERR_ERRONEUSNICKNAME(nick));
 		else
 		{
-			if(!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
+			if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
 				this->_sender->changeToLogged();
 			logg(LOG_INFO) << "New Nickname: " LBLUE << nick << RESET << "\n";
 			if (this->_sender->isLogged())
@@ -144,7 +145,7 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 			}
 			i++;
 		}
-		if(!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
+		if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
 			this->_sender->changeToLogged();
 		logg(LOG_INFO) << "Username: " << ORANGE << this->_sender->getUsername() << RESET << " logged\n";
 		logg(LOG_INFO) << "User: [" << this->_sender->getUsername() << "] | Real name: [" << this->_sender->getRealName() << "]\n";
@@ -235,4 +236,16 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 {
 	(void)replies;
 	(void)params;
+}
+
+void CommandHandler::error(std::list<std::string> params, std::list<Reply> &replies)
+{
+	std::string msg;
+
+	msg = "ERROR";
+	for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
+	{
+		msg += (" " + *it);
+	}
+	this->sendAsyncMessage(this->_sender->getFd(), msg);
 }
