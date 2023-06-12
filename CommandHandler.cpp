@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/12 17:24:47 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/12 18:02:16 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,10 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 	if (params.size() < 4)
 	{
 		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else if (!this->_sender->getUsername().empty())
+	{
+		rp.setReplyMsg(C_ERR_ALREADYREGISTRED, ERR_ALREADYREGISTRED());
 	}
 	else
 	{
