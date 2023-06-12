@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/12 18:13:45 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/12 18:17:40 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,6 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 	{
 		rp.setReplyMsg(C_ERR_NICKNAMEINUSE, ERR_NICKNAMEINUSE(nick));
 	}
-	/* 	// if (_sender.getMode() == 'r')
-		{
-			// rp.setReplyMsg(ERR_RESTRICTED);
-		} */
 	else
 	{
 		if (_sender->setNick(nick))
