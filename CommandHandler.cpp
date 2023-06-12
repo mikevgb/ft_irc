@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/12 17:14:35 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/12 17:24:47 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void CommandHandler::initCommandMap()
 	this->commandMap["CAP"] = &CommandHandler::cap;
 	this->commandMap["PING"] = &CommandHandler::pong;
 	this->commandMap["JOIN"] = &CommandHandler::join;
-	this->commandMap["ERROR"] = &CommandHandler::error;
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
@@ -162,7 +161,6 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 void CommandHandler::quit(std::list<std::string> params, std::list<Reply> &replies)
 {
 	(void)replies;
-	// TODO: Send msg to all users of channels
 	std::string msg;
 
 	msg = "QUIT";
@@ -238,14 +236,10 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 	(void)params;
 }
 
-void CommandHandler::error(std::list<std::string> params, std::list<Reply> &replies)
+void CommandHandler::error(const std::string reason, int fd)
 {
 	std::string msg;
 
-	msg = "ERROR";
-	for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
-	{
-		msg += (" " + *it);
-	}
-	this->sendAsyncMessage(this->_sender->getFd(), msg);
+	msg = "ERROR :" + reason;
+	this->sendAsyncMessage(fd, msg);
 }

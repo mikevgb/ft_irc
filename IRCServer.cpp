@@ -164,6 +164,7 @@ void IRCServer::pollLoop()
 						}
 						else if (rc == 0)
 						{
+							this->_cmdHandler->error("Connection lost", _pollFds[i].fd);
 							loseConnection(i);
 						}
 						else
