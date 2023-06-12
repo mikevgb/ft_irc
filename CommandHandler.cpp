@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/12 18:17:40 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/12 18:43:34 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void CommandHandler::initCommandMap()
 	this->commandMap["CAP"] = &CommandHandler::cap;
 	this->commandMap["PING"] = &CommandHandler::pong;
 	this->commandMap["JOIN"] = &CommandHandler::join;
+	this->commandMap["PASS"] = &CommandHandler::pass;
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
@@ -133,11 +134,6 @@ void CommandHandler::user(std::list<std::string> params, std::list<Reply> &repli
 		params.pop_front();
 		for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
 		{
-			if (i == 1)
-			{
-				// TODO: Implement mode
-				// this->_sender.setMode(*it);
-			}
 			if (i >= 3)
 			{
 				this->_sender->setRealName(*it);
@@ -234,6 +230,31 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 {
 	(void)replies;
 	(void)params;
+}
+
+void CommandHandler::pass(std::list<std::string> params, std::list<Reply> &replies)
+{
+	Reply rp;
+	std::string password = params.front();
+
+	if (params.size() != 1)
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else if (this->server->_logged)
+	{
+		rp.setReplyMsg(C_ERR_ALREADYREGISTRED, ERR_ALREADYREGISTRED());
+	}
+	else if (this->server->_password == password)
+	{
+		this->server->_logged = true;
+	}
+	else
+	{
+		rp.setReplyMsg(C_ERR_PASSWDMISMATCH, ERR_PASSWDMISMATCH());
+	}
+	rp.addTarget(this->_sender->getFd());
+	replies.push_back(rp);
 }
 
 void CommandHandler::error(const std::string reason, int fd)

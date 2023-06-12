@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 18:55:56 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/12 18:37:17 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ private:
 	// receive buffer
 	char _buf[MAXMSGSIZE];
 
+	//Login
 	std::string _password;
+	bool _logged;
 
 	bool startServer();
 	void pollLoop();
@@ -58,11 +60,10 @@ private:
 	void throwError(std::string msg);
 	void setUpPoll();
 	void acceptConnection();
-	void loseConnection(int i);
 	void setNonBlocking(int fdIn);
 	void processMessage(std::string buff, int fd);
 	std::string getHostname() const;
-	bool disconnect(const int fd);
+	void disconnect(const int fd);
 
 public:
 	IRCServer(const uint16_t port, const std::string password);

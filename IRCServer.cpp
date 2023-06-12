@@ -12,7 +12,7 @@
 
 #include "IRCServer.hpp"
 
-IRCServer::IRCServer(const uint16_t port, const std::string password)
+IRCServer::IRCServer(const uint16_t port, const std::string password) : _logged()
 {
 	_listUsers = new ListUsers();
 	_listChannels = new ListChannels();
@@ -116,11 +116,17 @@ void IRCServer::setUpPoll()
 	_pollFds[0].events = POLLIN;
 }
 
-void IRCServer::loseConnection(int i)
+void IRCServer::disconnect(const int fd)
 {
-	logg(LOG_INFO) << "Connection lost on - fd[" << ORANGE << _pollFds[i].fd << RESET << "]\n";
-	_listUsers->removeUser(_pollFds[i].fd);
-	_pollFds[i].fd = -1;
+	logg(LOG_INFO) << "Connection lost on - fd[" << ORANGE << fd << RESET << "]\n";
+	_listUsers->removeUser(fd);
+	for (int i = 0; i < this->_nfds; i++)
+	{
+		if (this->_pollFds[i].fd == fd)
+		{
+			_pollFds[i].fd = -1;
+		}
+	}
 	_nfds--;
 }
 
@@ -165,12 +171,19 @@ void IRCServer::pollLoop()
 						else if (rc == 0)
 						{
 							this->_cmdHandler->error("Connection lost", _pollFds[i].fd);
-							loseConnection(i);
+							disconnect(_pollFds[i].fd);
 						}
 						else
 						{
 							processMessage(std::string(_buf, rc), _pollFds[i].fd);
+							if (!_logged)
+							{
+								this->_cmdHandler->error("Can't login on IRCServer", _pollFds[i].fd);
+								disconnect(_pollFds[i].fd);
+							}
 						}
+
+						
 						break;
 					}
 				}
@@ -225,18 +238,4 @@ void IRCServer::setNonBlocking(int fd)
 std::string IRCServer::getHostname() const
 {
 	return std::string(this->_hostname);
-}
-
-bool IRCServer::disconnect(const int fd)
-{
-	for (int i = 0; i < this->_nfds; i++)
-	{
-		if (this->_pollFds[i].fd == fd)
-		{
-			loseConnection(i);
-			return true;
-		}
-	}
-	logg(LOG_ERROR) << "The user couldn't be disconnected\n";
-	return false;
 }

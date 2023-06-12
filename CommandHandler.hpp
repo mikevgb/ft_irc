@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/12 17:24:39 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/12 18:23:28 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ public:
 	void ping(std::list<std::string> params, std::list<Reply> &replies);
 	void pong(std::list<std::string> params, std::list<Reply> &replies);
 	void join(std::list<std::string> params, std::list<Reply> &replies);
+	void pass(std::list<std::string> params, std::list<Reply> &replies);
 	void error(const std::string reason, const int fd);
 
 };
