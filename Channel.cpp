@@ -6,18 +6,17 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 19:34:25 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 20:48:35 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-//TODO: Channel names are strings (beginning with specified prefix characters). Apart from the requirement of the first character being a valid channel type prefix character;
-//the only restriction on a channel name is that it may not contain any spaces (' ', 0x20), a control G / BELL ('^G', 0x07), or a comma (',', 0x2C) (which is used as a list item separator by the protocol).
-
+// TODO: Channel names are strings (beginning with specified prefix characters). Apart from the requirement of the first character being a valid channel type prefix character;
+// the only restriction on a channel name is that it may not contain any spaces (' ', 0x20), a control G / BELL ('^G', 0x07), or a comma (',', 0x2C) (which is used as a list item separator by the protocol).
 
 Channel::Channel(const std::string &name)
-	: _name(), _topic("Nuevo canal"), _password(), _users(), _admins(), _voiced(), _baned()
+	: _name(), _topic("New channel"), _password(), _users(), _admins(), _voiced(), _baned()
 {
 	_limit = 0;
 	_nbrUsers = 0;
@@ -42,7 +41,7 @@ const std::string &Channel::getName() const
 
 bool Channel::setName(const std::string &name)
 {
-	if (name.find(' ') > 0 || name.find(',') > 0)
+	if (name.find(' ') != std::string::npos || name.find(',') > std::string::npos)
 	{
 		logg(LOG_WARNING) << "Channel name contains forbidden characters\n";
 		return false;
@@ -57,26 +56,25 @@ int Channel::addUser(User *user, const std::string &password)
 	{
 		return 0;
 	}
-	
+
 	if (_users.empty())
 	{
 		_admins.insert(user);
 		if (!password.empty())
 			_password = password;
 	}
-/* 	if (_limit > 0 && _nbrUsers + 1 <= _limit)
-		return ERR_CHANNELISFULL;
-	if (isBaned(user))
-		return ERR_BANNEDFROMCHAN;
-	if (!_password.empty() && _password.compare(password))
-		return ERR_BADCHANNELKEY;
-	if (_isInviteOnly)
-		return ERR_INVITEONLYCHAN; */
+	/* 	if (_limit > 0 && _nbrUsers + 1 <= _limit)
+			return ERR_CHANNELISFULL;
+		if (isBaned(user))
+			return ERR_BANNEDFROMCHAN;
+		if (!_password.empty() && _password.compare(password))
+			return ERR_BADCHANNELKEY;
+		if (_isInviteOnly)
+			return ERR_INVITEONLYCHAN; */
 	_nbrUsers++;
 	_users.insert(user);
 	user->addChannel(this);
 	return 0;
-	// return error para unirse
 }
 
 void Channel::removeUser(User *user)
@@ -86,22 +84,6 @@ void Channel::removeUser(User *user)
 	_voiced.erase(user);
 	_nbrUsers--;
 }
-/* int Channel::setTopic(const std::string &topic, User *user)
-{
-	if (!isTopicBlock() || isAdmin(user))
-	{
-		_topic = topic;
-		return 0;
-	}
-	return ERR_CHANOPRIVSNEEDED;
-}
-
-const std::string &Channel::getTopic() const
-{
-	return _topic;
-}
-
-
 
 void Channel::setVoiceUser(User *user)
 {
@@ -123,6 +105,21 @@ void Channel::removeBanUser(User *user)
 	_baned.erase(user);
 }
 
+int Channel::setTopic(const std::string &topic, User *user)
+{
+	if (!isTopicBlock() || isAdmin(user))
+	{
+		_topic = topic;
+		return 0;
+	}
+	return false;
+}
+const std::string &Channel::getTopic() const
+{
+	return _topic;
+}
+
+/*
 int Channel::setMode(char mode, User *admin, User *user, const std::string &param)
 {
 	// TODO comprobar en que casos devuelve error por falta de privilegios
@@ -317,6 +314,8 @@ int Channel::removeMode(char mode, User *admin, User *user)
 	return 0;
 }
 
+*/
+
 bool Channel::isAdmin(User *admin) const
 {
 	return _admins.find(admin) != _admins.end();
@@ -379,7 +378,7 @@ int Channel::setPrivate(bool mode, User *user)
 		_isPrivate = mode;
 		return true;
 	}
-	return ERR_CHANOPRIVSNEEDED;
+	return false;
 }
 
 int Channel::setSecret(bool mode, User *user)
@@ -389,7 +388,7 @@ int Channel::setSecret(bool mode, User *user)
 		_isSecret = mode;
 		return true;
 	}
-	return ERR_CHANOPRIVSNEEDED;
+	return false;
 }
 
 int Channel::setInviteOnly(bool mode, User *user)
@@ -399,7 +398,7 @@ int Channel::setInviteOnly(bool mode, User *user)
 		_isInviteOnly = mode;
 		return true;
 	}
-	return ERR_CHANOPRIVSNEEDED;
+	return false;
 }
 
 int Channel::setModerate(bool mode, User *user)
@@ -409,7 +408,7 @@ int Channel::setModerate(bool mode, User *user)
 		_isModerate = mode;
 		return true;
 	}
-	return ERR_CHANOPRIVSNEEDED;
+	return false;
 }
 
 int Channel::setTopicBlock(bool mode, User *user)
@@ -419,7 +418,7 @@ int Channel::setTopicBlock(bool mode, User *user)
 		_isTopicBlock = mode;
 		return true;
 	}
-	return ERR_CHANOPRIVSNEEDED;
+	return false;
 }
 
 int Channel::setBlockOutside(bool mode, User *user)
@@ -429,25 +428,19 @@ int Channel::setBlockOutside(bool mode, User *user)
 		_isBlockOutside = mode;
 		return true;
 	}
-	return ERR_CHANOPRIVSNEEDED;
+	return false;
 }
 
-std::set<int> Channel::getUsers() const
+std::set<User *> Channel::getUsers() const
 {
-	std::set<int> listUsers;
-	std::set<User *>::iterator it;
-	for (it = _users.begin(); it != _users.end(); it++)
-	{
-		User *user = *it;
-		listUsers.insert(user->getFd());
-	}
-	return listUsers;
+	return this->_users;
 }
 
 std::string Channel::getModes() const
 {
 	//: irc.example.com MODE #channel +nt
 	std::string mode("+");
+
 	if (_isPrivate)
 		mode += std::string("p");
 	if (_isSecret)
@@ -465,20 +458,16 @@ std::string Channel::getModes() const
 
 std::string Channel::getListUsers() const
 {
-	// 353     RPL_NAMREPLY
-	// 366     RPL_ENDOFNAMES
-	//: irc.example.com 353 alice @ #channel :alice @dan
 	std::string users;
 	std::set<User *>::iterator it;
+
 	for (it = _users.begin(); it != _users.end(); it++)
 	{
 		if (!users.empty())
 			users += std::string(" ");
-		User *user = *it;
-		if (isAdmin(user))
+		if (isAdmin(*it))
 			users += std::string("@");
-		users += user->getNick();
+		users += (*it)->getNick();
 	}
 	return users;
 }
- */

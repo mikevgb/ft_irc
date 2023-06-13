@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/12 18:23:28 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 20:25:06 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ private:
 	ListUsers *_listUsers;
 	ListChannels *_listChannels;
 	User *_sender;
-	std::list<User *> _targets;
 	Message _msg;
 	int _firstTimeFlag;
 
@@ -59,10 +58,8 @@ public:
 	Message getMessage() const;
 	void setMessage(const Message &msg);
 	void setUser(const int fd);
-	std::list<User *> getTargets() const;
 
 	bool sendAsyncMessage(int fd, std::string msg);
-
 
 	// Command functions
 	void nick(std::list<std::string> params, std::list<Reply> &);
@@ -73,6 +70,7 @@ public:
 	void ping(std::list<std::string> params, std::list<Reply> &replies);
 	void pong(std::list<std::string> params, std::list<Reply> &replies);
 	void join(std::list<std::string> params, std::list<Reply> &replies);
+	void part(std::list<std::string> params, std::list<Reply> &replies);
 	void pass(std::list<std::string> params, std::list<Reply> &replies);
 	void error(const std::string reason, const int fd);
 

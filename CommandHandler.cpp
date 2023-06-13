@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 19:37:43 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 20:39:10 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,6 @@ void CommandHandler::setUser(const int fd)
 	this->_sender = _listUsers->getUser(fd);
 }
 
-std::list<User *> CommandHandler::getTargets() const
-{
-	return this->_targets;
-}
-
 bool CommandHandler::sendAsyncMessage(int fd, std::string msg)
 {
 	std::string toSend = ":" + this->server->getHostname() + " " + msg + "\n";
@@ -82,6 +77,7 @@ void CommandHandler::initCommandMap()
 	this->commandMap["CAP"] = &CommandHandler::cap;
 	this->commandMap["PING"] = &CommandHandler::pong;
 	this->commandMap["JOIN"] = &CommandHandler::join;
+	this->commandMap["PART"] = &CommandHandler::part;
 	this->commandMap["PASS"] = &CommandHandler::pass;
 }
 
@@ -241,15 +237,13 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 	{
 		this->_sender->removeAllChannels();
 		this->_listChannels->removeUserFromChannels(this->_sender);
-	}
-	else if (!(ch = this->_listChannels->getChannel(params.front())))
-	{
-		rp1.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(params.front()));
+		logg(LOG_INFO) << this->_sender->getNick() + " has exited from all channels\n";
 	}
 	else
 	{
-		if (!ch)
+		if (!(ch = this->_listChannels->getChannel(params.front())))
 		{
+			rp1.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(params.front()));
 			ch = this->_listChannels->addChannel(params.front());
 		}
 		msg = "JOIN " + params.front();
@@ -265,6 +259,38 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 	replies.push_back(rp1);
 	replies.push_back(rp2);
 }
+
+void CommandHandler::part(std::list<std::string> params, std::list<Reply> &replies)
+{
+	Reply rp;
+	Channel *ch;
+	std::string name = params.front();
+	std::string msg;
+
+	if (params.size() != 1)
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));	
+	}
+	else if (!(ch = this->_listChannels->getChannel(name)))
+	{
+		rp.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(name));
+	}
+	else if (!ch->isUser(this->_sender))
+	{
+		rp.setReplyMsg(C_ERR_NOTONCHANNEL, ERR_NOTONCHANNEL(name));
+	}
+	else
+	{
+		msg = "PART " + name;
+		this->_sender->removeChannel(ch);
+		ch->removeUser(this->_sender);
+		this->sendAsyncMessage(this->_sender->getFd(), msg);
+	}
+
+	rp.addTarget(this->_sender->getFd());
+	replies.push_back(rp);
+}
+
 
 void CommandHandler::pass(std::list<std::string> params, std::list<Reply> &replies)
 {
