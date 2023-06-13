@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:19:43 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:44:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,19 @@ ListChannels::ListChannels()
 
 ListChannels::~ListChannels()
 {
+	std::map<std::string, Channel *>::iterator it;
+
+	for (it = this->_channels.begin(); it != _channels.end(); it++)
+	{
+		delete it->second;
+	}
 }
 
 bool ListChannels::hasKey(const std::string &key)
 {
 	return _channels.find(key) != _channels.end();
 }
-/* 
+
 Channel *ListChannels::getChannel(const std::string &name)
 {
 	if (hasKey(name))
@@ -33,6 +39,27 @@ Channel *ListChannels::getChannel(const std::string &name)
 	return NULL;
 }
 
+Channel *ListChannels::addChannel(const std::string &name)
+{
+	Channel *ch = new Channel(name);
+
+	this->_channels[name] = ch;
+	return ch;
+}
+
+bool ListChannels::removeUserFromChannels(User *user)
+{
+	std::map<std::string, Channel *>::iterator it;
+
+	for (it = this->_channels.begin(); it != _channels.end(); it++)
+	{
+		it->second->removeUser(user);
+	}
+	return true;
+}
+
+
+/*
 std::list<ResultCmd> ListChannels::joinChannel(const std::string &name, User *user)
 {
 	std::list<ResultCmd> results;

@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 17:23:08 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:37:43 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,8 +228,42 @@ void CommandHandler::pong(std::list<std::string> params, std::list<Reply> &repli
 
 void CommandHandler::join(std::list<std::string> params, std::list<Reply> &replies)
 {
-	(void)replies;
-	(void)params;
+	Reply rp1;
+	Reply rp2;
+	std::string msg;
+	Channel *ch;
+
+	if (params.size() != 1)
+	{
+		rp1.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else if (params.front() == "0")
+	{
+		this->_sender->removeAllChannels();
+		this->_listChannels->removeUserFromChannels(this->_sender);
+	}
+	else if (!(ch = this->_listChannels->getChannel(params.front())))
+	{
+		rp1.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(params.front()));
+	}
+	else
+	{
+		if (!ch)
+		{
+			ch = this->_listChannels->addChannel(params.front());
+		}
+		msg = "JOIN " + params.front();
+		this->sendAsyncMessage(this->_sender->getFd(), msg);
+		rp1.setReplyMsg(C_RPL_TOPIC, RPL_TOPIC(ch->getName(), ch->getTopic()));
+		// Add user to the channel
+		ch->addUser(this->_sender, "");
+		rp2.setReplyMsg(C_RPL_NAMREPLY, RPL_NAMREPLY(ch->getModes(), ch->getName(), ch->getListUsers()));
+	}
+
+	rp1.addTarget(this->_sender->getFd());
+	rp2.addTarget(this->_sender->getFd());
+	replies.push_back(rp1);
+	replies.push_back(rp2);
 }
 
 void CommandHandler::pass(std::list<std::string> params, std::list<Reply> &replies)
@@ -248,7 +282,8 @@ void CommandHandler::pass(std::list<std::string> params, std::list<Reply> &repli
 	else if (this->server->_password == password)
 	{
 		this->_sender->changeToLogged();
-		logg(LOG_INFO) << GREEN << "Successful Authentication\n" << RESET;
+		logg(LOG_INFO) << GREEN << "Successful Authentication\n"
+					   << RESET;
 	}
 	else
 	{

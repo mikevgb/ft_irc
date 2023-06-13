@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/11 17:07:05 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:28:47 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,6 @@ void User::changeToLogged()
 	_isLogged = true;
 }
 
-/* const std::string User::getFullName() const
-{
-	return std::string(Msg::getColon() + _nick + Msg::getExclamation() + _username + Msg::getAt() + Msg::getServerName());
-} */
-
 void User::addChannel(Channel *channel)
 {
 	_channels.insert(channel);
@@ -117,3 +112,9 @@ void User::setRealName(const std::string &user)
 		this->_realname += (" " + user);
 	}
 }
+
+void User::removeAllChannels()
+{
+	this->_channels.clear();
+}
+

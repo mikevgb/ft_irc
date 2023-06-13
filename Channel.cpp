@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:21:35 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:34:25 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 
 Channel::Channel(const std::string &name)
-	: _name(name), _topic("Nuevo canal"), _password(), _users(), _admins(), _voiced(), _baned()
+	: _name(), _topic("Nuevo canal"), _password(), _users(), _admins(), _voiced(), _baned()
 {
 	_limit = 0;
 	_nbrUsers = 0;
@@ -27,6 +27,8 @@ Channel::Channel(const std::string &name)
 	_isModerate = false;
 	_isTopicBlock = true;
 	_isBlockOutside = true;
+
+	this->setName(name);
 }
 
 Channel::~Channel()
@@ -38,6 +40,52 @@ const std::string &Channel::getName() const
 	return _name;
 }
 
+bool Channel::setName(const std::string &name)
+{
+	if (name.find(' ') > 0 || name.find(',') > 0)
+	{
+		logg(LOG_WARNING) << "Channel name contains forbidden characters\n";
+		return false;
+	}
+	this->_name = name;
+	return true;
+}
+
+int Channel::addUser(User *user, const std::string &password)
+{
+	if (this->_users.find(user) == this->_users.end())
+	{
+		return 0;
+	}
+	
+	if (_users.empty())
+	{
+		_admins.insert(user);
+		if (!password.empty())
+			_password = password;
+	}
+/* 	if (_limit > 0 && _nbrUsers + 1 <= _limit)
+		return ERR_CHANNELISFULL;
+	if (isBaned(user))
+		return ERR_BANNEDFROMCHAN;
+	if (!_password.empty() && _password.compare(password))
+		return ERR_BADCHANNELKEY;
+	if (_isInviteOnly)
+		return ERR_INVITEONLYCHAN; */
+	_nbrUsers++;
+	_users.insert(user);
+	user->addChannel(this);
+	return 0;
+	// return error para unirse
+}
+
+void Channel::removeUser(User *user)
+{
+	_users.erase(user);
+	_admins.erase(user);
+	_voiced.erase(user);
+	_nbrUsers--;
+}
 /* int Channel::setTopic(const std::string &topic, User *user)
 {
 	if (!isTopicBlock() || isAdmin(user))
@@ -53,40 +101,7 @@ const std::string &Channel::getTopic() const
 	return _topic;
 }
 
-int Channel::addUser(User *user, const std::string &password)
-{
-	if (_users.empty())
-	{
-		_users.insert(user);
-		_admins.insert(user);
-		if (!password.empty())
-			_password = password;
-		return 0;
-	}
-	if (_limit > 0 && _nbrUsers + 1 <= _limit)
-		return ERR_CHANNELISFULL;
-	if (isBaned(user))
-		return ERR_BANNEDFROMCHAN;
-	if (!_password.empty() && _password.compare(password))
-		return ERR_BADCHANNELKEY;
-	if (_isInviteOnly)
-		return ERR_INVITEONLYCHAN;
-	_nbrUsers++;
-	_users.insert(user);
-	user->addChannel(this);
-	return 0;
-	// return error para unirse
-}
 
-int Channel::removeUser(User *user)
-{
-	user->removeChannel(this);
-	_users.erase(user);
-	_admins.erase(user);
-	_voiced.erase(user);
-	_nbrUsers--;
-	return 0;
-}
 
 void Channel::setVoiceUser(User *user)
 {

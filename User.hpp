@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 19:11:56 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:28:23 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ public:
 	const std::string getFullName() const;
 	void addChannel(Channel *channel);
 	void removeChannel(Channel *channel);
+	void removeAllChannels();
 };
 
 #endif

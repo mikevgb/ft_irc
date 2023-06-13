@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:22:50 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:30:15 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,13 @@ public:
 	typedef std::map<std::string, Channel>::const_iterator iterator;
 	ListChannels();
 	~ListChannels();
-	//std::list<ResultCmd> joinChannel(const std::string &name, User *user);
+	Channel *addChannel(const std::string &name);
 	int removeChannel(User *admin, const std::string name);
 	Channel *getChannel(const std::string &name);
 	int outOfChannel(User *user, const std::string &name);
 	std::set<int> getUsersFrom(const std::string &name);
 	std::string getChannelResponse(std::string channel, std::string code, User *user, bool igual);
+	bool removeUserFromChannels(User *);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:53 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 19:34:46 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:34:33 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ public:
 	int addUser(User *user, const std::string &password);
 	int addAdmin(User *user);
 	int inviteUser(User *user, User *admin);
-	int removeUser(User *user);
+	void removeUser(User *user);
 	void setVoiceUser(User *user);
 	void removeVoiceUser(User *user);
 	void setBanUser(User *user);
@@ -92,6 +92,7 @@ public:
 	int setModerate(bool mode, User *user);
 	int setTopicBlock(bool mode, User *user);
 	int setBlockOutside(bool mode, User *user);
+	bool setName(const std::string &name);
 	std::set<int> getUsers() const;
 	std::string getModes() const;
 	std::string getListUsers() const;
