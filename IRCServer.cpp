@@ -240,7 +240,7 @@ bool IRCServer::checkLogin(const std::string cmd, const int fd)
 {
 	if (cmd == "NICK" && !this->_listUsers->getUser(fd)->isLogged())
 	{
-		this->_cmdHandler->error("Can't connect to IRC Server", fd);
+		this->_cmdHandler->error("Unable to Authenticate", fd);
 		this->disconnect(fd);
 		return false;
 	}

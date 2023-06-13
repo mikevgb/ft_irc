@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/12 19:33:42 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 17:23:08 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,7 @@ void CommandHandler::pass(std::list<std::string> params, std::list<Reply> &repli
 	else if (this->server->_password == password)
 	{
 		this->_sender->changeToLogged();
+		logg(LOG_INFO) << GREEN << "Successful Authentication\n" << RESET;
 	}
 	else
 	{
@@ -262,5 +263,6 @@ void CommandHandler::error(const std::string reason, int fd)
 	std::string msg;
 
 	msg = "ERROR :" + reason;
+	logg(LOG_ERR) << reason << "\n";
 	this->sendAsyncMessage(fd, msg);
 }
