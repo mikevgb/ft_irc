@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/15 13:02:13 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/16 00:07:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,12 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 	else
 	{
 		msgtarget = params.front();
+		params.pop_front();
+		for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
+		{
+			msg += (" " + *it);
+		}
+
 		ch = this->_listChannels->getChannel(msgtarget);
 		if (ch != NULL)
 		{
@@ -187,7 +193,7 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 
 			for (std::set<User *>::iterator it = users.begin(); it != users.end(); it++)
 			{
-				sendAsyncMessage((*it)->getFd(), "holaaaaaaaaa");
+				sendAsyncMessage((*it)->getFd(), msg);
 			}
 		}
 		else
@@ -199,11 +205,6 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 			}
 			else
 			{
-				params.pop_front();
-				for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
-				{
-					msg += (" " + *it);
-				}
 				sendAsyncMessage(user->getFd(), msg);
 			}
 		}
