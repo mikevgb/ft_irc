@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/16 00:07:32 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/16 00:12:26 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,10 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 
 			for (std::set<User *>::iterator it = users.begin(); it != users.end(); it++)
 			{
-				sendAsyncMessage((*it)->getFd(), msg);
+				if ((*it)->getFd() != this->_sender->getFd())
+				{
+					sendAsyncMessage((*it)->getFd(), msg);
+				}
 			}
 		}
 		else
