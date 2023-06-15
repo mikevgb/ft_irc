@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:53 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 20:01:32 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/15 12:53:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ public:
 	const std::string &getName() const;
 	int setTopic(const std::string &topic, User *user);
 	const std::string &getTopic() const;
-	int addUser(User *user, const std::string &password);
+	int addUser(User *user);
 	int addAdmin(User *user);
 	int inviteUser(User *user, User *admin);
 	void removeUser(User *user);

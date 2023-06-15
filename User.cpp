@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 20:31:36 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/15 12:43:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,4 +117,3 @@ void User::removeAllChannels()
 {
 	this->_channels.clear();
 }
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 19:30:15 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/15 12:56:14 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ public:
 	std::set<int> getUsersFrom(const std::string &name);
 	std::string getChannelResponse(std::string channel, std::string code, User *user, bool igual);
 	bool removeUserFromChannels(User *);
+	std::string getListOfChannels() const;
 };
 
 #endif

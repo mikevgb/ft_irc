@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 19:44:31 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/15 13:04:48 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ Channel *ListChannels::addChannel(const std::string &name)
 	Channel *ch = new Channel(name);
 
 	this->_channels[name] = ch;
+
+	logg(LOG_INFO) << "New Channel: " ORANGE << name << RESET << "\n";
 	return ch;
 }
 
@@ -56,6 +58,20 @@ bool ListChannels::removeUserFromChannels(User *user)
 		it->second->removeUser(user);
 	}
 	return true;
+}
+
+std::string ListChannels::getListOfChannels() const
+{
+	std::string list;
+	std::map<std::string, Channel *>::const_iterator it;
+
+	//TODO: Remove last comma
+	for (it = this->_channels.begin(); it != _channels.end(); it++)
+	{
+		list += it->first + ",";
+	}
+
+	return list;
 }
 
 

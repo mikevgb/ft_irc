@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 20:48:35 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/15 12:53:26 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ bool Channel::setName(const std::string &name)
 	return true;
 }
 
-int Channel::addUser(User *user, const std::string &password)
+int Channel::addUser(User *user)
 {
 	if (this->_users.find(user) == this->_users.end())
 	{
@@ -60,8 +60,6 @@ int Channel::addUser(User *user, const std::string &password)
 	if (_users.empty())
 	{
 		_admins.insert(user);
-		if (!password.empty())
-			_password = password;
 	}
 	/* 	if (_limit > 0 && _nbrUsers + 1 <= _limit)
 			return ERR_CHANNELISFULL;
