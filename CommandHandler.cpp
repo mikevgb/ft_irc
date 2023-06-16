@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/16 14:36:15 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/16 14:45:18 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void CommandHandler::initCommandMap()
 	this->commandMap["USER"] = &CommandHandler::user;
 	this->commandMap["QUIT"] = &CommandHandler::quit;
 	this->commandMap["PRIVMSG"] = &CommandHandler::privmsg;
+	this->commandMap["NOTICE"] = &CommandHandler::notice;
 	this->commandMap["CAP"] = &CommandHandler::cap;
 	this->commandMap["PING"] = &CommandHandler::pong;
 	this->commandMap["JOIN"] = &CommandHandler::join;
@@ -222,6 +223,53 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 	replies.push_back(rp);
 }
 
+void CommandHandler::notice(std::list<std::string> params, std::list<Reply> &replies)
+{
+	Channel *ch;
+	std::string msg;
+	User *user;
+	std::string msgtarget;
+	std::set<User *> users;
+
+	if (params.size() < 2)
+	{
+		return;
+	}
+
+	msgtarget = params.front();
+	params.pop_front();
+	for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
+	{
+		msg += (" " + *it);
+	}
+	ch = this->_listChannels->getChannel(msgtarget);
+	if (ch != NULL)
+	{
+		users = ch->getUsers();
+
+		for (std::set<User *>::iterator it = users.begin(); it != users.end(); it++)
+		{
+			if ((*it)->getFd() != this->_sender->getFd())
+			{
+				sendAsyncMessage((*it)->getFd(), msg);
+			}
+		}
+	}
+	else
+	{
+		user = this->_listUsers->getUser(msgtarget);
+		if (!user)
+		{
+			return;
+		}
+		else
+		{
+			sendAsyncMessage(user->getFd(), msg);
+		}
+	}
+	(void)replies;
+}
+
 void CommandHandler::cap(std::list<std::string> params, std::list<Reply> &replies)
 {
 	std::string msg;
@@ -273,23 +321,23 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 	else
 	{
 		ch = this->_listChannels->getChannel(params.front());
-			if (!ch)
-			{
+		if (!ch)
+		{
 			rp1.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(params.front()));
 			ch = this->_listChannels->addChannel(params.front());
-			}
+		}
 		msg = "JOIN " + params.front();
-			this->sendAsyncMessage(this->_sender->getFd(), msg);
-			rp1.setReplyMsg(C_RPL_TOPIC, RPL_TOPIC(ch->getName(), ch->getTopic()));
-			// Add user to the channel
-			ch->addUser(this->_sender);
-			rp2.setReplyMsg(C_RPL_NAMREPLY, RPL_NAMREPLY(ch->getModes(), ch->getName(), ch->getListUsers()));
+		this->sendAsyncMessage(this->_sender->getFd(), msg);
+		rp1.setReplyMsg(C_RPL_TOPIC, RPL_TOPIC(ch->getName(), ch->getTopic()));
+		// Add user to the channel
+		ch->addUser(this->_sender);
+		rp2.setReplyMsg(C_RPL_NAMREPLY, RPL_NAMREPLY(ch->getModes(), ch->getName(), ch->getListUsers()));
 	}
 
-		rp1.addTarget(this->_sender->getFd());
-		rp2.addTarget(this->_sender->getFd());
-		replies.push_back(rp1);
-		replies.push_back(rp2);
+	rp1.addTarget(this->_sender->getFd());
+	rp2.addTarget(this->_sender->getFd());
+	replies.push_back(rp1);
+	replies.push_back(rp2);
 }
 
 void CommandHandler::part(std::list<std::string> params, std::list<Reply> &replies)
