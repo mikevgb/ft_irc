@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/16 00:12:26 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/16 14:36:15 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ bool CommandHandler::sendAsyncMessage(int fd, std::string msg)
 	}
 	logg(LOG_INFO) << "Sent: " << ROSE << toSend << RESET;
 	return true;
+}
+
+std::list<std::string> CommandHandler::parseList(const std::string &list)
+{
+	return Message::split(list, ",");
 }
 
 void CommandHandler::initCommandMap()
@@ -268,23 +273,23 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 	else
 	{
 		ch = this->_listChannels->getChannel(params.front());
-		if (!ch)
-		{
+			if (!ch)
+			{
 			rp1.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(params.front()));
 			ch = this->_listChannels->addChannel(params.front());
-		}
+			}
 		msg = "JOIN " + params.front();
-		this->sendAsyncMessage(this->_sender->getFd(), msg);
-		rp1.setReplyMsg(C_RPL_TOPIC, RPL_TOPIC(ch->getName(), ch->getTopic()));
-		// Add user to the channel
-		ch->addUser(this->_sender);
-		rp2.setReplyMsg(C_RPL_NAMREPLY, RPL_NAMREPLY(ch->getModes(), ch->getName(), ch->getListUsers()));
+			this->sendAsyncMessage(this->_sender->getFd(), msg);
+			rp1.setReplyMsg(C_RPL_TOPIC, RPL_TOPIC(ch->getName(), ch->getTopic()));
+			// Add user to the channel
+			ch->addUser(this->_sender);
+			rp2.setReplyMsg(C_RPL_NAMREPLY, RPL_NAMREPLY(ch->getModes(), ch->getName(), ch->getListUsers()));
 	}
 
-	rp1.addTarget(this->_sender->getFd());
-	rp2.addTarget(this->_sender->getFd());
-	replies.push_back(rp1);
-	replies.push_back(rp2);
+		rp1.addTarget(this->_sender->getFd());
+		rp2.addTarget(this->_sender->getFd());
+		replies.push_back(rp1);
+		replies.push_back(rp2);
 }
 
 void CommandHandler::part(std::list<std::string> params, std::list<Reply> &replies)

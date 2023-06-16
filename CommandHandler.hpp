@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 20:25:06 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/16 10:29:27 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ public:
 	Message getMessage() const;
 	void setMessage(const Message &msg);
 	void setUser(const int fd);
+	std::list<std::string> parseList(const std::string &);
 
 	bool sendAsyncMessage(int fd, std::string msg);
 
