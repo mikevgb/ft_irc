@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/16 14:45:18 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/18 13:07:48 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,6 +365,7 @@ void CommandHandler::part(std::list<std::string> params, std::list<Reply> &repli
 		this->_sender->removeChannel(ch);
 		ch->removeUser(this->_sender);
 		this->sendAsyncMessage(this->_sender->getFd(), msg);
+		logg(LOG_INFO) << this->_sender->getNick() << " leaves the channel (" << ch->getName() << ")\n";
 	}
 
 	rp.addTarget(this->_sender->getFd());
