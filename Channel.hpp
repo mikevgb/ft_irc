@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:53 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/12 19:34:46 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/15 12:53:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ public:
 	const std::string &getName() const;
 	int setTopic(const std::string &topic, User *user);
 	const std::string &getTopic() const;
-	int addUser(User *user, const std::string &password);
+	int addUser(User *user);
 	int addAdmin(User *user);
 	int inviteUser(User *user, User *admin);
-	int removeUser(User *user);
+	void removeUser(User *user);
 	void setVoiceUser(User *user);
 	void removeVoiceUser(User *user);
 	void setBanUser(User *user);
@@ -92,7 +92,8 @@ public:
 	int setModerate(bool mode, User *user);
 	int setTopicBlock(bool mode, User *user);
 	int setBlockOutside(bool mode, User *user);
-	std::set<int> getUsers() const;
+	bool setName(const std::string &name);
+	std::set<User *> getUsers() const;
 	std::string getModes() const;
 	std::string getListUsers() const;
 };

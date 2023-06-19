@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 16:22:50 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/16 10:33:59 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,13 @@ public:
 	typedef std::map<std::string, Channel>::const_iterator iterator;
 	ListChannels();
 	~ListChannels();
-	//std::list<ResultCmd> joinChannel(const std::string &name, User *user);
+	Channel *addChannel(const std::string &name);
 	int removeChannel(User *admin, const std::string name);
 	Channel *getChannel(const std::string &name);
 	int outOfChannel(User *user, const std::string &name);
-	std::set<int> getUsersFrom(const std::string &name);
-	std::string getChannelResponse(std::string channel, std::string code, User *user, bool igual);
+	std::set<User *> getUsersFrom(const std::string &name);
+	bool removeUserFromChannels(User *);
+	std::string getListOfChannels() const;
 };
 
 #endif

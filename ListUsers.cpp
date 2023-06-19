@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/06 18:16:05 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:42:23 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@ ListUsers::ListUsers(/* args */)
 
 ListUsers::~ListUsers()
 {
+	std::set<User *>::iterator it;
+
+	for (it = _listOfUsers.begin(); it != _listOfUsers.end(); it++)
+	{
+		delete *it;
+	}
 }
 
 bool ListUsers::addUser(User *user)
@@ -47,53 +53,6 @@ bool ListUsers::createUser(const size_t fd)
 	logg(LOG_DEBUG) << "New user | fd: " << ROSE << fd << RESET << "\n";
 	return true;
 }
-
-/* int ListUsers::setNick(const std::string &nick, const size_t fd)
-{
-	std::cout << "set nick: " << nick << std::endl;
-	// TODO comprobar que pasa en IRC si el usuario que tiene size_tenta ponerse el mismo nick
-	User *user = getUser(fd);
-	const std::string &oldNick = user->getNick();
-	if (_usersByNick.find(nick) == _usersByNick.end())
-	{
-		user->setNick(nick);
-		if (user->isLogged())
-		{
-			_usersByNick.erase(oldNick);
-			addUser(user);
-			return 0;
-		}
-		else if (!user->isLogged() && user->getUsername().length() > 0)
-		{
-			user->changeToLogged();
-			addUser(user);
-			std::cout << "nick 2: " << user->getNick() << std::endl;
-			return CODE_WELCOME;
-		}
-	}
-	else if (oldNick != nick)
-	{
-		return ERR_NICKNAMEINUSE;
-	}
-	return 0;
-} */
-
-/* int ListUsers::setUser(const std::string &name, const size_t fd)
-{
-	// TODO crear excepciones si no existe el usuario en la lista
-	User *user = getUser(fd);
-	user->setUsername(name);
-	std::cout << "nick: " << user->getNick() << std::endl;
-	std::cout << "user: " << user->getUsername() << std::endl;
-	if (!user->isLogged() && user->getNick().length() > 0)
-	{
-		user->changeToLogged();
-		addUser(user);
-		std::cout << "user 2: " << user->getUsername() << std::endl;
-		return CODE_WELCOME;
-	}
-	return 0;
-} */
 
 User *ListUsers::getUser(const std::string &nick)
 {
@@ -126,11 +85,13 @@ int ListUsers::removeUser(const size_t fd)
 		this->_listOfUsers.erase(user);
 		if (!user->getNick().empty() && !user->getUsername().empty())
 		{
-			logg(LOG_INFO) << "User -> [Nick: " << user->getNick() << " | User: " << user->getUsername() << "] disconnected\n" << RESET;
+			logg(LOG_INFO) << "User -> [Nick: " << user->getNick() << " | User: " << user->getUsername() << "] disconnected\n"
+						   << RESET;
 		}
 		else
 		{
-			logg(LOG_INFO) << "User -> [FD: " << user->getFd() << "] disconnected\n" << RESET;
+			logg(LOG_INFO) << "User -> [FD: " << user->getFd() << "] disconnected\n"
+						   << RESET;
 		}
 		delete user;
 	}
