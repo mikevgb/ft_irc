@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/18 13:07:48 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:28:11 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ bool CommandHandler::sendAsyncMessage(int fd, std::string msg)
 		logg(LOG_ERROR) << "An expected error occurs while sending a message\n";
 		return false;
 	}
-	logg(LOG_INFO) << "Sent: " << ROSE << toSend << RESET;
+	logg(LOG_INFO) << "Sent TO: [" << fd << "]\t" << ROSE << toSend << RESET;
 	return true;
 }
 
@@ -321,6 +321,11 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 	else
 	{
 		ch = this->_listChannels->getChannel(params.front());
+		if (ch && ch->isUser(this->_sender))
+		{
+			logg(LOG_WARN) << this->_sender->getNick() << " is already added to the channel\n";
+			return;
+		}
 		if (!ch)
 		{
 			rp1.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(params.front()));
@@ -347,7 +352,7 @@ void CommandHandler::part(std::list<std::string> params, std::list<Reply> &repli
 	std::string name = params.front();
 	std::string msg;
 
-	if (params.size() != 1)
+	if (params.size() < 1)
 	{
 		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
 	}
@@ -364,8 +369,12 @@ void CommandHandler::part(std::list<std::string> params, std::list<Reply> &repli
 		msg = "PART " + name;
 		this->_sender->removeChannel(ch);
 		ch->removeUser(this->_sender);
-		this->sendAsyncMessage(this->_sender->getFd(), msg);
 		logg(LOG_INFO) << this->_sender->getNick() << " leaves the channel (" << ch->getName() << ")\n";
+		if (ch->isEmpty())
+		{
+			this->_listChannels->removeChannel(ch);
+		}
+		this->sendAsyncMessage(this->_sender->getFd(), msg);
 	}
 
 	rp.addTarget(this->_sender->getFd());
