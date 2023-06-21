@@ -6,7 +6,7 @@
 /*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/19 13:02:42 by mvillaes         ###   ########.fr       */
+/*   Updated: 2023/06/21 09:31:21 by mvillaes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void printUsage()
 
 void simpleErrorExit(const char *errorMessage)
 {
-	std::cerr << errorMessage << std::endl;
+	logg(LOG_ERROR) << errorMessage << " | Errno: " << std::strerror(errno) << "\n";
 	exit(EXIT_FAILURE);
 }
 
