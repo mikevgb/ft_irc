@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/18 13:07:48 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/21 14:26:43 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 {
 	Reply rp;
 	std::string nick = params.front();
+	std::string old_nick = this->_sender->getNick();
+	std::string msg;
 
 	if (params.empty())
 	{
@@ -106,13 +108,14 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 			rp.setReplyMsg(C_ERR_ERRONEUSNICKNAME, ERR_ERRONEUSNICKNAME(nick));
 		else
 		{
-			if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
-				this->_sender->changeToLogged();
-			logg(LOG_INFO) << "New Nickname: " LBLUE << nick << RESET << "\n";
-			if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty())
+			if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty() && !this->_sender->isLogged())
 			{
 				rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick(), this->_sender->getUsername(), this->server->getHostname()));
+				this->_sender->changeToLogged();
 			}
+			msg = ":" + old_nick + "!" + this->_sender->getUsername() + "@" + this->server->getHostname() + " NICK " + nick + "\n";
+			send(this->_sender->getFd(), msg.c_str(), msg.length(), 0);
+			logg(LOG_INFO) << "New Nickname: " LBLUE << nick << RESET << "\n";
 		}
 	}
 	rp.addTarget(_sender->getFd());
