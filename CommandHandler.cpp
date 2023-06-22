@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/22 21:42:24 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/23 00:04:11 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ void CommandHandler::setUser(const int fd)
 	this->_sender = _listUsers->getUser(fd);
 }
 
-bool CommandHandler::sendAsyncMessage(int fd, std::string msg)
+bool CommandHandler::sendAsyncMessage(int fd, std::string prefix, std::string msg)
 {
-	std::string toSend = ":" + this->server->getHostname() + " " + msg + "\n";
+	std::string toSend = ":" + prefix + " " + msg + "\n";
 	if (send(fd, toSend.c_str(), toSend.length(), 0) == -1)
 	{
 		logg(LOG_ERROR) << "An expected error occurs while sending a message\n";
@@ -95,6 +95,7 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 	Reply rp;
 	std::string nick = params.front();
 	std::string old_nick = this->_sender->getNick();
+	std::string prefix;
 	std::string msg;
 
 	if (params.empty())
@@ -116,11 +117,13 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 				rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick(), this->_sender->getUsername(), this->server->getHostname()));
 				this->_sender->changeToLogged();
 			}
-			msg = ":" + old_nick + "!" + this->_sender->getUsername() + "@" + this->server->getHostname() + " NICK " + nick + "\n";
-			send(this->_sender->getFd(), msg.c_str(), msg.length(), 0);
+			prefix = old_nick + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
+			msg = "NICK " + nick;
+			sendAsyncMessage(this->_sender->getFd(), prefix, msg);
 			logg(LOG_INFO) << "New Nickname: " LBLUE << nick << RESET << "\n";
 		}
 	}
+
 	rp.addTarget(_sender->getFd());
 	replies.push_back(rp);
 }
@@ -172,7 +175,7 @@ void CommandHandler::quit(std::list<std::string> params, std::list<Reply> &repli
 	{
 		msg += (" " + *it);
 	}
-	this->sendAsyncMessage(this->_sender->getFd(), msg);
+	this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), msg);
 	this->server->disconnect(this->_sender->getFd());
 }
 
@@ -180,7 +183,9 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 {
 	Reply rp;
 	Channel *ch;
+	std::string prefix;
 	std::string msg;
+	std::string sendMsg;
 	User *user;
 	std::string msgtarget;
 	std::set<User *> users;
@@ -201,18 +206,21 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 		ch = this->_listChannels->getChannel(msgtarget);
 		if (ch != NULL)
 		{
+			prefix = this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
 			users = ch->getUsers();
 
 			for (std::set<User *>::iterator it = users.begin(); it != users.end(); it++)
 			{
 				if ((*it)->getFd() != this->_sender->getFd())
 				{
-					sendAsyncMessage((*it)->getFd(), msg);
+					sendMsg = "PRIVMSG " + ch->getName() + msg;
+					sendAsyncMessage((*it)->getFd(), prefix, sendMsg);
 				}
 			}
 		}
 		else
 		{
+			prefix = this->_sender->getNick();
 			user = this->_listUsers->getUser(msgtarget);
 			if (!user)
 			{
@@ -220,7 +228,8 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 			}
 			else
 			{
-				sendAsyncMessage(user->getFd(), msg);
+				sendMsg = user->getNick() + msg;
+				sendAsyncMessage(user->getFd(), prefix, sendMsg);
 			}
 		}
 	}
@@ -233,6 +242,7 @@ void CommandHandler::notice(std::list<std::string> params, std::list<Reply> &rep
 {
 	Channel *ch;
 	std::string msg;
+	std::string prefix;
 	User *user;
 	std::string msgtarget;
 	std::set<User *> users;
@@ -248,6 +258,7 @@ void CommandHandler::notice(std::list<std::string> params, std::list<Reply> &rep
 	{
 		msg += (" " + *it);
 	}
+	prefix = this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
 	ch = this->_listChannels->getChannel(msgtarget);
 	if (ch != NULL)
 	{
@@ -257,7 +268,7 @@ void CommandHandler::notice(std::list<std::string> params, std::list<Reply> &rep
 		{
 			if ((*it)->getFd() != this->_sender->getFd())
 			{
-				sendAsyncMessage((*it)->getFd(), msg);
+				sendAsyncMessage((*it)->getFd(), prefix, msg);
 			}
 		}
 	}
@@ -270,7 +281,7 @@ void CommandHandler::notice(std::list<std::string> params, std::list<Reply> &rep
 		}
 		else
 		{
-			sendAsyncMessage(user->getFd(), msg);
+			sendAsyncMessage(user->getFd(), prefix, msg);
 		}
 	}
 	(void)replies;
@@ -283,7 +294,7 @@ void CommandHandler::cap(std::list<std::string> params, std::list<Reply> &replie
 	if (params.front() == "LS" || params.front() == "LIST")
 	{
 		msg = "CAP * " + params.front() + " :";
-		this->sendAsyncMessage(this->_sender->getFd(), msg);
+		this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), msg);
 	}
 	(void)replies;
 }
@@ -298,7 +309,7 @@ void CommandHandler::pong(std::list<std::string> params, std::list<Reply> &repli
 		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
 	}
 	msg = "PONG " + params.front();
-	this->sendAsyncMessage(this->_sender->getFd(), msg);
+	this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), msg);
 	rp.addTarget(this->_sender->getFd());
 	replies.push_back(rp);
 }
@@ -316,7 +327,7 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 	}
 	else if (params.front() == ":")
 	{
-		this->sendAsyncMessage(this->_sender->getFd(), this->_listChannels->getListOfChannels());
+		this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), this->_listChannels->getListOfChannels());
 	}
 	else if (params.front() == "#0")
 	{
@@ -338,7 +349,7 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 			ch = this->_listChannels->addChannel(params.front());
 		}
 		msg = "JOIN " + params.front();
-		this->sendAsyncMessage(this->_sender->getFd(), msg);
+		this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), msg);
 		rp1.setReplyMsg(C_RPL_TOPIC, RPL_TOPIC(ch->getName(), ch->getTopic()));
 		// Add user to the channel
 		ch->addUser(this->_sender);
@@ -380,7 +391,7 @@ void CommandHandler::part(std::list<std::string> params, std::list<Reply> &repli
 		{
 			this->_listChannels->removeChannel(ch);
 		}
-		this->sendAsyncMessage(this->_sender->getFd(), msg);
+		this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), msg);
 	}
 
 	rp.addTarget(this->_sender->getFd());
@@ -420,7 +431,7 @@ void CommandHandler::error(const std::string reason, int fd)
 
 	msg = "ERROR :" + reason;
 	logg(LOG_ERR) << reason << "\n";
-	this->sendAsyncMessage(fd, msg);
+	this->sendAsyncMessage(fd, this->server->getHostname(), msg);
 }
 
 void CommandHandler::kick(std::list<std::string> params, std::list<Reply> &replies)
@@ -429,6 +440,7 @@ void CommandHandler::kick(std::list<std::string> params, std::list<Reply> &repli
 	Channel *ch;
 	std::string ch_name;
 	std::string username;
+	std::string prefix;
 	std::string msg;
 	User *user;
 
@@ -459,9 +471,9 @@ void CommandHandler::kick(std::list<std::string> params, std::list<Reply> &repli
 		else
 		{
 			ch->removeUser(user);
-			msg = ":" + this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname()
-			+ " KICK " + ch_name + " " + username + "\n";
-			send(user->getFd(), msg.c_str(), msg.length(), 0);
+			prefix = ":" + this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
+			msg =  + "KICK " + ch_name + " " + username;
+			this->sendAsyncMessage(user->getFd(), prefix, msg);
 		}
 	}
 
@@ -471,8 +483,52 @@ void CommandHandler::kick(std::list<std::string> params, std::list<Reply> &repli
 
 void CommandHandler::invite(std::list<std::string> params, std::list<Reply> &replies)
 {
-	(void)params;
-	(void)replies;
+	Reply rp;
+	Channel *ch;
+	std::string ch_name;
+	std::string nickname;
+	std::string prefix;
+	std::string msg;
+	User *user;
+
+	if (params.size() != 2)
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else
+	{
+		nickname = params.front();
+		params.pop_front();
+		ch_name = params.front();
+		user = this->_listUsers->getUser(nickname);
+		ch = this->_listChannels->getChannel(ch_name);
+		if (!ch)
+		{
+			rp.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(ch_name));
+		}
+		else if (!ch->isUser(this->_sender))
+		{
+			rp.setReplyMsg(C_ERR_NOTONCHANNEL, ERR_NOTONCHANNEL(ch_name));
+		}
+		else if (ch->isUser(user))
+		{
+			rp.setReplyMsg(C_ERR_USERONCHANNEL, ERR_USERONCHANNEL(nickname, ch_name));
+		}
+		else if (!ch->isAdmin(user) && ch->isInviteOnly())
+		{
+			rp.setReplyMsg(C_ERR_CHANOPRIVSNEEDED, ERR_CHANOPRIVSNEEDED(ch_name));
+		}
+		else
+		{
+			rp.setReplyMsg(C_RPL_INVITING, RPL_INVITING(ch_name, nickname));
+			prefix = ":" + this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
+			msg = "INVITE " + nickname + " " + ch_name + "\n";
+			this->sendAsyncMessage(user->getFd(), prefix, msg);
+		}
+	}
+
+	rp.addTarget(this->_sender->getFd());
+	replies.push_back(rp);
 }
 
 void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &replies)
@@ -518,7 +574,7 @@ void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &repl
 						new_topic += " ";
 					}
 					ch->setTopic(new_topic);
-					this->sendAsyncMessage(this->_sender->getFd(), RPL_TOPIC(ch_name, ch->getTopic()));
+					this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), RPL_TOPIC(ch_name, ch->getTopic()));
 				}
 				else
 				{
