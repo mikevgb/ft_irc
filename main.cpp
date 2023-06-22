@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/21 09:31:21 by mvillaes         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:19:18 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void printUsage()
 	std::cout << "\t[password_network]: the password needed to connect on host\n";
 	std::cout << "\t<port>: port number on which your server will accept incoming connections.\n";
 	std::cout << "\t<password>: the password needed by any IRC client who wants to connect to your server (max 16 characters)\n";
-	std::cout << "\t[WARNING] Server to server communication is not implemented\n"; 
+	std::cout << std::endl;
+	logg(LOG_WARN) << "Server to server communication is not implemented\n";
 }
 
 void simpleErrorExit(const char *errorMessage)
@@ -49,7 +50,7 @@ void parsePass(const char *pass)
 		if (!isalnum(pass[i]))
 			simpleErrorExit("Password must be alphanumeric");
 }
-			
+
 
 int main(int argc, char **argv)
 {

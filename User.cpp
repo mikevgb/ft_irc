@@ -6,13 +6,13 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/15 12:43:31 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:34:36 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "User.hpp"
 
-User::User(size_t fd)
+User::User(int fd)
 	: _fd(fd), _nick(""), _username(""), _realname(""), _channels(), forbittenChar(",!?*@.&#")
 {
 	_isLogged = false;
@@ -27,7 +27,7 @@ User::~User()
 	}
 }
 
-size_t User::getFd() const
+int User::getFd() const
 {
 	return _fd;
 }
