@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/16 10:33:54 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:57:34 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int ListChannels::removeChannel(User *admin, const std::string name)
 
 int ListChannels::removeChannel(Channel *channel)
 {
+	logg(LOG_INFO) << channel->getName() << " removed\n";
 	_channels.erase(channel->getName());
 	delete channel;
 	return 0;
