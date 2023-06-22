@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/16 14:41:36 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:32:10 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ public:
 	void join(std::list<std::string> params, std::list<Reply> &replies);
 	void part(std::list<std::string> params, std::list<Reply> &replies);
 	void pass(std::list<std::string> params, std::list<Reply> &replies);
+	void kick(std::list<std::string> params, std::list<Reply> &replies);
+	void invite(std::list<std::string> params, std::list<Reply> &replies);
+	void topic(std::list<std::string> params, std::list<Reply> &replies);
 	void error(const std::string reason, const int fd);
 
 };

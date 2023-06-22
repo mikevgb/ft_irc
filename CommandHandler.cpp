@@ -6,8 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/21 14:26:43 by mmateo-t         ###   ########.fr       */
-/*   Updated: 2023/06/21 13:28:11 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:35:44 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +85,9 @@ void CommandHandler::initCommandMap()
 	this->commandMap["JOIN"] = &CommandHandler::join;
 	this->commandMap["PART"] = &CommandHandler::part;
 	this->commandMap["PASS"] = &CommandHandler::pass;
+	this->commandMap["KICK"] = &CommandHandler::kick;
+	this->commandMap["INVITE"] = &CommandHandler::invite;
+	this->commandMap["TOPIC"] = &CommandHandler::topic;
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
@@ -419,4 +421,22 @@ void CommandHandler::error(const std::string reason, int fd)
 	msg = "ERROR :" + reason;
 	logg(LOG_ERR) << reason << "\n";
 	this->sendAsyncMessage(fd, msg);
+}
+
+void CommandHandler::kick(std::list<std::string> params, std::list<Reply> &replies)
+{
+	(void)params;
+	(void)replies;
+}
+
+void CommandHandler::invite(std::list<std::string> params, std::list<Reply> &replies)
+{
+	(void)params;
+	(void)replies;
+}
+
+void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &replies)
+{
+	(void)params;
+	(void)replies;
 }
