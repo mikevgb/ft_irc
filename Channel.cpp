@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/22 20:58:25 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/22 21:36:14 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void Channel::removeUser(User *user)
 	_admins.erase(user);
 	_voiced.erase(user);
 	_nbrUsers--;
+	logg(LOG_DEBUG) << user->getNick() << " removed from the channel " << this->_name << "\n";
 }
 
 void Channel::setVoiceUser(User *user)

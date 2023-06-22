@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/22 18:04:44 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/22 21:42:24 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -425,8 +425,48 @@ void CommandHandler::error(const std::string reason, int fd)
 
 void CommandHandler::kick(std::list<std::string> params, std::list<Reply> &replies)
 {
-	(void)params;
-	(void)replies;
+	Reply rp;
+	Channel *ch;
+	std::string ch_name;
+	std::string username;
+	std::string msg;
+	User *user;
+
+	if (params.size() < 2)
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else
+	{
+		ch_name = params.front();
+		params.pop_front();
+		username = params.front();
+		params.pop_front();
+		user = this->_listUsers->getUser(username);
+		ch = this->_listChannels->getChannel(ch_name);
+		if (!ch)
+		{
+			rp.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(ch_name));
+		}
+		else if (!ch->isUser(user))
+		{
+			rp.setReplyMsg(C_ERR_USERNOTINCHANNEL, ERR_USERNOTINCHANNEL(username, ch_name));
+		}
+		else if (!ch->isAdmin(this->_sender))
+		{
+			rp.setReplyMsg(C_ERR_CHANOPRIVSNEEDED, ERR_CHANOPRIVSNEEDED(ch_name));
+		}
+		else
+		{
+			ch->removeUser(user);
+			msg = ":" + this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname()
+			+ " KICK " + ch_name + " " + username + "\n";
+			send(user->getFd(), msg.c_str(), msg.length(), 0);
+		}
+	}
+
+	rp.addTarget(this->_sender->getFd());
+	replies.push_back(rp);
 }
 
 void CommandHandler::invite(std::list<std::string> params, std::list<Reply> &replies)
