@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/22 17:35:44 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/22 18:04:44 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -437,6 +437,57 @@ void CommandHandler::invite(std::list<std::string> params, std::list<Reply> &rep
 
 void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &replies)
 {
-	(void)params;
-	(void)replies;
+	Reply rp;
+	std::string ch_name;
+	std::string new_topic;
+	Channel *ch;
+
+	if (params.size() < 1)
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else
+	{
+		ch_name = params.front();
+		params.pop_front();
+		ch = this->_listChannels->getChannel(ch_name);
+		if (!ch)
+		{
+			rp.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(ch_name));
+		}
+		else
+		{
+			if (!ch->isUser(this->_sender))
+			{
+				rp.setReplyMsg(C_ERR_NOTONCHANNEL, ERR_NOTONCHANNEL(ch_name));
+			}
+			else
+			{
+				if (!ch->isTopicBlock() || ch->isAdmin(this->_sender))
+				{
+					for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
+					{
+						if ((*it).at(0) == ':')
+						{
+							new_topic += (*it).substr(1);
+						}
+						else
+						{
+							new_topic += *it;
+						}
+						new_topic += " ";
+					}
+					ch->setTopic(new_topic);
+					this->sendAsyncMessage(this->_sender->getFd(), RPL_TOPIC(ch_name, ch->getTopic()));
+				}
+				else
+				{
+					rp.setReplyMsg(C_ERR_CHANOPRIVSNEEDED, ERR_CHANOPRIVSNEEDED(ch_name));
+				}
+			}
+		}
+	}
+
+	rp.addTarget(this->_sender->getFd());
+	replies.push_back(rp);
 }

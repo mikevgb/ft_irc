@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:53 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/15 12:53:32 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:58:02 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ public:
 	Channel(const std::string &name);
 	~Channel();
 	const std::string &getName() const;
-	int setTopic(const std::string &topic, User *user);
+	void setTopic(const std::string &topic);
 	const std::string &getTopic() const;
 	int addUser(User *user);
 	int addAdmin(User *user);
