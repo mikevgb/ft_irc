@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/22 17:57:27 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/22 20:58:25 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void Channel::removeBanUser(User *user)
 void Channel::setTopic(const std::string &topic)
 {
 	_topic = topic;
+	logg(LOG_INFO) << "Channel: " << ORANGE << this->_name << RESET << " | New Topic: " << ORANGE << this->_topic << "\n"
+				   << RESET;
 }
 const std::string &Channel::getTopic() const
 {
