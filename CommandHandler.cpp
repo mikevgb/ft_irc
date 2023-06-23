@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/23 11:33:12 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:37:30 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void CommandHandler::kill(std::list<std::string> params, std::list<Reply> &repli
 		{
 			rp.setReplyMsg(C_ERR_NOSUCHSERVER, ERR_NOSUCHSERVER(this->server->getHostname()));
 		}
-		else if (!user->isOperator())
+		else if (!this->_sender->isOperator())
 		{
 			rp.setReplyMsg(C_ERR_NOPRIVILEGES, ERR_NOPRIVILEGES());
 		}
