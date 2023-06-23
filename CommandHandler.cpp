@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/23 00:04:11 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/23 12:38:02 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,7 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 {
 	Reply rp1;
 	Reply rp2;
+	std::string prefix;
 	std::string msg;
 	Channel *ch;
 
@@ -349,7 +350,8 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 			ch = this->_listChannels->addChannel(params.front());
 		}
 		msg = "JOIN " + params.front();
-		this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), msg);
+		prefix = this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
+		this->sendAsyncMessage(this->_sender->getFd(), prefix, msg);
 		rp1.setReplyMsg(C_RPL_TOPIC, RPL_TOPIC(ch->getName(), ch->getTopic()));
 		// Add user to the channel
 		ch->addUser(this->_sender);
@@ -368,6 +370,7 @@ void CommandHandler::part(std::list<std::string> params, std::list<Reply> &repli
 	Channel *ch;
 	std::string name = params.front();
 	std::string msg;
+	std::string prefix;
 
 	if (params.size() < 1)
 	{
@@ -391,7 +394,8 @@ void CommandHandler::part(std::list<std::string> params, std::list<Reply> &repli
 		{
 			this->_listChannels->removeChannel(ch);
 		}
-		this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), msg);
+		prefix = this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
+		this->sendAsyncMessage(this->_sender->getFd(), prefix, msg);
 	}
 
 	rp.addTarget(this->_sender->getFd());
@@ -471,8 +475,8 @@ void CommandHandler::kick(std::list<std::string> params, std::list<Reply> &repli
 		else
 		{
 			ch->removeUser(user);
-			prefix = ":" + this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
-			msg =  + "KICK " + ch_name + " " + username;
+			prefix = this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
+			msg = "KICK " + ch_name + " " + username;
 			this->sendAsyncMessage(user->getFd(), prefix, msg);
 		}
 	}
@@ -536,6 +540,8 @@ void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &repl
 	Reply rp;
 	std::string ch_name;
 	std::string new_topic;
+	std::string prefix;
+	std::string msg;
 	Channel *ch;
 
 	if (params.size() < 1)
@@ -574,7 +580,9 @@ void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &repl
 						new_topic += " ";
 					}
 					ch->setTopic(new_topic);
-					this->sendAsyncMessage(this->_sender->getFd(), this->server->getHostname(), RPL_TOPIC(ch_name, ch->getTopic()));
+					prefix = this->_sender->getNick() + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
+					msg = "TOPIC " + RPL_TOPIC(ch_name, ch->getTopic());
+					this->sendAsyncMessage(this->_sender->getFd(), prefix, msg);
 				}
 				else
 				{
