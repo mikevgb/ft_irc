@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/23 10:56:59 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:11:13 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,12 @@ bool User::isOperator() const
 void User::changeToLogged()
 {
 	_isLogged = true;
+}
+
+void User::changeToOperator()
+{
+	_operator = true;
+	logg(LOG_INFO) << ORANGE << this->_nick << RESET << " changed to operator\n";
 }
 
 void User::addChannel(Channel *channel)

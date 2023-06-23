@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/23 10:56:20 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:08:05 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ public:
 	bool isLogged() const;
 	bool isOperator() const;
 	void changeToLogged();
+	void changeToOperator();
 	const std::string getFullName() const;
 	void addChannel(Channel *channel);
 	void removeChannel(Channel *channel);

@@ -6,10 +6,9 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/23 11:00:59 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:10:11 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "CommandHandler.hpp"
 
@@ -122,15 +121,10 @@ void CommandHandler::oper(std::list<std::string> params, std::list<Reply> &repli
 			}
 			else
 			{
-				//user.
+				user->changeToOperator();
 			}
-
-
 		}
-
-
 	}
-
 
 	rp.addTarget(_sender->getFd());
 	replies.push_back(rp);
