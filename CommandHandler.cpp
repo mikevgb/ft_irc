@@ -6,10 +6,10 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/21 14:26:43 by mmateo-t         ###   ########.fr       */
-/*   Updated: 2023/06/21 13:28:11 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:00:59 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "CommandHandler.hpp"
 
@@ -76,6 +76,7 @@ std::list<std::string> CommandHandler::parseList(const std::string &list)
 
 void CommandHandler::initCommandMap()
 {
+	this->commandMap["OPER"] = &CommandHandler::oper;
 	this->commandMap["NICK"] = &CommandHandler::nick;
 	this->commandMap["USER"] = &CommandHandler::user;
 	this->commandMap["QUIT"] = &CommandHandler::quit;
@@ -86,6 +87,53 @@ void CommandHandler::initCommandMap()
 	this->commandMap["JOIN"] = &CommandHandler::join;
 	this->commandMap["PART"] = &CommandHandler::part;
 	this->commandMap["PASS"] = &CommandHandler::pass;
+}
+
+void CommandHandler::oper(std::list<std::string> params, std::list<Reply> &replies)
+{
+	Reply rp;
+	std::string name;
+	std::string password;
+	User *user;
+
+	if (params.size() != 2)
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else
+	{
+		name = params.front();
+		params.pop_front();
+		password = params.front();
+		user = this->_listUsers->getUser(name);
+		if (!user)
+		{
+			rp.setReplyMsg(C_ERR_NOOPERHOST, ERR_NOOPERHOST());
+		}
+		else if (password != this->server->_password)
+		{
+			rp.setReplyMsg(C_ERR_PASSWDMISMATCH, ERR_PASSWDMISMATCH());
+		}
+		else
+		{
+			if (user->isOperator())
+			{
+				rp.setReplyMsg(C_RPL_YOUREOPER, RPL_YOUREOPER());
+			}
+			else
+			{
+				//user.
+			}
+
+
+		}
+
+
+	}
+
+
+	rp.addTarget(_sender->getFd());
+	replies.push_back(rp);
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)

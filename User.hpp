@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/21 13:28:43 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/23 10:56:20 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ private:
 	std::string _username;
 	std::string _realname;
 	bool _isLogged;
-	bool _isOperator;
+	bool _operator;
 	std::set<Channel *> _channels;
 	const std::string forbittenChar;
 
@@ -42,6 +42,7 @@ public:
 	std::string getRealName() const;
 	void setRealName(const std::string &user);
 	bool isLogged() const;
+	bool isOperator() const;
 	void changeToLogged();
 	const std::string getFullName() const;
 	void addChannel(Channel *channel);
