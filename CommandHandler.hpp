@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/23 10:47:08 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:17:29 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ public:
 
 	// Command functions
 	void oper(std::list<std::string> params, std::list<Reply> &replies);
+	void kill(std::list<std::string> params, std::list<Reply> &replies);
 	void nick(std::list<std::string> params, std::list<Reply> &);
 	void user(std::list<std::string> params, std::list<Reply> &);
 	void quit(std::list<std::string> params, std::list<Reply> &);
