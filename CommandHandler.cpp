@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/24 13:51:51 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/25 11:57:50 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,6 +250,7 @@ void CommandHandler::notice(std::list<std::string> params, std::list<Reply> &rep
 	std::string prefix;
 	User *user;
 	std::string msgtarget;
+	std::string sendMsg;
 	std::set<User *> users;
 
 	if (params.size() < 2)
@@ -263,22 +264,24 @@ void CommandHandler::notice(std::list<std::string> params, std::list<Reply> &rep
 	{
 		msg += (" " + *it);
 	}
-	prefix = this->getPrefix(this->_sender);
 	ch = this->_listChannels->getChannel(msgtarget);
 	if (ch != NULL)
 	{
+		prefix = this->getPrefix(this->_sender);
 		users = ch->getUsers();
 
 		for (std::set<User *>::iterator it = users.begin(); it != users.end(); it++)
 		{
 			if ((*it)->getFd() != this->_sender->getFd())
 			{
-				sendAsyncMessage((*it)->getFd(), prefix, msg);
+				sendMsg = "NOTICE " + ch->getName() + msg;
+				sendAsyncMessage((*it)->getFd(), prefix, sendMsg);
 			}
 		}
 	}
 	else
 	{
+		prefix = this->_sender->getNick();
 		user = this->_listUsers->getUser(msgtarget);
 		if (!user)
 		{
@@ -286,7 +289,8 @@ void CommandHandler::notice(std::list<std::string> params, std::list<Reply> &rep
 		}
 		else
 		{
-			sendAsyncMessage(user->getFd(), prefix, msg);
+			sendMsg = user->getNick() + msg;
+			sendAsyncMessage(user->getFd(), prefix, sendMsg);
 		}
 	}
 	(void)replies;
