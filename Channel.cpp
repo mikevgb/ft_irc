@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/16 00:04:08 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/22 21:36:14 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,7 @@ int Channel::addUser(User *user)
 	{
 		_admins.insert(user);
 	}
-	/* 	if (_limit > 0 && _nbrUsers + 1 <= _limit)
-			return ERR_CHANNELISFULL;
-		if (isBaned(user))
-			return ERR_BANNEDFROMCHAN;
-		if (!_password.empty() && _password.compare(password))
-			return ERR_BADCHANNELKEY;
-		if (_isInviteOnly)
-			return ERR_INVITEONLYCHAN; */
+
 	_nbrUsers++;
 	_users.insert(user);
 	user->addChannel(this);
@@ -78,6 +71,7 @@ void Channel::removeUser(User *user)
 	_admins.erase(user);
 	_voiced.erase(user);
 	_nbrUsers--;
+	logg(LOG_DEBUG) << user->getNick() << " removed from the channel " << this->_name << "\n";
 }
 
 void Channel::setVoiceUser(User *user)
@@ -100,14 +94,11 @@ void Channel::removeBanUser(User *user)
 	_baned.erase(user);
 }
 
-int Channel::setTopic(const std::string &topic, User *user)
+void Channel::setTopic(const std::string &topic)
 {
-	if (!isTopicBlock() || isAdmin(user))
-	{
-		_topic = topic;
-		return 0;
-	}
-	return false;
+	_topic = topic;
+	logg(LOG_INFO) << "Channel: " << ORANGE << this->_name << RESET << " | New Topic: " << ORANGE << this->_topic << "\n"
+				   << RESET;
 }
 const std::string &Channel::getTopic() const
 {
