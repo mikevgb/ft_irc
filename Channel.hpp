@@ -6,38 +6,13 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:53 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/26 16:30:42 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:32:17 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 #include "lib2.h"
-/*****************************
-  o - give/take channel operator privileges;*
-  p - private channel flag;*
-  s - secret channel flag;*
-  i - invite-only channel flag;*
-  t - topic settable by channel operator only flag;*
-  n - no messages to channel from clients on the outside;*
-  m - moderated channel;*
-  When mode +m is set, any users with a powerlevel of 0 (i.e. not opped or voiced) will be prevented from talking.
-  l - set the user limit to channel;*
-  b - set a ban mask to keep users out;
-  v - give/take the ability to speak on a moderated channel;
-  k - set a channel key (password).
-
-	ERR_NEEDMOREPARAMS              RPL_CHANNELMODEIS
-	ERR_CHANOPRIVSNEEDED            ERR_NOSUCHNICK
-	ERR_NOTONCHANNEL                ERR_KEYSET
-	RPL_BANLIST                     RPL_ENDOFBANLIST
-	ERR_UNKNOWNMODE                 ERR_NOSUCHCHANNEL
-
-	ERR_USERSDONTMATCH              RPL_UMODEIS
-	ERR_UMODEUNKNOWNFLAG
-*****************************/
-
-// class User;
 
 class Channel
 {

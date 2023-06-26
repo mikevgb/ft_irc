@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/25 11:57:50 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:38:22 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -531,11 +531,15 @@ void CommandHandler::invite(std::list<std::string> params, std::list<Reply> &rep
 		{
 			rp.setReplyMsg(C_ERR_CHANOPRIVSNEEDED, ERR_CHANOPRIVSNEEDED(ch_name));
 		}
+		else if (ch->isInvited(user))
+		{
+			rp.setReplyMsg(C_ERR_USERONCHANNEL, ERR_USERONCHANNEL(user->getNick(), ch->getName()));
+		}
 		else
 		{
 			rp.setReplyMsg(C_RPL_INVITING, RPL_INVITING(ch_name, nickname));
 			prefix = this->getPrefix(this->_sender);
-			msg = "INVITE " + nickname + " " + ch_name + "\n";
+			msg = "INVITE " + nickname + " " + ch_name;
 			this->sendAsyncMessage(user->getFd(), prefix, msg);
 		}
 	}
@@ -603,4 +607,9 @@ void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &repl
 
 	rp.addTarget(this->_sender->getFd());
 	replies.push_back(rp);
+}
+
+void mode(std::list<std::string> params, std::list<Reply> &replies)
+{
+	
 }
