@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/26 13:13:37 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 13:33:44 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,9 @@ std::string ListChannels::getListOfChannels() const
 	while (it != this->_channels.end())
 	{
 		list += it->first + ",";
-		if (++it == this->_channels.end())
-		{
-			list += this->_channels.rbegin()->first;
-			break;
-		}
+		it++;
 	}
+	list.pop_back();
 	return list;
 }
 
