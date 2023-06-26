@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/26 12:04:16 by mvillaes         ###   ########.fr       */
+/*   Updated: 2023/06/26 13:13:37 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,31 @@ std::string ListChannels::getListOfChannels() const
 	std::string list;
 	std::map<std::string, Channel *>::const_iterator it;
 
-	if (it != this->_channels.end())
+	it = this->_channels.begin();
+	while (it != this->_channels.end())
 	{
-		while (true)
+		list += it->first + ",";
+		if (++it == this->_channels.end())
 		{
-			list += it->first + ",";
-			if (++it == this->_channels.end())
-				break;
+			list += this->_channels.rbegin()->first;
+			break;
 		}
-		list += this->_channels.rbegin()->first;
 	}
 	return list;
 }
 
 int ListChannels::removeChannel(User *admin, const std::string name)
 {
-	// TODO comprobar si existe esta opción
 	Channel *channel = _channels[name];
+
+	if (!channel)
+	{
+		return false;
+	}
+
 	if (channel->isAdmin(admin))
 		removeChannel(channel);
-	return 0;
+	return true;
 }
 
 int ListChannels::removeChannel(Channel *channel)
@@ -100,14 +105,4 @@ std::set<User *> ListChannels::getUsersFrom(const std::string &name)
 	Channel *channel = _channels[name];
 
 	return channel->getUsers();
-}
-
-int ListChannels::outOfChannel(User *user, const std::string &name)
-{
-	// TODO comprobar que pasa si se intenta salir de un canal en el que no estás
-	Channel *channel = _channels[name];
-	channel->removeUser(user);
-	if (channel->isEmpty())
-		removeChannel(channel);
-	return 0;
 }
