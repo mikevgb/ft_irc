@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/22 21:36:14 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:30:50 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
 Channel::Channel(const std::string &name)
-	: _name(), _topic("New channel"), _password(), _users(), _admins(), _voiced(), _baned()
+	: _name(), _topic("New channel"), _password(), _users(), _admins(), _invited(), _baned()
 {
 	_limit = 0;
 	_nbrUsers = 0;
@@ -69,29 +69,9 @@ void Channel::removeUser(User *user)
 {
 	_users.erase(user);
 	_admins.erase(user);
-	_voiced.erase(user);
+	_invited.erase(user);
 	_nbrUsers--;
 	logg(LOG_DEBUG) << user->getNick() << " removed from the channel " << this->_name << "\n";
-}
-
-void Channel::setVoiceUser(User *user)
-{
-	_voiced.insert(user);
-}
-
-void Channel::removeVoiceUser(User *user)
-{
-	_voiced.erase(user);
-}
-
-void Channel::setBanUser(User *user)
-{
-	_baned.insert(user);
-}
-
-void Channel::removeBanUser(User *user)
-{
-	_baned.erase(user);
 }
 
 void Channel::setTopic(const std::string &topic)
@@ -187,7 +167,7 @@ int Channel::setMode(char mode, User *admin, User *user, const std::string &para
 			return ERR_NEEDMOREPARAMS;
 		if (isUser(user) && isAdmin(admin))
 		{
-			_voiced.insert(user);
+			_invited.insert(user);
 		}
 		break;
 	case 'k': // set a channel key (password)
@@ -283,7 +263,7 @@ int Channel::removeMode(char mode, User *admin, User *user)
 			return ERR_NEEDMOREPARAMS;
 		if (isAdmin(admin) || admin == user)
 		{
-			_voiced.erase(user);
+			_invited.erase(user);
 		}
 		break;
 	case 'k': // set a channel key (password)
@@ -315,6 +295,11 @@ bool Channel::isUser(User *user) const
 bool Channel::isBaned(User *user) const
 {
 	return _baned.find(user) != _baned.end();
+}
+
+bool  Channel::isInvited(User *user) const
+{
+	return _invited.find(user) != _invited.end();	
 }
 
 int Channel::addAdmin(User *user)
@@ -456,4 +441,9 @@ std::string Channel::getListUsers() const
 		users += (*it)->getNick();
 	}
 	return users;
+}
+
+void Channel::inviteUser(User *user)
+{
+	this->_invited.insert(user);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:53 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/22 17:58:02 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:30:42 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ private:
 	std::string _password;
 	std::set<User *> _users;
 	std::set<User *> _admins;
-	std::set<User *> _voiced;
+	std::set<User *> _invited;
 	std::set<User *> _baned;
 	size_t _limit;
 	size_t _nbrUsers;
@@ -68,18 +68,15 @@ public:
 	const std::string &getTopic() const;
 	int addUser(User *user);
 	int addAdmin(User *user);
-	int inviteUser(User *user, User *admin);
+	void inviteUser(User *user);
 	void removeUser(User *user);
-	void setVoiceUser(User *user);
-	void removeVoiceUser(User *user);
-	void setBanUser(User *user);
-	void removeBanUser(User *user);
 	int setMode(char mode, User *admin, User *user, const std::string &param);
 	int removeMode(char mode, User *admin, User *user);
 	bool isEmpty() const;
 	bool isUser(User *user) const;
 	bool isAdmin(User *admin) const;
 	bool isBaned(User *user) const;
+	bool isInvited(User *user) const;
 	bool isPrivate() const;
 	bool isSecret() const;
 	bool isInviteOnly() const;
