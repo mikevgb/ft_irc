@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/26 16:43:01 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:47:23 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void CommandHandler::initCommandMap()
 	this->commandMap["KICK"] = &CommandHandler::kick;
 	this->commandMap["INVITE"] = &CommandHandler::invite;
 	this->commandMap["TOPIC"] = &CommandHandler::topic;
+	this->commandMap["MODE"] = &CommandHandler::mode;
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
@@ -358,9 +359,9 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 			rp1.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(params.front()));
 			ch = this->_listChannels->addChannel(params.front());
 		}
-		else if (ch->isInviteOnly() && !ch->isInvited(this->_sender))
+		if (ch->isInviteOnly() && !ch->isInvited(this->_sender))
 		{
-			rp1.setReplyMsg(C_ERR_INVITEONLYCHAN, ERR_INVITEONLYCHAN(ch->getName()));
+			rp2.setReplyMsg(C_ERR_INVITEONLYCHAN, ERR_INVITEONLYCHAN(ch->getName()));
 		}
 		else
 		{
@@ -534,7 +535,7 @@ void CommandHandler::invite(std::list<std::string> params, std::list<Reply> &rep
 		{
 			rp.setReplyMsg(C_ERR_USERONCHANNEL, ERR_USERONCHANNEL(nickname, ch_name));
 		}
-		else if (!ch->isAdmin(user) && ch->isInviteOnly())
+		else if (!ch->isAdmin(this->_sender) && ch->isInviteOnly())
 		{
 			rp.setReplyMsg(C_ERR_CHANOPRIVSNEEDED, ERR_CHANOPRIVSNEEDED(ch_name));
 		}
@@ -544,6 +545,7 @@ void CommandHandler::invite(std::list<std::string> params, std::list<Reply> &rep
 		}
 		else
 		{
+			ch->inviteUser(user);
 			rp.setReplyMsg(C_RPL_INVITING, RPL_INVITING(ch_name, nickname));
 			prefix = this->getPrefix(this->_sender);
 			msg = "INVITE " + nickname + " " + ch_name;
@@ -616,6 +618,51 @@ void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &repl
 	replies.push_back(rp);
 }
 
-void mode(std::list<std::string> params, std::list<Reply> &replies)
+void CommandHandler::mode(std::list<std::string> params, std::list<Reply> &replies)
 {
+	Reply rp;
+	std::string ch_name;
+	std::string modestring;
+	std::string msg;
+	std::set<User *> users;
+	Channel *ch;
+
+	if (params.size() < 1)
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else
+	{
+		ch_name = params.front();
+		ch = this->_listChannels->getChannel(ch_name);
+		params.pop_front();
+		if (!ch)
+		{
+			rp.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(ch_name));
+		}
+		else if (!ch->isAdmin(this->_sender))
+		{
+			rp.setReplyMsg(C_ERR_CHANOPRIVSNEEDED, ERR_CHANOPRIVSNEEDED(ch_name));
+		}
+		else
+		{
+			modestring = params.front();
+			if (!ch->setMode(modestring))
+			{
+				rp.setReplyMsg(C_ERR_NOCHANMODES, ERR_NOCHANMODES(ch_name));
+			}
+			else
+			{
+				msg = "MODE " + ch->getName() + " " + modestring;
+				users = ch->getUsers();
+				for (std::set<User *>::iterator it = users.begin(); it != users.end(); it++)
+				{
+					sendAsyncMessage((*it)->getFd(), this->getPrefix(this->_sender), msg);
+				}
+			}
+		}
+	}
+
+	rp.addTarget(this->_sender->getFd());
+	replies.push_back(rp);
 }

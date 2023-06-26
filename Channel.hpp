@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:53 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/26 16:32:17 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 17:05:24 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ public:
 	int addAdmin(User *user);
 	void inviteUser(User *user);
 	void removeUser(User *user);
-	int setMode(char mode, User *admin, User *user, const std::string &param);
+	bool setMode(std::string mode);
 	int removeMode(char mode, User *admin, User *user);
 	bool isEmpty() const;
 	bool isUser(User *user) const;
