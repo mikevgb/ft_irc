@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/26 11:19:19 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 12:04:16 by mvillaes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,26 @@ std::string ListChannels::getListOfChannels() const
 	std::string list;
 	std::map<std::string, Channel *>::const_iterator it;
 
-	//TODO: Remove last comma
-	for (it = this->_channels.begin(); it != _channels.end(); it++)
+	if (it != this->_channels.end())
 	{
-		list += it->first + ",";
+		while (true)
+		{
+			list += it->first + ",";
+			if (++it == this->_channels.end())
+				break;
+		}
+		list += this->_channels.rbegin()->first;
 	}
-
 	return list;
 }
 
 int ListChannels::removeChannel(User *admin, const std::string name)
 {
+	// TODO comprobar si existe esta opción
 	Channel *channel = _channels[name];
-
-	if (!channel)
-	{
-		return false;
-	}
 	if (channel->isAdmin(admin))
 		removeChannel(channel);
-	return true;
+	return 0;
 }
 
 int ListChannels::removeChannel(Channel *channel)
@@ -102,3 +102,12 @@ std::set<User *> ListChannels::getUsersFrom(const std::string &name)
 	return channel->getUsers();
 }
 
+int ListChannels::outOfChannel(User *user, const std::string &name)
+{
+	// TODO comprobar que pasa si se intenta salir de un canal en el que no estás
+	Channel *channel = _channels[name];
+	channel->removeUser(user);
+	if (channel->isEmpty())
+		removeChannel(channel);
+	return 0;
+}
