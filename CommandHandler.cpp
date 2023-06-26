@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/26 16:38:22 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:43:01 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,13 +358,20 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 			rp1.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(params.front()));
 			ch = this->_listChannels->addChannel(params.front());
 		}
-		msg = "JOIN " + params.front();
-		prefix = this->getPrefix(this->_sender);
-		this->sendAsyncMessage(this->_sender->getFd(), prefix, msg);
-		rp1.setReplyMsg(C_RPL_TOPIC, RPL_TOPIC(ch->getName(), ch->getTopic()));
-		// Add user to the channel
-		ch->addUser(this->_sender);
-		rp2.setReplyMsg(C_RPL_NAMREPLY, RPL_NAMREPLY(ch->getModes(), ch->getName(), ch->getListUsers()));
+		else if (ch->isInviteOnly() && !ch->isInvited(this->_sender))
+		{
+			rp1.setReplyMsg(C_ERR_INVITEONLYCHAN, ERR_INVITEONLYCHAN(ch->getName()));
+		}
+		else
+		{
+			msg = "JOIN " + params.front();
+			prefix = this->getPrefix(this->_sender);
+			this->sendAsyncMessage(this->_sender->getFd(), prefix, msg);
+			rp1.setReplyMsg(C_RPL_TOPIC, RPL_TOPIC(ch->getName(), ch->getTopic()));
+			// Add user to the channel
+			ch->addUser(this->_sender);
+			rp2.setReplyMsg(C_RPL_NAMREPLY, RPL_NAMREPLY(ch->getModes(), ch->getName(), ch->getListUsers()));
+		}
 	}
 
 	rp1.addTarget(this->_sender->getFd());
@@ -611,5 +618,4 @@ void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &repl
 
 void mode(std::list<std::string> params, std::list<Reply> &replies)
 {
-	
 }
