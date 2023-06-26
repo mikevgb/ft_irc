@@ -22,7 +22,7 @@ IRCServer::IRCServer(const uint16_t port, const std::string password)
 
 	_serverSocket = new Socket(port);
 	this->startServer();
-	/*server data*/ // FIXME: Handle main arguments
+
 	if (gethostname(_hostname, sizeof(_hostname)) == -1)
 	{
 		throwError("Gethostname() failed");
