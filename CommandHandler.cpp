@@ -6,6 +6,8 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
+/*   Updated: 2023/06/23 11:37:30 by mmateo-t         ###   ########.fr       */
+=======
 /*   Updated: 2023/06/26 18:47:23 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -80,6 +82,8 @@ std::list<std::string> CommandHandler::parseList(const std::string &list)
 
 void CommandHandler::initCommandMap()
 {
+	this->commandMap["OPER"] = &CommandHandler::oper;
+	this->commandMap["KILL"] = &CommandHandler::kill;
 	this->commandMap["NICK"] = &CommandHandler::nick;
 	this->commandMap["USER"] = &CommandHandler::user;
 	this->commandMap["QUIT"] = &CommandHandler::quit;
@@ -94,6 +98,91 @@ void CommandHandler::initCommandMap()
 	this->commandMap["INVITE"] = &CommandHandler::invite;
 	this->commandMap["TOPIC"] = &CommandHandler::topic;
 	this->commandMap["MODE"] = &CommandHandler::mode;
+}
+
+void CommandHandler::oper(std::list<std::string> params, std::list<Reply> &replies)
+{
+	Reply rp;
+	std::string name;
+	std::string password;
+	User *user;
+
+	if (params.size() != 2)
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else
+	{
+		name = params.front();
+		params.pop_front();
+		password = params.front();
+		user = this->_listUsers->getUser(name);
+		if (!user)
+		{
+			rp.setReplyMsg(C_ERR_NOOPERHOST, ERR_NOOPERHOST());
+		}
+		else if (password != this->server->_password)
+		{
+			rp.setReplyMsg(C_ERR_PASSWDMISMATCH, ERR_PASSWDMISMATCH());
+		}
+		else
+		{
+			if (user->isOperator())
+			{
+				rp.setReplyMsg(C_RPL_YOUREOPER, RPL_YOUREOPER());
+			}
+			else
+			{
+				user->changeToOperator();
+			}
+		}
+	}
+
+	rp.addTarget(_sender->getFd());
+	replies.push_back(rp);
+}
+
+void CommandHandler::kill(std::list<std::string> params, std::list<Reply> &replies)
+{
+	Reply rp;
+	std::string nick;
+	std::string comment;
+	std::string prefix;
+	std::string msg;
+	User *user;
+
+	if (params.size() != 2)
+	{
+		rp.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
+	}
+	else
+	{
+		nick = params.front();
+		params.pop_front();
+		user = this->_listUsers->getUser(nick);
+		for (std::list<std::string>::iterator it = params.begin(); it != params.end(); it++)
+		{
+			comment += (*it) + " ";
+		}
+		if (!user)
+		{
+			rp.setReplyMsg(C_ERR_NOSUCHSERVER, ERR_NOSUCHSERVER(this->server->getHostname()));
+		}
+		else if (!this->_sender->isOperator())
+		{
+			rp.setReplyMsg(C_ERR_NOPRIVILEGES, ERR_NOPRIVILEGES());
+		}
+		else
+		{
+			prefix = this->_sender->getNick();
+			msg = "KILL";
+			//this->sendAsyncMessage(user->getFd(),)
+			this->server->disconnect(user->getFd());
+		}
+	}
+
+	rp.addTarget(_sender->getFd());
+	replies.push_back(rp);
 }
 
 void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &replies)
