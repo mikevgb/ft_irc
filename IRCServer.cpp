@@ -196,11 +196,10 @@ void IRCServer::processMessage(std::string buff, int fd)
 		Message msg(*it);
 		_cmdHandler->setMessage(msg);
 		std::cout << _cmdHandler->getMessage();
-		if (!checkLogin(msg.getCmd(), fd))
+		if (msg.getCmd() == "PASS" || this->checkLogin(fd))
 		{
-			break;
+			_cmdHandler->executeCmd(replies);
 		}
-		_cmdHandler->executeCmd(replies);
 		for (std::list<Reply>::iterator rp = replies.begin(); rp != replies.end(); rp++)
 		{
 			std::set<int> targets = (*rp).getTargets();
@@ -212,6 +211,11 @@ void IRCServer::processMessage(std::string buff, int fd)
 			}
 		}
 		replies.clear();
+		if (!checkLogin(fd))
+		{
+			this->_cmdHandler->error("Unable to Authenticate", fd);
+			this->disconnect(fd);
+		}
 	}
 }
 
@@ -236,13 +240,11 @@ std::string IRCServer::getHostname() const
 	return std::string(this->_hostname);
 }
 
-bool IRCServer::checkLogin(const std::string cmd, const int fd)
+bool IRCServer::checkLogin(const int fd)
 {
-	if (cmd == "NICK" && !this->_listUsers->getUser(fd)->isLogged())
+	if (this->_listUsers->getUser(fd)->isLogged())
 	{
-		this->_cmdHandler->error("Unable to Authenticate", fd);
-		this->disconnect(fd);
-		return false;
+		return true;
 	}
-	return true;
+	return false;
 }
