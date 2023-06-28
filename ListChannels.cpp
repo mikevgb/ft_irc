@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/26 13:33:44 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/28 14:34:52 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,15 @@ std::string ListChannels::getListOfChannels() const
 		list += it->first + ",";
 		it++;
 	}
-	list.erase(list.length() - 1);
+	try
+	{
+		list.erase(list.length() - 1);
+	}
+	catch(const std::exception& e)
+	{
+		logg(LOG_DEBUG) << "Channel list empty" << '\n';
+	}
+	
 	return list;
 }
 
