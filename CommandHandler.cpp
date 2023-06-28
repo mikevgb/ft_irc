@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/23 11:37:30 by mmateo-t         ###   ########.fr       */
-/*   Updated: 2023/06/26 18:47:23 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/28 15:29:50 by mvillaes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "CommandHandler.hpp"
 
@@ -614,6 +614,10 @@ void CommandHandler::invite(std::list<std::string> params, std::list<Reply> &rep
 		if (!ch)
 		{
 			rp.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(ch_name));
+		}
+		else if (!user)
+		{
+			rp.setReplyMsg(C_ERR_NOSUCHNICK, ERR_NOSUCHNICK(nickname));
 		}
 		else if (!ch->isUser(this->_sender))
 		{
