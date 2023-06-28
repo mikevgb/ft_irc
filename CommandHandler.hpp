@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/24 13:47:06 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:20:34 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ public:
 	void kick(std::list<std::string> params, std::list<Reply> &replies);
 	void invite(std::list<std::string> params, std::list<Reply> &replies);
 	void topic(std::list<std::string> params, std::list<Reply> &replies);
+	void mode(std::list<std::string> params, std::list<Reply> &replies);
 	void error(const std::string reason, const int fd);
 
 };
