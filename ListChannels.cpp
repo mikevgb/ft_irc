@@ -71,7 +71,7 @@ std::string ListChannels::getListOfChannels() const
 		list += it->first + ",";
 		it++;
 	}
-	list.pop_back();
+	list.erase(list.length() - 1);
 	return list;
 }
 
