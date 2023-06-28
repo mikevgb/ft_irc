@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:37 by mmateo-t          #+#    #+#             */
 /*   Updated: 2023/06/23 11:17:29 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:20:34 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +61,8 @@ public:
 	void setUser(const int fd);
 	std::list<std::string> parseList(const std::string &);
 
-	bool sendAsyncMessage(int fd, std::string msg);
+	std::string getPrefix(const User *) const;
+	bool sendAsyncMessage(int fd, std::string prefix, std::string msg);
 
 	// Command functions
 	void oper(std::list<std::string> params, std::list<Reply> &replies);
@@ -76,6 +78,10 @@ public:
 	void join(std::list<std::string> params, std::list<Reply> &replies);
 	void part(std::list<std::string> params, std::list<Reply> &replies);
 	void pass(std::list<std::string> params, std::list<Reply> &replies);
+	void kick(std::list<std::string> params, std::list<Reply> &replies);
+	void invite(std::list<std::string> params, std::list<Reply> &replies);
+	void topic(std::list<std::string> params, std::list<Reply> &replies);
+	void mode(std::list<std::string> params, std::list<Reply> &replies);
 	void error(const std::string reason, const int fd);
 
 };
