@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/23 11:11:13 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/03 16:17:50 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,13 @@ User::User(int fd)
 }
 
 User::~User()
-{
+{	
+	for(std::set<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+	{
+		(*it)->removeUser(this);
+	}
+	_channels.clear();
+
 	if (close(this->_fd) < 0)
 	{
 		logg(LOG_ERROR) << "Close() Error\n";
