@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/28 15:29:50 by mvillaes         ###   ########.fr       */
+/*   Updated: 2023/07/03 16:11:37 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ bool CommandHandler::sendAsyncMessage(int fd, std::string prefix, std::string ms
 		logg(LOG_ERROR) << "An expected error occurs while sending a message\n";
 		return false;
 	}
-	logg(LOG_INFO) << "Sent TO: [" << fd << "]\t" << ROSE << toSend << RESET;
+	logg(LOG_INFO) << "Sent TO: [" << ORANGE << fd << RESET << "]\t" << ROSE << toSend << RESET;
 	return true;
 }
 

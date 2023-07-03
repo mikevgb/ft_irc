@@ -165,12 +165,11 @@ void IRCServer::pollLoop()
 						{
 							if (errno != EWOULDBLOCK)
 							{
-								logg(LOG_ERR) << "  recv() failed\n";
+								logg(LOG_ERR) << "recv() failed\n";
 							}
 						}
 						else if (rc == 0)
 						{
-							this->_cmdHandler->error("Connection lost", _pollFds[i].fd);
 							disconnect(_pollFds[i].fd);
 						}
 						else
@@ -207,7 +206,7 @@ void IRCServer::processMessage(std::string buff, int fd)
 			for (std::set<int>::iterator user = targets.begin(); user != targets.end(); user++)
 			{
 				std::string msg = (*rp).getReplyMsg(this->getHostname(), this->_listUsers->getUser(fd)->getNick());
-				logg(LOG_DEBUG) << "Reply: " << RED << msg << RESET << "\n";
+				logg(LOG_DEBUG) << "Reply: " << MAGENTA << msg << RESET << "\n";
 				send(*user, msg.c_str(), msg.length(), 0);
 			}
 		}

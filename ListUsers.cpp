@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:54 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/13 19:42:23 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/03 16:08:24 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int ListUsers::removeUser(const size_t fd)
 		}
 		else
 		{
-			logg(LOG_INFO) << "User -> [FD: " << user->getFd() << "] disconnected\n"
+			logg(LOG_INFO) << "User -> [FD: " << ORANGE << user->getFd() << RESET << "] disconnected\n"
 						   << RESET;
 		}
 		delete user;
