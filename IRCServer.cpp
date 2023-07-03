@@ -90,17 +90,25 @@ void IRCServer::acceptConnection()
 				throwError("accept() failed");
 			}
 		}
-
-		logg(LOG_INFO) << "New incoming connection - [" << ROSE << new_sd << RESET << "]\n";
-		for (int i = 0; i <= _nfds; i++)
+		else if (_nfds >= MAX_USERS)
 		{
-			if (_pollFds[i].fd <= 0)
+			close(new_sd);
+			logg(LOG_WARN) << "IRC-Server can't handle more connections\n";
+		}
+		else
+		{
+
+			logg(LOG_INFO) << "New incoming connection - [" << ROSE << new_sd << RESET << "]\n";
+			for (int i = 0; i <= _nfds; i++)
 			{
-				_pollFds[i].fd = new_sd;
-				_pollFds[i].events = POLLIN;
-				_listUsers->createUser(_pollFds[i].fd);
-				_nfds++;
-				break;
+				if (_pollFds[i].fd <= 0)
+				{
+					_pollFds[i].fd = new_sd;
+					_pollFds[i].events = POLLIN;
+					_listUsers->createUser(_pollFds[i].fd);
+					_nfds++;
+					break;
+				}
 			}
 		}
 	}

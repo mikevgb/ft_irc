@@ -6,13 +6,13 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/28 14:23:12 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/03 17:48:56 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IRCSERVER_HPP
 #define IRCSERVER_HPP
-#define MAX_USERS 1024
+#define MAX_USERS 32
 #define MAXMSGSIZE 512
 #define HOST_SIZE 128
 #define DEFAULT_PORT 6667
