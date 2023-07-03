@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/26 17:05:06 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/03 16:24:05 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void Channel::removeUser(User *user)
 	_admins.erase(user);
 	_invited.erase(user);
 	_nbrUsers--;
-	logg(LOG_DEBUG) << user->getNick() << " removed from the channel " << this->_name << "\n";
+	logg(LOG_DEBUG) << GRAY << user->getNick() << " removed from the channel (" << this->_name << ")\n" << RESET;
 }
 
 void Channel::setTopic(const std::string &topic)
