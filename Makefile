@@ -6,12 +6,12 @@
 #    By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 12:42:39 by mmateo-t          #+#    #+#              #
-#    Updated: 2023/06/05 16:25:19 by mmateo-t         ###   ########.fr        #
+#    Updated: 2023/07/03 16:04:57 by mmateo-t         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-PORT= 4242
-PASSWORD=""
+PORT= 4244
+PASSWORD="pass"
 NAME:= ircserv
 CXX:= g++
 RM:= rm -rf
