@@ -6,10 +6,9 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/03 16:11:37 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:26:59 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "CommandHandler.hpp"
 
@@ -175,7 +174,7 @@ void CommandHandler::kill(std::list<std::string> params, std::list<Reply> &repli
 		{
 			prefix = this->_sender->getNick();
 			msg = "KILL";
-			//this->sendAsyncMessage(user->getFd(),)
+			// this->sendAsyncMessage(user->getFd(),)
 			this->server->disconnect(user->getFd());
 		}
 	}
@@ -657,6 +656,7 @@ void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &repl
 	std::string prefix;
 	std::string msg;
 	Channel *ch;
+	std::set<User *> users;
 
 	if (params.size() < 1)
 	{
@@ -694,9 +694,13 @@ void CommandHandler::topic(std::list<std::string> params, std::list<Reply> &repl
 						new_topic += " ";
 					}
 					ch->setTopic(new_topic);
-					prefix = this->getPrefix(this->_sender);
 					msg = "TOPIC " + RPL_TOPIC(ch_name, ch->getTopic());
-					this->sendAsyncMessage(this->_sender->getFd(), prefix, msg);
+					users = ch->getUsers();
+					for (std::set<User *>::iterator it = users.begin(); it != users.end(); it++)
+					{
+						prefix = this->getPrefix(*it);
+						this->sendAsyncMessage((*it)->getFd(), prefix, msg);
+					}
 				}
 				else
 				{
