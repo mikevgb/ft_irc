@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:01 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/03 16:17:50 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/04 18:05:02 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,12 @@ User::User(int fd)
 {
 	_isLogged = false;
 	_operator = false;
+	_welcomeFlag = false;
 }
 
 User::~User()
-{	
-	for(std::set<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+{
+	for (std::set<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
 	{
 		(*it)->removeUser(this);
 	}
@@ -134,4 +135,14 @@ void User::setRealName(const std::string &user)
 void User::removeAllChannels()
 {
 	this->_channels.clear();
+}
+
+bool User::isWelcomeSent() const
+{
+	return _welcomeFlag;
+}
+
+void User::setWelcomeFlag()
+{
+	_welcomeFlag = true;
 }

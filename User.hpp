@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:04 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/23 11:08:05 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/04 18:05:36 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ private:
 	std::string _username;
 	std::string _realname;
 	bool _isLogged;
+	bool _welcomeFlag;
 	bool _operator;
 	std::set<Channel *> _channels;
 	const std::string forbittenChar;
@@ -43,6 +44,8 @@ public:
 	void setRealName(const std::string &user);
 	bool isLogged() const;
 	bool isOperator() const;
+	bool isWelcomeSent() const;
+	void setWelcomeFlag();
 	void changeToLogged();
 	void changeToOperator();
 	const std::string getFullName() const;

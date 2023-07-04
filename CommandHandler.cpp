@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/04 15:26:59 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/04 18:06:08 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,10 +205,10 @@ void CommandHandler::nick(std::list<std::string> params, std::list<Reply> &repli
 			rp.setReplyMsg(C_ERR_ERRONEUSNICKNAME, ERR_ERRONEUSNICKNAME(nick));
 		else
 		{
-			if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty() && !this->_sender->isLogged())
+			if (!this->_sender->getNick().empty() && !this->_sender->getUsername().empty() && !this->_sender->isWelcomeSent())
 			{
 				rp.setReplyMsg(C_RPL_WELCOME, RPL_WELCOME(this->_sender->getNick(), this->_sender->getUsername(), this->server->getHostname()));
-				this->_sender->changeToLogged();
+				this->_sender->setWelcomeFlag();
 			}
 			prefix = old_nick + "!" + this->_sender->getUsername() + "@" + this->server->getHostname();
 			msg = "NICK " + nick;
