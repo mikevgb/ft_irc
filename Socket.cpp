@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:41:39 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/10 16:44:36 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/04 13:23:29 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ bool Socket::initSocket()
 	if (setsockopt(this->sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0)
 	{
 		logg(LOG_ERROR) << "Failed setsockopt.\n";
+		exit(EXIT_FAILURE);
+	}
+	if (fcntl(this->sockfd, F_SETFL, O_NONBLOCK) < 0)
+	{
+		logg(LOG_ERROR) << "Failed fcntl.\n";
 		exit(EXIT_FAILURE);
 	}
 	return true;

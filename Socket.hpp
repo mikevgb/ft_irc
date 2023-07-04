@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:41:49 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/10 16:45:09 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/04 13:23:44 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <signal.h>
+#include <fcntl.h>
 #include <arpa/inet.h>
 #include <string>
 #include <iostream>

@@ -60,8 +60,6 @@ IRCServer::~IRCServer()
 
 bool IRCServer::startServer()
 {
-	setNonBlocking(_serverSocket->sockfd);
-
 	if (bind(_serverSocket->sockfd, (struct sockaddr *)&_serverSocket->addr, sizeof(_serverSocket->addr)) < 0)
 	{
 		logg(LOG_ERROR) << "Failed to bind to port " << ntohs(_serverSocket->addr.sin_port) << "\n";
@@ -226,16 +224,6 @@ void IRCServer::throwError(std::string msg)
 {
 	logg(LOG_ERROR) << msg << " | Errno: " << std::strerror(errno) << "\n";
 	exit(EXIT_FAILURE);
-}
-
-void IRCServer::setNonBlocking(int fd)
-{
-	int opts = fcntl(fd, F_GETFL); // get current fd flags
-	if (opts < 0)
-	{
-		throwError("ftcntl() failed");
-	}
-	fcntl(fd, F_SETFL, opts | O_NONBLOCK); // bitwise 0x01 (READONLY flag) + 0x80 (NONBLOCK flag) = 0x81
 }
 
 std::string IRCServer::getHostname() const

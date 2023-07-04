@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:11 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/03 17:48:56 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/04 13:24:00 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ private:
 	void throwError(std::string msg);
 	void setUpPoll();
 	void acceptConnection();
-	void setNonBlocking(int fdIn);
 	void processMessage(std::string buff, int fd);
 	std::string getHostname() const;
 	void disconnect(const int fd);
