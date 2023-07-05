@@ -126,6 +126,7 @@ void IRCServer::disconnect(const int fd)
 {
 	logg(LOG_INFO) << "Connection lost on - fd[" << ORANGE << fd << RESET << "]\n";
 	_listUsers->removeUser(fd);
+	_listChannels->removeEmptyChannels();
 	for (int i = 0; i < this->_nfds; i++)
 	{
 		if (this->_pollFds[i].fd == fd)

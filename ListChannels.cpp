@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/28 14:34:52 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/05 12:14:37 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ std::string ListChannels::getListOfChannels() const
 	{
 		logg(LOG_DEBUG) << "Channel list empty" << '\n';
 	}
-	
+
 	return list;
 }
 
@@ -110,4 +110,23 @@ std::set<User *> ListChannels::getUsersFrom(const std::string &name)
 	Channel *channel = _channels[name];
 
 	return channel->getUsers();
+}
+
+void ListChannels::removeEmptyChannels()
+{
+	std::map<std::string, Channel *>::iterator it;
+	std::vector<std::string> ch_names;
+
+	for (it = this->_channels.begin(); it != _channels.end(); it++)
+	{
+		if (it->second->isEmpty())
+		{
+			ch_names.push_back(it->second->getName());
+		}
+	}
+
+	for (std::vector<std::string>::iterator it = ch_names.begin(); it != ch_names.end(); it++)
+	{
+		this->removeChannel(_channels[*it]);
+	}
 }
