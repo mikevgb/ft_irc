@@ -13,7 +13,7 @@
 #include "User.hpp"
 
 User::User(int fd)
-	: _fd(fd), _nick(""), _username(""), _realname(""), _channels(), forbittenChar(",!?*@.&#")
+	: _fd(fd), _nick(""), _username(""), _realname(""), _channels(), forbiddenChar(",!?*@.&#")
 {
 	_isLogged = false;
 	_operator = false;
@@ -48,9 +48,9 @@ bool User::setNick(const std::string &nick)
 		isForbbiten = true;
 		return isForbbiten;
 	}
-	for (size_t i = 0; i < this->forbittenChar.size(); i++)
+	for (size_t i = 0; i < this->forbiddenChar.size(); i++)
 	{
-		if (nick.find(this->forbittenChar[i]) != std::string::npos)
+		if (nick.find(this->forbiddenChar[i]) != std::string::npos)
 		{
 			isForbbiten = true;
 			break;
