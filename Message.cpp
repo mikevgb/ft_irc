@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/05 20:08:49 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/10 14:47:29 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,24 @@ Message::Message(const std::string buff) : _prefix(""), _cmd("")
 {
 	this->setMsg(buff);
 
-	std::list<std::string> components = split(this->_msg, " ");
-
 	try
 	{
+		std::list<std::string> components = split(this->_msg, " ");
 		if (components.front().at(0) == ':')
 		{
 			this->_prefix = components.front();
 			components.pop_front();
 		}
-		this->setCmd(components.front());
-		components.pop_front();
-		this->setParams(components);
+		if (components.size() > 1)
+		{
+			this->setCmd(components.front());
+			components.pop_front();
+			this->setParams(components);
+		}
 	}
 	catch (const std::exception &e)
 	{
-		logg(LOG_DEBUG) << "Empty message" << '\n';
+		logg(LOG_DEBUG) << "Message not valid" << '\n';
 	}
 }
 
