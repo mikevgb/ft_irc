@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:58 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/03 16:24:05 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/10 10:47:14 by mvillaes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ bool Channel::setName(const std::string &name)
 		logg(LOG_WARNING) << "Channel name contains forbidden characters\n";
 		return false;
 	}
+	if (name[0] != '#')
+		logg(LOG_WARNING) << "Channel names should start with '#'\n";
+		return false;
 	this->_name = name;
 	return true;
 }
