@@ -30,7 +30,7 @@ private:
 	bool _welcomeFlag;
 	bool _operator;
 	std::set<Channel *> _channels;
-	const std::string forbittenChar;
+	const std::string forbiddenChar;
 
 public:
 	User(int fd);
