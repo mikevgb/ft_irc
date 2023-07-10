@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/10 13:45:38 by mvillaes         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:11:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,6 +416,7 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 {
 	Reply rp1;
 	Reply rp2;
+	Reply rp3;
 	std::string prefix;
 	std::string msg;
 	Channel *ch;
@@ -466,13 +467,16 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 			// Add user to the channel
 			ch->addUser(this->_sender);
 			rp2.setReplyMsg(C_RPL_NAMREPLY, RPL_NAMREPLY(ch->getModes(), ch->getName(), ch->getListUsers()));
+			rp3.setReplyMsg(C_RPL_ENDOFNAMES, RPL_ENDOFNAMES(ch->getName()));
 		}
 	}
 
 	rp1.addTarget(this->_sender->getFd());
 	rp2.addTarget(this->_sender->getFd());
+	rp3.addTarget(this->_sender->getFd());
 	replies.push_back(rp1);
 	replies.push_back(rp2);
+	replies.push_back(rp3);
 }
 
 void CommandHandler::part(std::list<std::string> params, std::list<Reply> &replies)
