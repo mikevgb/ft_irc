@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/05 11:20:24 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/10 13:45:38 by mvillaes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,6 +446,12 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 		{
 			rp1.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(params.front()));
 			ch = this->_listChannels->addChannel(params.front());
+			if (!ch)
+			{
+				rp1.addTarget(this->_sender->getFd());
+				replies.push_back(rp1);
+				return;
+			}
 		}
 		if (ch->isInviteOnly() && !ch->isInvited(this->_sender))
 		{

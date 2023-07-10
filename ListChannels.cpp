@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListChannels.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:00 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/05 12:14:37 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/10 13:44:18 by mvillaes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,12 @@ Channel *ListChannels::getChannel(const std::string &name)
 Channel *ListChannels::addChannel(const std::string &name)
 {
 	Channel *ch = new Channel(name);
+
+	if (ch->getName().empty())
+	{
+		delete ch;
+		return NULL;
+	}
 
 	this->_channels[name] = ch;
 
