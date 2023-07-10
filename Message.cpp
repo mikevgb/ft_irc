@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 13:50:42 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/10 14:47:29 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:25:17 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ Message::Message(const std::string buff) : _prefix(""), _cmd("")
 			this->_prefix = components.front();
 			components.pop_front();
 		}
-		if (components.size() > 1)
+		if (components.size() >= 1)
 		{
 			this->setCmd(components.front());
 			components.pop_front();
