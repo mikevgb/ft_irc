@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:44:17 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/05/16 14:18:49 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/12 11:46:32 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,19 +100,6 @@ Logger::Logger(std::ostream &f, unsigned ll, std::string n)
 {
 	_loglevel() = ll;
 }
-
-// Original operator
-/*
-Logger &Logger::operator()(unsigned ll)
-{
-	_message_level = ll;
-	if (_message_level <= _loglevel())
-	{
-		_fac << prep_level(*this) << prep_time(*this) << prep_name(*this) << ": ";
-	}
-	return *this;
-}
-*/
 
 Logger &Logger::operator()(unsigned ll)
 {
