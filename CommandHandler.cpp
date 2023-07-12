@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/10 15:11:31 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/12 12:21:10 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -746,6 +746,10 @@ void CommandHandler::mode(std::list<std::string> params, std::list<Reply> &repli
 		if (!ch)
 		{
 			rp.setReplyMsg(C_ERR_NOSUCHCHANNEL, ERR_NOSUCHCHANNEL(ch_name));
+		}
+		else if (params.empty())
+		{
+			rp.setReplyMsg(C_RPL_CHANNELMODEIS, RPL_CHANNELMODEIS(ch->getName(), ch->getModes(), ""));
 		}
 		else if (!ch->isAdmin(this->_sender))
 		{
