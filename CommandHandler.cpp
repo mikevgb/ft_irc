@@ -6,7 +6,7 @@
 /*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/12 12:21:10 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/12 13:29:51 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,7 +322,7 @@ void CommandHandler::privmsg(std::list<std::string> params, std::list<Reply> &re
 			}
 			else
 			{
-				sendMsg = user->getNick() + msg;
+				sendMsg = "PRIVMSG " + user->getNick() + msg;
 				sendAsyncMessage(user->getFd(), prefix, sendMsg);
 			}
 		}
