@@ -172,18 +172,19 @@ void IRCServer::pollLoop()
 						{
 							if (errno != EWOULDBLOCK)
 							{
-								logg(LOG_ERR) << "recv() failed\n";
+								logg(LOG_WARNING) << "recv() failed\n";
 							}
+							break;
 						}
 						else if (rc == 0)
 						{
 							disconnect(_pollFds[i].fd);
+							break;
 						}
 						else
 						{
 							processMessage(std::string(_buf, rc), _pollFds[i].fd);
 						}
-						break;
 					}
 				}
 			}
