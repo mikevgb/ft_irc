@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmateo-t <mmateo-t@student.42madrid>       +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:47 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/06/21 12:19:18 by mmateo-t         ###   ########.fr       */
+/*   Updated: 2023/07/12 11:38:59 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ void parsePort(const char *portChar)
 void parsePass(const char *pass)
 {
 	int len = strlen(pass);
+	if (!len)
+	{
+		printUsage();
+		exit(EXIT_FAILURE);
+	}
 	if (len > 16)
 		simpleErrorExit("Password must be 16 characters length");
 	for (int i = 0; pass[i] != '\0'; ++i)
