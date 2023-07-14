@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvillaes <mvillaes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmateo-t <mmateo-t@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:43:41 by mmateo-t          #+#    #+#             */
-/*   Updated: 2023/07/14 10:14:30 by mvillaes         ###   ########.fr       */
+/*   Updated: 2023/07/14 11:56:31 by mmateo-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,7 +363,7 @@ void CommandHandler::notice(std::list<std::string> params, std::list<Reply> &rep
 		{
 			if ((*it)->getFd() != this->_sender->getFd())
 			{
-				sendMsg = "NOTICE " + ch->getName() + msg; //getName or getNick?
+				sendMsg = "NOTICE " + ch->getName() + msg;
 				sendAsyncMessage((*it)->getFd(), prefix, sendMsg);
 			}
 		}
@@ -421,7 +421,7 @@ void CommandHandler::join(std::list<std::string> params, std::list<Reply> &repli
 	std::string msg;
 	Channel *ch;
 
-	if (params.size() != 1)
+	if (params.size() < 1)
 	{
 		rp1.setReplyMsg(C_ERR_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS(this->_msg.getCmd()));
 	}
