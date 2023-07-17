@@ -36,7 +36,7 @@ To set up the **ft_irc** project on your local machine, follow these steps:
 1. Clone the repository: `git clone https://github.com/MikelTolino/ft_irc.git`
 2. Navigate to the project directory: `cd ft_irc`
 3. Compile the server using the provided Makefile: `make`
-5. Start the server: `./ircserv`
+5. Start the server: `./ircserv <port> <password>`
 
 ### 💁‍♂️ Usage
 
