@@ -43,9 +43,3 @@ To set up the **ft_irc** project on your local machine, follow these steps:
 Once the server are running, you can use the client's command-line interface to interact with the IRC server. I strongly recommend using [Irssi](https://irssi.org/) but you can choose the IRC Client you want.
 
 For more information on the available commands and their usage, refer to the documentation provided by your IRC Client.
-
-### 🦸 Contributing
-
-Contributions to the ft_irc project are welcome! If you find any bugs, have suggestions for improvements, or want to add new features, feel free to open an issue or submit a pull request. Please follow the established coding style and commit message conventions for a smooth integration process.
-
-_Happy coding! 🚀_
